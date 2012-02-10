@@ -19,7 +19,7 @@ class Welcome extends CI_Controller {
 	 */
 	public function index()
 	{
-        $data = array();
+        $data = array("pie" => "pie string");
 		//Old way: $this->load->view('welcome_message');
         $this->template->load('template', 'welcome_message', $data);
 	}
