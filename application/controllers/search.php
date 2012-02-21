@@ -11,6 +11,14 @@ class Search extends CI_Controller {
      * @see http://codeigniter.com/user_guide/general/urls.html
      */
     
+    // ------------------------------------------------------------------------
+    // Class variable declarations.
+    // ------------------------------------------------------------------------
+    
+    protected $SEARCH_TAG_NAME_LIMIT = 10;
+    
+    // ------------------------------------------------------------------------
+    
     public function index()
     {
         // data map with one variable, "$json" which is anouther map for whatever data you want to see in json
@@ -48,6 +56,39 @@ class Search extends CI_Controller {
         
         // return the cookware to the "views/search_json.php" view so it can build valid JSON from the data
         $this->load->view('search_json', $data);
+    }
+    
+    // ------------------------------------------------------------------------
+    // Return a list of ingrendient names based on the target input; the
+    // database should be queried again each time the user changes the input
+    // value. Use for displaying existing tags while the user is typing in the
+    // search box; pass only the single ingredient currently being typed.
+    //
+    // http://home.jacobfischer.me/USERNAME/cs397/index.php/search/
+    //   ingredients_like_name/target
+    // ------------------------------------------------------------------------
+    
+    public function ingredients_like_name($target)
+    {
+        // Create result array and empty sub-array
+        $result = array("json" => array("ingredients_like_name" => array()));
+        
+        // Set up database query
+        $this->db->select("name");
+        $this->db->like("name", $this->search_term_escape($target), "after");
+        $this->db->order_by("CHAR_LENGTH(name)");
+        $this->db->limit($this->SEARCH_TAG_NAME_LIMIT});
+        
+        // Execute database query
+        $this->db->get("Ingredients");
+        
+        // Append query records to result sub-array
+        foreach($query->result() as $row) {
+            $result["json"]["ingredients_like_name"][] = $row->name;
+        }
+        
+        // Load result records into view for retrieval
+        $this->load->view('search_json', $result);
     }
 }
 
