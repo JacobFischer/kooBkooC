@@ -2,23 +2,17 @@
 
 class Search extends CI_Controller {
 
-	/**
-	 * Index Page for this controller.
-	 *
-	 * Maps to the following URL
-	 * 		http://example.com/index.php/welcome
-	 *	- or -  
-	 * 		http://example.com/index.php/welcome/index
-	 *	- or -
-	 * Since this controller is set as the default controller in 
-	 * config/routes.php, it's displayed at http://example.com/
-	 *
-	 * So any other public methods not prefixed with an underscore will
-	 * map to /index.php/search/<method_name>
-	 * @see http://codeigniter.com/user_guide/general/urls.html
-	 */
-	public function index()
-	{
+    /**
+     * Basic Info:
+     *
+     * Controlls are Maped to the following URL
+     *    http://home.jacobfischer.me/USERNAME/cs397/index.php/search/FUNCTION
+     *
+     * @see http://codeigniter.com/user_guide/general/urls.html
+     */
+    
+    public function index()
+    {
         // data map with one variable, "$json" which is anouther map for whatever data you want to see in json
         $data = array("json" => array());
         
@@ -27,12 +21,15 @@ class Search extends CI_Controller {
         
         // templated view:
         //$this->template->load('template', 'welcome_message', $data);
-	}
+    }
     
+    
+    // The basic implimentation of a JSON search function for cookware
+    //   ex URL: http://home.jacobfischer.me/USERNAME/cs397/index.php/search/cookware/
     public function cookware()
     {
-        // An array of cookware to return
-        $cookwareToReturn = array();
+        // We want to return the $data object with a map key to json, and in the json we are building the cookware
+        $data = array("json" => array("cookware" => array() ) );
         
         // Build the SQL-ish query using CodeIgniters's Active Record
         $this->db->select('*');
@@ -45,19 +42,11 @@ class Search extends CI_Controller {
         $i = 0;
         foreach($query->result() as $cookware)
         {
-            $cookwareToReturn[$i] = $cookware;
-            /*$cookwareToReturn[$i] = array
-            (
-                "ID" => $cookware->ID,
-                "Description" => $cookware->Description,
-                "Name" => $cookware->Name,
-                "ImageURL" => $cookware->ImageURL
-            );*/
+            $data['json']['cookware'][$i] = $cookware;
             $i++;
         }
         
         // return the cookware to the "views/search_json.php" view so it can build valid JSON from the data
-        $data = array("json" => array("cookware" => $cookwareToReturn) );
         $this->load->view('search_json', $data);
     }
 }
