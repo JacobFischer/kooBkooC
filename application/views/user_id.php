@@ -3,7 +3,12 @@
   <li>Email: <?=$info->Email?>
 </ul>
 
-<h2>Recipes</h2>
+<?php
+  if( count( $recipes ) )
+  {
+    print "<h2>Recipes</h2>";
+  }
+?>
 <ul>
 <?php
   foreach( $recipes as $recipe )
@@ -13,7 +18,12 @@
 ?>
 </ul>
 
-<h2>Favorites</h2>
+<?php
+  if( count( $favorites ) )
+  {
+    print "<h2>Favorites</h2>";
+  }
+?>
 <ul>
 <?php
   foreach( $favorites as $recipe )
