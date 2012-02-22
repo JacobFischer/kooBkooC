@@ -15,7 +15,14 @@ class User extends CI_Controller {
       $user_info = $query->row(0);
       $this->db->flush_cache();
 
-      $this->template->load('user_id', array('info' => $user_info ) );
+      $this->db->select('*');
+      $this->db->from('Recipes');
+      $this->db->join('Users', 'Recipes.SubmitterUsersID = Users.ID' );
+      $this->db->where('SubmittersUsersID', $id );
+
+      $query = $this->db->get();
+
+      $this->template->load('user_id', array('info' => $user_info, 'recipes' => $query->result() ) );
     }
     else
     {

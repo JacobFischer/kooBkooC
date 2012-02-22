@@ -2,3 +2,10 @@
 <ul>
   <li>Email: <?=$info->Email?>
 </ul>
+
+<ul>
+{recipes}
+  <li> Recipe: {Description} </li>
+
+{/recipes}
+</ul>
