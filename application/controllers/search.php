@@ -15,6 +15,8 @@ class Search extends CI_Controller {
     // Class variable declarations.
     // ------------------------------------------------------------------------
     
+    // Value for SQL LIMIT when querying the database for search tag
+    // suggestions; does not apply to general searching.
     protected $SEARCH_TAG_NAME_LIMIT = 10;
     
     // ------------------------------------------------------------------------
@@ -64,7 +66,10 @@ class Search extends CI_Controller {
     // not consider the result to be SQL-escaped.
     // ------------------------------------------------------------------------
     
-    // NEED TO MAKE THIS ACTUALLY WORK SOMETIME
+    // NEED TO MAKE THIS ACTUALLY WORK SOMETIME, need to decide on a standard
+    // way of expressing tags first ("Proper Capitalization" seems to be the
+    // current, so lowercase here not desirable even though LIKE doesn't care).
+    // Actually might not need this at all WE'LL WAIT AND SEE.
     
     public function tag_escape($target)
     {
@@ -88,7 +93,7 @@ class Search extends CI_Controller {
         // Set up database query
         $this->db->select("name");
         $this->db->like("name", $this->tag_escape($target), "after");
-        $this->db->order_by("CHAR_LENGTH(name)");
+        $this->db->order_by("CHAR_LENGTH(name), name");
         $this->db->limit($this->SEARCH_TAG_NAME_LIMIT);
         
         // Execute database query
