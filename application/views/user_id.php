@@ -4,8 +4,11 @@
 </ul>
 
 <ul>
-{recipes}
-  <li> Recipe: {Description} </li>
+<?php
+  foreach( $recipes as $recipe )
+  {
+    print "<li> Recipe: $recipe->Description </li>";
+  }
+?>
 
-{/recipes}
 </ul>
