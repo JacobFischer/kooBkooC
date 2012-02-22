@@ -85,7 +85,7 @@ class Search extends CI_Controller {
     // http://www.foo.com/search/ingredients_like_name/target
     // ------------------------------------------------------------------------
     
-    public function ingredients_like_name($target)
+    public function ingredients_like_name($target = "")
     {
         // Create result array and empty sub-array
         $result = array("json" => array("ingredients_like_name" => array()));
