@@ -13,23 +13,22 @@ class User extends CI_Controller {
   }
 
 
-  public function name($name)
+  public function name($username)
   {
     $this->db->select('ID');
     $this->db->from('Users');
-    $this->db->where('DisplayName', $name );
+    $this->db->where('DisplayName', $username );
 
     $query = $this->db->get();
 
     if( $query->num_rows() == 1 )
     {
-      $this->template->load('error', array('title' => 'Username Not Found', "message" => "The username \"$name\" could not be found!") );
       index( $query->row(0) );
       
     } 
     else
     {
-      $this->template->load('error', array('title' => 'Username Not Found', "message" => "The username \"$name\" could not be found!") );
+      $this->template->load('error', array('title' => 'Username Not Found', "message" => "The username \"$username\" could not be found!") );
     }
     
   }
