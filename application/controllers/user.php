@@ -2,9 +2,13 @@
 
 class User extends CI_Controller {
 
-  public function index()
+  public function _remap( $method )
+  {
+    print $method;
+  }
+
+  public function index( $id )
   { 
-    $id =1 ;
     $this->db->flush_cache();
     $this->db->select('*');
     $this->db->from('Users');
