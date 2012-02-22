@@ -13,26 +13,32 @@ class User extends CI_Controller {
     if( $query->num_rows() == 1 )
     {
       $user_info = $query->row(0);
-      $this->db->flush_cache();
 
+      $this->db->flush_cache();
       $this->db->select('*');
       $this->db->from('Recipes');
       $this->db->join('Users', 'Recipes.SubmitterUsersID = Users.ID' );
       $this->db->where('SubmitterUsersID', $id );
       $query = $this->db->get();
-      
       $recipes = $query->result();
 
+      $this->db->flush_cache();
       $this->db->select('*');
       $this->db->from('Recipes');
       $this->db->join('Favorites', 'Recipes.ID = Favorites.RecipesID' );
       $this->db->join('Users', 'Favorites.UsersID = Users.ID' );
       $this->db->where('Users.ID', $id );
       $query = $this->db->get();
-
       $favorites = $query->result();
+
+      $this->db->flush_cache();
+      $this->db->select('*');
+      $this->db->from('Allergies');
+      $this->db->join('UsersAllergies', 'UsersAllergies.AllergiesID = Allergies.ID' );
+      $this->db->where('UsersAllergies.UsersID', $id );
+      $allergies = $query->result();
     
-      $this->template->load('user_id', array('info' => $user_info, 'recipes' => $recipes, 'favorites' => $favorites ) );
+      $this->template->load('user_id', array('info' => $user_info, 'recipes' => $recipes, 'favorites' => $favorites, 'allergies' => $allergies ) );
     }
     else
     {

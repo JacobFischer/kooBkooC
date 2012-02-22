@@ -34,3 +34,19 @@
 </ul>
 
 
+<?php
+  if( count( $allergies ) )
+  {
+    print "<h2>Allergies</h2>";
+  }
+?>
+<ul>
+<?php
+  foreach( $allergies as $allergy )
+  {
+    print "<li> Name: $allergy->Name </li>";
+  }
+?>
+</ul>
+
+
