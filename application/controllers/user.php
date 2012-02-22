@@ -36,6 +36,7 @@ class User extends CI_Controller {
       $this->db->from('Allergies');
       $this->db->join('UsersAllergies', 'UsersAllergies.AllergiesID = Allergies.ID' );
       $this->db->where('UsersAllergies.UsersID', $id );
+      $query = $this->db->get();
       $allergies = $query->result();
     
       $this->template->load('user_id', array('info' => $user_info, 'recipes' => $recipes, 'favorites' => $favorites, 'allergies' => $allergies ) );
