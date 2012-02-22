@@ -3,12 +3,14 @@
 class User extends CI_Controller {
 
   public function index($name)
-  {
-    print $name;
+  { 
+    $this->template->load('error', array('title' => 'Cookware Not Found!', "message" => "The Cookware with id \"$name\" could not be found!") );
+    // print $name;
   }
 
   public function id($id)
   {
-    print $id;
+    $this->template->load('error', array('title' => 'Cookware Not Found!', "message" => "The Cookware with id \"$id\" could not be found!") );
+    // print $id;
   }
 }
