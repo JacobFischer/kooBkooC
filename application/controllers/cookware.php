@@ -18,11 +18,7 @@ class Cookware extends CI_Controller {
         }
         else
         {
-            foreach($query->result() as $cookware)
-            {
-                $this->template->load('cookware_id', array("cookware" => $cookware) );
-                break;
-            }
+            $this->template->load('cookware_id', array("cookware" => $query->row(0) ) );
         }
     }
 }
