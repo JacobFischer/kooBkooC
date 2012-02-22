@@ -59,28 +59,40 @@ class Search extends CI_Controller {
     }
     
     // ------------------------------------------------------------------------
+    // Return the target string stripped of non-alphanumeric characters and
+    // converted to lower case. For future-proofing and security reasons, do
+    // not consider the result to be SQL-escaped.
+    // ------------------------------------------------------------------------
+    
+    // NEED TO MAKE THIS ACTUALLY WORK SOMETIME
+    
+    public function tag_escape($target)
+    {
+      return strtolower($target);
+    }
+    
+    // ------------------------------------------------------------------------
     // Return a list of ingrendient names based on the target input; the
     // database should be queried again each time the user changes the input
     // value. Use for displaying existing tags while the user is typing in the
     // search box; pass only the single ingredient currently being typed.
     //
-    // http://home.jacobfischer.me/USERNAME/cs397/index.php/search/
-    //   ingredients_like_name/target
+    // http://www.foo.com/search/ingredients_like_name/target
     // ------------------------------------------------------------------------
     
     public function ingredients_like_name($target)
     {
-        /* // Create result array and empty sub-array
+        // Create result array and empty sub-array
         $result = array("json" => array("ingredients_like_name" => array()));
         
         // Set up database query
         $this->db->select("name");
-        $this->db->like("name", $this->search_term_escape($target), "after");
+        $this->db->like("name", $this->tag_escape($target), "after");
         $this->db->order_by("CHAR_LENGTH(name)");
-        $this->db->limit($this->SEARCH_TAG_NAME_LIMIT});
+        $this->db->limit($this->SEARCH_TAG_NAME_LIMIT);
         
         // Execute database query
-        $this->db->get("Ingredients");
+        $query = $this->db->get("Ingredients");
         
         // Append query records to result sub-array
         foreach($query->result() as $row) {
@@ -88,7 +100,7 @@ class Search extends CI_Controller {
         }
         
         // Load result records into view for retrieval
-        $this->load->view('search_json', $result); */
+        $this->load->view('search_json', $result);
     }
 }
 
