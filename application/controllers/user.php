@@ -4,13 +4,23 @@ class User extends CI_Controller {
 
   public function id( $id )
   { 
-    $this->db->flush_cache();
     $this->db->select('*');
     $this->db->from('Users');
     $this->db->where('ID', $id );
 
-    $this->template->load('error', array('title' => 'Cookware Not Found!', "message" => "The Cookware with id \"$id\" could not be found!") );
-    // print $name;
+    $query = $this->db->get();
+
+    if( $query->num_rows() == 1 )
+    {
+      $user_info = $query->row(0);
+      $this->db->flush_cache();
+
+      $this->template->load('user_id', array('info' => $user_info ) );
+    }
+    else
+    {
+      $this->template->load('error', array('title' => 'Cookware Not Found!', "message" => "The Cookware with id \"$id\" could not be found!") );
+    }
   }
 
 
@@ -25,7 +35,8 @@ class User extends CI_Controller {
     if( $query->num_rows() == 1 )
     {
       $id = $query->row(0)->ID;
-      id( $id );
+      print 'I don\'t know how to call stuff from here.';
+
     } 
     else
     {
