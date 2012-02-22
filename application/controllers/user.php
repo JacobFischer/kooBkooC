@@ -2,8 +2,9 @@
 
 class User extends CI_Controller {
 
-  public function index($id)
+  public function index()
   { 
+    $id =1 ;
     $this->db->flush_cache();
     $this->db->select('*');
     $this->db->from('Users');
