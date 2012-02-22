@@ -23,7 +23,7 @@ class User extends CI_Controller {
 
     if( $query->num_rows() == 1 )
     {
-      $id = $query->row(0)[0];
+      $id = $query->row(0)->ID;
       $this->template->load('error', array('title' => 'Username Not Found', "message" => "The username \"$id\" could not be found!") );
       //index( $query->row(0) );
     } 
