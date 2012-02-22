@@ -49,4 +49,20 @@
 ?>
 </ul>
 
+<?php
+  if( count( $stalkers ) )
+  {
+    print "<h2>This Person Stalkers:</h2>";
+  }
+?>
+<ul>
+<?php
+  foreach( $stalkers as $stalker )
+  {
+    print "<li> $stalker->DisplayName </li>";
+  }
+?>
+</ul>
+
+
 
