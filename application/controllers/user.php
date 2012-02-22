@@ -18,7 +18,7 @@ class User extends CI_Controller {
       $this->db->select('*');
       $this->db->from('Recipes');
       $this->db->join('Users', 'Recipes.SubmitterUsersID = Users.ID' );
-      $this->db->where('SubmittersUsersID', $id );
+      $this->db->where('SubmitterUsersID', $id );
 
       $query = $this->db->get();
 
