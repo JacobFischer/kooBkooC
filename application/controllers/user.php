@@ -25,7 +25,6 @@ class User extends CI_Controller {
     if( $query->num_rows() == 1 )
     {
       $id = $query->row(0)->ID;
-      print $id;
       id( $id );
     } 
     else
