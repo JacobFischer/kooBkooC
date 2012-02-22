@@ -8,6 +8,7 @@ class User extends CI_Controller {
     // print $name;
   }
 
+
   public function id($id)
   {
     $this->template->load('error', array('title' => 'Cookware Not Found!', "message" => "The Cookware with id \"$id\" could not be found!") );
