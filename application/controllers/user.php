@@ -4,7 +4,15 @@ class User extends CI_Controller {
 
   public function _remap( $method )
   {
-    print $method;
+    if( $method == 'name' )
+    {
+      $this->default_method();
+    }
+    else
+    {
+      print $method;
+    }
+
   }
 
   public function index( $id )
