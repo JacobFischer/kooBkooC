@@ -70,7 +70,7 @@ class Search extends CI_Controller {
     
     public function ingredients_like_name($target)
     {
-        // Create result array and empty sub-array
+        /* // Create result array and empty sub-array
         $result = array("json" => array("ingredients_like_name" => array()));
         
         // Set up database query
@@ -80,7 +80,7 @@ class Search extends CI_Controller {
         $this->db->limit($this->SEARCH_TAG_NAME_LIMIT});
         
         // Execute database query
-        $query = $this->db->get("Ingredients");
+        $this->db->get("Ingredients");
         
         // Append query records to result sub-array
         foreach($query->result() as $row) {
@@ -88,7 +88,7 @@ class Search extends CI_Controller {
         }
         
         // Load result records into view for retrieval
-        $this->load->view('search_json', $result);
+        $this->load->view('search_json', $result); */
     }
 }
 
