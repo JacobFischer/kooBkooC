@@ -2,21 +2,7 @@
 
 class User extends CI_Controller {
 
-  public function _remap( $method )
-  {
-    if( $method == 'name' )
-    {
-      $this->default_method();
-      print $method;
-    }
-    else
-    {
-      index( $method );
-    }
-
-  }
-
-  public function index( $id )
+  public function id( $id )
   { 
     $this->db->flush_cache();
     $this->db->select('*');
@@ -39,7 +25,7 @@ class User extends CI_Controller {
     if( $query->num_rows() == 1 )
     {
       $id = $query->row(0)->ID;
-      index( $id );
+      id( $id );
     } 
     else
     {
