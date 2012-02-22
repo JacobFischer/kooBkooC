@@ -19,10 +19,20 @@ class User extends CI_Controller {
       $this->db->from('Recipes');
       $this->db->join('Users', 'Recipes.SubmitterUsersID = Users.ID' );
       $this->db->where('SubmitterUsersID', $id );
+      $query = $this->db->get();
+      
+      $recipes = $query->result();
 
+      $this->db->select('*');
+      $this->db->from('Recipes');
+      $this->db->join('Favorites', 'Recipes.ID = Favorites.RecipesID' );
+      $this->db->join('Users', 'Favorites.UsersID = Users.ID' );
+      $this->db->where('Users.ID', $id );
       $query = $this->db->get();
 
-      $this->template->load('user_id', array('info' => $user_info, 'recipes' => $query->result() ) );
+      $favorites = $query->result();
+    
+      $this->template->load('user_id', array('info' => $user_info, 'recipes' => $recipes, 'favorites' => $favorites ) );
     }
     else
     {
