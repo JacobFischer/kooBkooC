@@ -26,7 +26,6 @@ class User extends CI_Controller {
     {
       $id = $query->row(0)->ID;
       id( $id );
-
     } 
     else
     {
