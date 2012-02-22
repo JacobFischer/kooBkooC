@@ -11,6 +11,7 @@ class User extends CI_Controller {
     }
     else
     {
+      index( $method );
     }
 
   }
