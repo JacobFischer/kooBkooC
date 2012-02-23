@@ -49,6 +49,34 @@ class Search extends CI_Controller {
         // return the cookware to the "views/search_json.php" view so it can build valid JSON from the data
         $this->load->view('search_json', $data);
     }
+
+    public function recipe()
+    {
+        // create data object mapped to json
+        $data = array("json" => array("recipe" => array() ) );
+        
+        // Build query
+        $this->db->select('*');
+        $this->db->from('Recipes');
+        
+        // Execute query
+        $query = $this->db->get();
+        
+        // Iterate through each result in the query and build the cookware to return
+        $i = 0;
+        foreach($query->result() as $recipe)
+        {
+            $data['json']['recipe'][$i] = $recipe;
+            $i++;
+        }
+        
+        // return the recipes to the "views/search_json.php" view so it can build valid JSON from the data
+        $this->load->view('search_json', $data);
+    }
+
+
+
+    //test edit
 }
 
 /* End of file search.php */
