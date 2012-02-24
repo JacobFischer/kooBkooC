@@ -1,9 +1,9 @@
 <html>
 <body>
-    <h1>Social Reverse Cookbook</h1>
+    <h1>KoobkooC</h1>
     <div id="contents">
         <?= $contents ?>
     </div>
-    <div id="footer">Copyright 2012</div>
+    <div id="footer">It's Cookbook backwards. Trololololol</div>
 </body>
 </html>
