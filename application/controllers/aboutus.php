@@ -8,5 +8,5 @@ public funtion index()
 }
 
 ?>
-~
+
 
