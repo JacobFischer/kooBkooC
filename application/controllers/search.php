@@ -59,6 +59,7 @@ class Search extends CI_Controller {
         // return the cookware to the "views/search_json.php" view so it can build valid JSON from the data
         $this->load->view('search_json', $data);
     }
+<<<<<<< HEAD
     
     // ------------------------------------------------------------------------
     // Return the target string stripped of non-alphanumeric characters and
@@ -107,6 +108,36 @@ class Search extends CI_Controller {
         // Load result records into view for retrieval
         $this->load->view('search_json', $result);
     }
+=======
+
+    public function recipe()
+    {
+        // create data object mapped to json
+        $data = array("json" => array("recipe" => array() ) );
+        
+        // Build query
+        $this->db->select('*');
+        $this->db->from('Recipes');
+        
+        // Execute query
+        $query = $this->db->get();
+        
+        // Iterate through each result in the query and build the cookware to return
+        $i = 0;
+        foreach($query->result() as $recipe)
+        {
+            $data['json']['recipe'][$i] = $recipe;
+            $i++;
+        }
+        
+        // return the recipes to the "views/search_json.php" view so it can build valid JSON from the data
+        $this->load->view('search_json', $data);
+    }
+
+
+
+    //test edit
+>>>>>>> 2ff226212ea950756ef8906ccbeea65f10b2b981
 }
 
 /* End of file search.php */
