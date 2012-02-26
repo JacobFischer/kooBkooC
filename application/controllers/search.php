@@ -23,16 +23,19 @@ class Search extends CI_Controller {
     
     public function index()
     {
-        // data map with one variable, "$json" which is anouther map for whatever data you want to see in json
+        // data map with one variable, "$json" which is anouther map for
+        // whatever data you want to see in json
         $data = array("json" => array());
         
-        $data["json"] = array('a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5);
+        $data["json"] = array('a' => 1, 'b' => 2, 'c' => 3, 'd' => 4,
+                              'e' => 5);
         $this->load->view('search_json', $data);
         
         // templated view:
         //$this->template->load('template', 'welcome_message', $data);
     }
     
+    // ------------------------------------------------------------------------
     
     // The basic implimentation of a JSON search function for cookware
     //   ex URL: http://home.jacobfischer.me/USERNAME/cs397/index.php/search/cookware/
@@ -59,7 +62,8 @@ class Search extends CI_Controller {
         // return the cookware to the "views/search_json.php" view so it can build valid JSON from the data
         $this->load->view('search_json', $data);
     }
-<<<<<<< HEAD
+    
+    // <<<<<<< HEAD
     
     // ------------------------------------------------------------------------
     // Return the target string stripped of non-alphanumeric characters and
@@ -67,14 +71,9 @@ class Search extends CI_Controller {
     // not consider the result to be SQL-escaped.
     // ------------------------------------------------------------------------
     
-    // NEED TO MAKE THIS ACTUALLY WORK SOMETIME, need to decide on a standard
-    // way of expressing tags first ("Proper Capitalization" seems to be the
-    // current, so lowercase here not desirable even though LIKE doesn't care).
-    // Actually might not need this at all WE'LL WAIT AND SEE.
-    
     public function tag_escape($target)
     {
-      return strtolower($target);
+      return strtolower(ereg_replace("[^A-Za-z0-9]", "", target));
     }
     
     // ------------------------------------------------------------------------
@@ -108,8 +107,9 @@ class Search extends CI_Controller {
         // Load result records into view for retrieval
         $this->load->view('search_json', $result);
     }
-=======
-
+    
+    // ------------------------------------------------------------------------
+    
     public function recipe()
     {
         // create data object mapped to json
@@ -133,11 +133,6 @@ class Search extends CI_Controller {
         // return the recipes to the "views/search_json.php" view so it can build valid JSON from the data
         $this->load->view('search_json', $data);
     }
-
-
-
-    //test edit
->>>>>>> 2ff226212ea950756ef8906ccbeea65f10b2b981
 }
 
 /* End of file search.php */
