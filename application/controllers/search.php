@@ -130,7 +130,7 @@ class Search extends CI_Controller {
         $result["json"]["ingredients"]["imageurl"] = array();
         
         // Prepare database query
-        $this->db->select("id, name, baseunitofmeature, description, "
+        $this->db->select("id, name, baseunitofmeasure, description, "
                 ."imageurl");
         $this->db->like("name", $this->tag_escape($target));
         $this->db->order_by("CHAR_LENGTH(name), name");
