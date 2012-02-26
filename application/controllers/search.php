@@ -133,7 +133,7 @@ class Search extends CI_Controller {
         // Prepare database query
         $this->db->select("id, name, baseunitofmeature, description, "
                 ."imageurl");
-        /*$this->db->like("name", $this->tag_escape($target));
+        $this->db->like("name", $this->tag_escape($target));
         $this->db->order_by("CHAR_LENGTH(name), name");
         $this->db->limit($this->$SEARCH_TAG_GENERAL_LIMIT);
         
@@ -148,7 +148,7 @@ class Search extends CI_Controller {
                   = $row->baseunitofmeasure;
           $result["json"]["ingredients"]["description"][] = $row->description;
           $result["json"]["ingredients"]["imageurl"][] = $row->imageurl;
-        }*/
+        }
         
         // Load result records into view for retrieval
         $this->load->view('search_index', $result);
