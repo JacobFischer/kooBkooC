@@ -82,7 +82,7 @@ class Search extends CI_Controller {
     // Return all information on ingredients selected based on the target
     // input. Use for general ingreadient searching.
     //
-    // http://www.foo.com/search/ingredients/target
+    // http://.../search/ingredients/target
     // ------------------------------------------------------------------------
     
     public function ingredients($target = "")
@@ -95,7 +95,7 @@ class Search extends CI_Controller {
                 ."imageurl");
         $this->db->like("name", $this->tag_escape($target));
         $this->db->order_by("CHAR_LENGTH(name), name");
-        //$this->db->limit($this->$SEARCH_TAG_GENERAL_LIMIT);
+        $this->db->limit($this->SEARCH_TAG_GENERAL_LIMIT);
         
         // Execute database query
         $query = $this->db->get("Ingredients");
@@ -115,7 +115,7 @@ class Search extends CI_Controller {
     // value. Use for displaying existing tags while the user is typing in the
     // search box; pass only the single ingredient currently being typed.
     //
-    // http://www.foo.com/search/ingredients_like_name/target
+    // http://.../search/ingredients_like_name/target
     // ------------------------------------------------------------------------
     
     public function ingredients_like_name($target = "")
