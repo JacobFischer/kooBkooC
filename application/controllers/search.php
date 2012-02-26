@@ -132,7 +132,7 @@ class Search extends CI_Controller {
         
         // Prepare database query
         $this->db->select("id, name, baseunitofmeature, description, "
-                "imageurl");
+                ."imageurl");
         /*$this->db->like("name", $this->tag_escape($target));
         $this->db->order_by("CHAR_LENGTH(name), name");
         $this->db->limit($this->$SEARCH_TAG_GENERAL_LIMIT);
