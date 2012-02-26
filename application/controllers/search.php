@@ -122,7 +122,7 @@ class Search extends CI_Controller {
     {
         // Create result array and empty sub-array
         $result = array("json" => array("ingredients" => array()));
-        
+        $result["json"]["ingredients"]["id"] = array();
         /*// Prepare result sub-arrays
         $result["json"]["ingredients"]["id"] = array();
         $result["json"]["ingredients"]["name"] = array();
