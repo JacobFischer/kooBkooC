@@ -117,6 +117,7 @@ class Search extends CI_Controller {
     //
     // http://www.foo.com/search/ingredients/target
     // ------------------------------------------------------------------------
+    /*
     
     public function ingredients($target = "")
     {
@@ -141,7 +142,6 @@ class Search extends CI_Controller {
         $query = $this->db->get("ingredients");
         
         // Append query records to result sub-array
-        /*
         foreach($query->result() as $row) {
           $result["json"]["ingredients"]["id"][] = $row->id;
           $result["json"]["ingredients"]["name"][] = $row->name;
@@ -150,12 +150,12 @@ class Search extends CI_Controller {
           $result["json"]["ingredients"]["description"][] = $row->description;
           $result["json"]["ingredients"]["imageurl"][] = $row->imageurl;
         }
-        */
         
         // Load result records into view for retrieval
         $this->load->view('search_index', $result);
     }
-    
+    */
+        
     // ------------------------------------------------------------------------
     
     public function recipe()
