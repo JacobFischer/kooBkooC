@@ -122,15 +122,15 @@ class Search extends CI_Controller {
     {
         // Create result array and empty sub-array
         $result = array("json" => array("ingredients" => array()));
-        $result["json"]["ingredients"]["id"] = array();
-        /*// Prepare result sub-arrays
+        
+        // Prepare result sub-arrays
         $result["json"]["ingredients"]["id"] = array();
         $result["json"]["ingredients"]["name"] = array();
         $result["json"]["ingredients"]["baseunitofmeasure"] = array();
         $result["json"]["ingredients"]["description"] = array();
         $result["json"]["ingredients"]["imageurl"] = array();
         
-        // Prepare database query
+        /*// Prepare database query
         $this->db->select("id, name, baseunitofmeature, description, "
                 "imageurl");
         $this->db->like("name", $this->tag_escape($target));
