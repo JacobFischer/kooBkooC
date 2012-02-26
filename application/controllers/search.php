@@ -76,7 +76,7 @@ class Search extends CI_Controller {
     
     public function tag_escape($target)
     {
-      return strtolower(ereg_replace("[^A-Za-z0-9]", "", target));
+      return strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $target));
     }
     
     // ------------------------------------------------------------------------
