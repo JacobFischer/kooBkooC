@@ -117,14 +117,13 @@ class Search extends CI_Controller {
     //
     // http://www.foo.com/search/ingredients/target
     // ------------------------------------------------------------------------
-    /*
     
     public function ingredients($target = "")
     {
         // Create result array and empty sub-array
         $result = array("json" => array("ingredients" => array()));
         
-        // Prepare result sub-arrays
+        /*// Prepare result sub-arrays
         $result["json"]["ingredients"]["id"] = array();
         $result["json"]["ingredients"]["name"] = array();
         $result["json"]["ingredients"]["baseunitofmeasure"] = array();
@@ -149,12 +148,11 @@ class Search extends CI_Controller {
                   = $row->baseunitofmeasure;
           $result["json"]["ingredients"]["description"][] = $row->description;
           $result["json"]["ingredients"]["imageurl"][] = $row->imageurl;
-        }
+        }*/
         
         // Load result records into view for retrieval
         $this->load->view('search_index', $result);
     }
-    */
         
     // ------------------------------------------------------------------------
     
