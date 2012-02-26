@@ -32,8 +32,7 @@ class Search extends CI_Controller {
         // whatever data you want to see in json
         $data = array("json" => array());
         
-        $data["json"] = array('a' => 1, 'b' => 2, 'c' => 3, 'd' => 4,
-                'e' => 5);
+        $data["json"] = array('a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5);
         $this->load->view('search_json', $data);
         
         // templated view:
@@ -100,7 +99,7 @@ class Search extends CI_Controller {
         $this->db->limit($this->SEARCH_TAG_NAME_LIMIT);
         
         // Execute database query
-        $query = $this->db->get("ingredients");
+        $query = $this->db->get("Ingredients");
         
         // Append query records to result sub-array
         foreach($query->result() as $row) {
@@ -138,7 +137,7 @@ class Search extends CI_Controller {
         $this->db->limit($this->$SEARCH_TAG_GENERAL_LIMIT);
         
         // Execute database query
-        $query = $this->db->get("ingredients");
+        $query = $this->db->get("Ingredients");
         
         // Append query records to result sub-array
         foreach($query->result() as $row) {
