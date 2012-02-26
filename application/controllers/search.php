@@ -130,10 +130,10 @@ class Search extends CI_Controller {
         $result["json"]["ingredients"]["description"] = array();
         $result["json"]["ingredients"]["imageurl"] = array();
         
-        /*// Prepare database query
+        // Prepare database query
         $this->db->select("id, name, baseunitofmeature, description, "
                 "imageurl");
-        $this->db->like("name", $this->tag_escape($target));
+        /*$this->db->like("name", $this->tag_escape($target));
         $this->db->order_by("CHAR_LENGTH(name), name");
         $this->db->limit($this->$SEARCH_TAG_GENERAL_LIMIT);
         
