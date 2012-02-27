@@ -1,0 +1,108 @@
+/* A Free Design by Bryant Smith (bryantsmith.com) */
+
+
+
+body 
+{
+	margin: 0;
+	padding: 0;
+	font-family:"Adobe Garamond Pro Bold", Georgia, "Times New Roman", Times, serif;
+	font-size: 13px;
+	color: #061C37;
+  width: 100%;
+}
+
+.siteHomeLink
+{
+margin: 0 auto;
+width: 20em;
+font-size:40px;
+height: 50px;
+color:#000000;
+font-family:"Adobe Garamond Pro Bold", Georgia, "Times New Roman", Times, serif;
+}
+
+.topNaviagationLink a
+{
+margin: 0 auto;
+height: auto;
+width:5em;
+font-size:24px;
+line-height: 39px;
+float:left;
+color:#000000;
+font-family:"Adobe Garamond Pro Bold", Georgia, "Times New Roman", Times, serif;
+}
+
+.topNaviagationLink a:hover
+{
+text-align:center;
+border-bottom:none;
+color:#0C61C9;
+display: block;
+width:121px;
+height: 35px;
+line-height: 35px;
+
+}
+
+#headerSubtext
+{
+position:relative;
+top:20px;
+left:40%;
+font-size:24px;
+color:#666666;
+font-family:"Adobe Garamond Pro Bold", Georgia, "Times New Roman", Times, serif;
+}
+
+.contentBox
+{
+text-align:left;
+width:auto;
+height:auto;
+margin-top:40px;
+}
+
+
+#Horizontal-Divisor
+{
+  float: left; 
+  width: 100%; 
+  padding: 1.5em 0 1.25em 0; 
+  border-top: #0C0C0C 0.5em solid;  
+  background-position: bottom center; 
+  background-repeat: repeat-x;
+}
+
+footer#Template-Footer
+{ 
+  width: 100%; 
+  display: inline-block;
+  background: #0C0C0C; 
+  vertical-align: bottom;
+}
+
+#footer {
+
+width: 670px;
+height:8px;
+background: #CCCCCC;
+text-align:center;
+font-size:9px;
+font-family:Arial, Helvetica, sans-serif;
+color:#386172;
+padding-top:5px;
+}
+
+#footer a
+{
+text-decoration:none;
+font-size:9px;
+color:#386172;
+}
+
+html, body {
+text-align: center;
+}
+p {text-align: left;}
