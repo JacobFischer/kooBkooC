@@ -1,4 +1,4 @@
-<html>
+
 <h1>Faqs</h1>
 <body>
 <ul>
@@ -13,5 +13,5 @@
 </ul>
 
 </body>
-</html>
+
 
