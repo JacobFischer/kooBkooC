@@ -23,14 +23,10 @@ class Ingredients extends CI_Controller{       //display ingredients by id
 	}
 
 	//return ingredient view for a supplied recipeid
-	public function recipe($id)
+	public function recipes($id)
 	{
-		$query = $this->db->query("SELECT * FROM RecipesIngedients JOIN Recipes on RecipesIngedients.RecipesID = Recipes.ID WHERE RecipesIngedients.IngredientsID = \"$id\" ");
-	  //  $this->db->select('*');
-		//$this->db->from('Recip
-		//$this->select('*');
-		//$this->from('RecipesIngredients');
-		//$this->join('ingredients
+		$query2 = $this->db->query("SELECT * FROM RecipesIngredients JOIN Recipes on RecipesIngredients.RecipesID = Recipes.ID WHERE RecipesIngredients.IngredientsID = \"$id\" ");
+	 
 		if($query->num_rows() < 1)
 		{
 			$this->template->load('error', array('title' => 'Ingredients not found!', "message" => "The recipe with id  \"$id\" returned no ingredients") );//load error view
