@@ -1,6 +1,6 @@
 
 <h1>Faqs</h1>
-<body>
+
 <ul>
 <li>Q: Who?</li>
 <li>A: Social Reverse Cookbook</li>
@@ -12,6 +12,6 @@
 <li>A: here </li>
 </ul>
 
-</body>
+
 
 
