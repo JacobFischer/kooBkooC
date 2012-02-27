@@ -6,13 +6,13 @@
     <?foreach($styles as $style):?>  
       <link rel="stylesheet" type="text/css" href="<?=base_url()?>/styles/<?=$style?>"></script>
     <?endforeach;?>
+    <script type="text/javascript">
+        var base_url = "<?=base_url()?>";
+    </script>
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
     <?foreach($scripts as $script):?>  
     <script type="text/javascript" src="<?=base_url()?>/scripts/<?=$script?>"></script>
     <?endforeach;?>
-    <script type="text/javascript">
-        var base_url = "<?=base_url()?>";
-    </script>
     <title>Social Reverse Cookbook</title>
   <body>
     <h1>KoobkooC</h1>
