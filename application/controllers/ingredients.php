@@ -12,11 +12,11 @@ class Ingredient extends CI_Controller
 
 		if($query->num_rows != 1)
                 {
-                	this->load->view('error', array("Ingredient" =>"Ingredient with ID of \"$id\"not found" ));//load error view  
+                	$this->tenplate->load('error', array("Ingredient" =>"Ingredient with ID of \"$id\"not found" ));//load error view  
 		}
 		else
 		{
-			$this->load->view('ingredient_id',$query->row(0));	//load view of the ingredient and pas in params
+			$this->template->load('ingredient_id',array("ingredient"=>$query->row(0));	//load view of the ingredient and pas in params
 		}
                
 	
@@ -44,4 +44,4 @@ class Ingredient extends CI_Controller
 
 }
 
-?> 
+
