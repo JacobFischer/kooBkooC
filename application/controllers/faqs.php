@@ -1,10 +1,11 @@
-<?php
-class Faq extends CI_Controller{
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+class Faqs extends CI_Controller{
 
-public funtion index()
+public function index()
 {
-  $this->load->view('faqs');
-}
+  $this->template->load('faqs');
 }
 
-?>
+}
+
+

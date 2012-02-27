@@ -1,9 +1,9 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-class About_us extends CI_Controller{
+class Aboutus extends CI_Controller{
 
-public funtion index()
+public function index()
 {
-  $this->load->view('about_usview');
+  $this->template->load('about_usview');
 }
 }
 

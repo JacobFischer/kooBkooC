@@ -1,8 +1,8 @@
-<html>
-<h1>Recipe Ingredients:</h1>
-<body>
+
+<h1>This ingredient is used in:</h1>
 <ul>
-<?php foreach($query as $i)
-{?>
-<li>Name:<?$i->Name?> </li>
+<?foreach($ingredient->result() as $i){?>
+<li><?echo $i->Description ?></li>
+<? } ?>
+</ul>
  
