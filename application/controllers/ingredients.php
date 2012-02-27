@@ -7,7 +7,7 @@ class Ingredient extends CI_Controller
 		//create a query
 		this->db->SELECT('*');
                 this->db->FROM('Ingredients');
-		this->db->WHERE('id',$id);  
+		this->db->WHERE('ID',$id);  
                 $query = this->db->get();   //run query to retrieve the information required for view
 
 		if($query->num_rows != 1)
