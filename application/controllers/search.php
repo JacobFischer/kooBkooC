@@ -11,9 +11,36 @@ class Search extends CI_Controller {
      * @see http://codeigniter.com/user_guide/general/urls.html
      */
     
+    // ------------------------------------------------------------------------
+    // Class variable declarations.
+    // ------------------------------------------------------------------------
+    
+    // Value for SQL LIMIT when querying the database for search tag
+    // suggestions; does not apply to general searching.
+    protected $SEARCH_TAG_NAME_LIMIT = 10;
+    
+    // Value for SQL LIMIT when querying the database for general search
+    // results; use to prevent unnecessary result preparation in case of very
+    // large result sets.
+    protected $SEARCH_TAG_GENERAL_LIMIT = 5000;
+    
+    // ------------------------------------------------------------------------
+    // Return the target string stripped of non-alphanumeric characters and
+    // converted to lower case. For future-proofing and security reasons, do
+    // not consider the result to be SQL-escaped.
+    // ------------------------------------------------------------------------
+    
+    public function tag_escape($target)
+    {
+      return strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $target));
+    }
+    
+    // ------------------------------------------------------------------------
+    
     public function index()
     {
-        // data map with one variable, "$json" which is anouther map for whatever data you want to see in json
+        // data map with one variable, "$json" which is anouther map for
+        // whatever data you want to see in json
         $data = array("json" => array());
         
         $data["json"] = array('a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5);
@@ -23,6 +50,7 @@ class Search extends CI_Controller {
         //$this->template->load('template', 'welcome_message', $data);
     }
     
+    // ------------------------------------------------------------------------
     
     // The basic implimentation of a JSON search function for cookware
     //   ex URL: http://home.jacobfischer.me/USERNAME/cs397/index.php/search/cookware/
@@ -50,6 +78,72 @@ class Search extends CI_Controller {
         $this->load->view('search_json', $data);
     }
 
+    
+    // ------------------------------------------------------------------------
+    // Return all information on ingredients selected based on the target
+    // input. Use for general ingreadient searching.
+    //
+    // http://.../search/ingredients/target
+    // ------------------------------------------------------------------------
+    
+    public function ingredients($target = "")
+    {
+        // Create result array and empty sub-array
+        $result = array("json" => array("ingredients" => array()));
+        
+        // Prepare database query
+        $this->db->select("id, name, baseunitofmeasure, description, "
+                ."imageurl");
+        $this->db->like("name", $this->tag_escape($target));
+        $this->db->order_by("CHAR_LENGTH(name), name");
+        $this->db->limit($this->SEARCH_TAG_GENERAL_LIMIT);
+        
+        // Execute database query
+        $query = $this->db->get("Ingredients");
+        
+        // Append query records to result sub-array
+        foreach($query->result() as $row) {
+          $result["json"]["ingredients"][] = $row;
+        }
+        
+        // Load result records into view for retrieval
+        $this->load->view('search_json', $result);
+    }
+    
+    // ------------------------------------------------------------------------
+    // Return a short list of ingrendient names based on the target input; the
+    // database should be queried again each time the user changes the input
+    // value. Use for displaying existing tags while the user is typing in the
+    // search box; pass only the single ingredient currently being typed.
+    //
+    // http://.../search/ingredients_like_name/target
+    // ------------------------------------------------------------------------
+    
+    public function ingredients_like_name($target = "")
+    {
+        // Create result array and empty sub-array
+        $result = array("json" => array("ingredients_like_name" => array()));
+        
+        // Prepare database query
+        $this->db->select("name");
+        $this->db->like("name", $this->tag_escape($target), "after");
+        $this->db->order_by("CHAR_LENGTH(name), name");
+        $this->db->limit($this->SEARCH_TAG_NAME_LIMIT);
+        
+        // Execute database query
+        $query = $this->db->get("Ingredients");
+        
+        // Append query records to result sub-array
+        foreach($query->result() as $row) {
+            $result["json"]["ingredients_like_name"][] = $row->name;
+        }
+        
+        // Load result records into view for retrieval
+        $this->load->view('search_json', $result);
+    }
+    
+    // ------------------------------------------------------------------------
+    
     public function recipe($text = "default" )
     {
         // create data object mapped to json
@@ -96,10 +190,6 @@ class Search extends CI_Controller {
         // return the recipes to the "views/search_json.php" view so it can build valid JSON from the data
         $this->load->view('search_json', $data);
     }
-
-
-
-    //test edit
 }
 
 /* End of file search.php */

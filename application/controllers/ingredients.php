@@ -1,22 +1,21 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Ingredient extends CI_Controller
-{       //display ingredients by id
+class Ingredient extends CI_Controller{       //display ingredients by id
 	public function id($id)
 	{	
 		//create a query
 		this->db->SELECT('*');
                 this->db->FROM('Ingredients');
-		this->db->WHERE('id',$id);  
+		this->db->WHERE('ID',$id);  
                 $query = this->db->get();   //run query to retrieve the information required for view
 
-		if($query->num_rows != 1)
+		if($query->num_rows() != 1)
                 {
-                	this->load->view('error', array("Ingredient" =>"Ingredient with ID of \"$id\"not found" ));//load error view  
+                	$this->template->load('error', array("Ingredient" =>"Ingredient with ID of \"$id\"not found" ));//load error view  
 		}
 		else
 		{
-			$this->load->view('ingredient_id',$query->row(0));	//load view of the ingredient and pas in params
+			$this->template->load('ingredients_id',array("ingredient"=>$query->row(0));	//load view of the ingredient and pas in params
 		}
                
 	
@@ -44,4 +43,4 @@ class Ingredient extends CI_Controller
 
 }
 
-?> 
+
