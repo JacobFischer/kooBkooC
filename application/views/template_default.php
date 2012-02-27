@@ -10,36 +10,11 @@
       <script type="text/javascript" src="<?=base_url()?>/scripts/<?=$script?>"></script>
     <?endforeach;?>
     <title>Social Reverse Cookbook</title>
-  </head>
   <body>
-      <div>
-        <div id="Horizontal-Divisor"></div>
-        <a class="siteHomeLink">kooBkooC</a>
-        <div class="topNaviagationLink">
-          <ul>
-            <li>
-            <a href="index.html">Home</a>
-            </li>
-            <li>
-              <a href="index.html">Profile</a>
-            </li>
-            <li>
-              <a href="index.html">FAQ</a>
-            </li>
-            <li>
-              <a href="index.html">Contact</a>
-            </li>
-            <li>
-              <a href="index.html">About</a>
-            </li>
-          </ul>
-        <div>
-        <div id="Horizontal-Divisor"></div>
-      </div>
-      <div class="contentBox">
-          <?=$contents?>
-      </div>
+    <h1>KoobkooC</h1>
+    <div id="contents">
+        <?= $contents ?>
+    </div>
+    <div id="footer">It's Cookbook backwards. Trololololol</div>
   </body>
-</html>
-
 </html>
