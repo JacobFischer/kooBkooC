@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$your_username = "swilliams";
+$your_username = "byocum";
 $config['base_url']	= 'http://home.jacobfischer.me/' . $your_username . '/cs397';
 
 /*
