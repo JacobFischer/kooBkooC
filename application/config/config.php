@@ -14,7 +14,11 @@
 | path to your installation.
 |
 */
+<<<<<<< HEAD
 $your_username = "lharmon";
+=======
+$your_username = "byocum";
+>>>>>>> 41d7878cbbeee157ce8f6fc729beba36d29f24e5
 $config['base_url']	= 'http://home.jacobfischer.me/' . $your_username . '/cs397';
 
 /*
