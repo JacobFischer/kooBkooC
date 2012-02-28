@@ -50,8 +50,17 @@ class User extends CI_Controller {
       $this->db->where('Followings.StalkingUsersID', $id);
       $query = $this->db->get();
       $stalkers = $query->result();
+
+      // Retrieve who this user's stalking
+      $this->db->flush_cache();
+      $this->db->select('*');
+      $this->db->from('Users');
+      $this->db->join('Followings', 'Users.ID = Followings.StalkingUsersID' );
+      $this->db->where('Followings.StalkerUsersID', $id);
+      $query = $this->db->get();
+      $stalking = $query->result();
     
-      $this->template->load('user_id', array('info' => $user_info, 'recipes' => $recipes, 'favorites' => $favorites, 'allergies' => $allergies, 'stalkers' => $stalkers ) );
+      $this->template->load('user_id', array('info' => $user_info, 'recipes' => $recipes, 'favorites' => $favorites, 'allergies' => $allergies, 'stalkers' => $stalkers, 'stalking' => $stalking ) );
     }
     else
     {
