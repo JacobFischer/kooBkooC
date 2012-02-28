@@ -68,6 +68,11 @@ class User extends CI_Controller {
     }
   }
 
+  public function reg()
+  {
+    $this->template->load( 'reg.php' );
+  }
+
   public function register()
   {
     $username = $this->input->post( "username" );
@@ -75,6 +80,17 @@ class User extends CI_Controller {
     $password = $this->input->post( "password" );
     $email = $this->input->post( "email" );
     $avatarURL = $this->input->post( "avatarURL" );
+
+    if( strlen( $username ) < 4 )
+    {
+      $this->template->load('error', array('title' => 'User Registration Failed', "message" => "Please make your username at least 4 characters!") );
+      return;
+    }
+    if( strlen( $password ) < 4 )
+    {
+      $this->template->load('error', array('title' => 'User Registration Failed', "message" => "Please make your password at least 4 characters!") );
+      return;
+    }
 
     $this->db->select('*');
     $this->db->from('Users');
@@ -86,6 +102,7 @@ class User extends CI_Controller {
     {
       // TODO: Determine which is in use
       $this->template->load('error', array('title' => 'User Registration Failed', "message" => "Username or email is already in use!") );
+      return;
     }
 
     $this->db->flush_cache();
@@ -119,10 +136,12 @@ class User extends CI_Controller {
       if( crypt( $password, 'WoolyWilly' ) ==  $query->row(0)->HashedPassword )
       {
         $this->template->load('login_successful', array() );
+        return;
       }
       else
       {
         $this->template->load('error', array('title' => 'User Login Failed', "message" => "Invalid password!") );
+        return;
       }
 
     }
