@@ -15,8 +15,8 @@
 |
 */
 
-$your_username = "USERNAME";
-$config['base_url']	= 'http://home.jacobfischer.me/' . $your_username . '/cs397';
+$username = explode('/',getcwd());
+$config['base_url']	= 'http://home.jacobfischer.me/' . $username[2] . '/cs397';
 
 /*
 |--------------------------------------------------------------------------
