@@ -120,6 +120,11 @@ class User extends CI_Controller {
     
   }
 
+  public function user_login()
+  {
+    $this->template->load( 'user_login.php' );
+  }
+
   public function login()
   {
     $username = $this->input->post( "username" );
