@@ -52,7 +52,7 @@
 <?php
   if( count( $stalkers ) )
   {
-    print "<h2>This Person Stalkers:</h2>";
+    print "<h2>Followers:</h2>";
   }
 ?>
 <ul>
@@ -60,6 +60,21 @@
   foreach( $stalkers as $stalker )
   {
     print "<li> $stalker->DisplayName </li>";
+  }
+?>
+</ul>
+
+<?php
+  if( count( $stalking ) )
+  {
+    print "<h2>Following:</h2>";
+  }
+?>
+<ul>
+<?php
+  foreach( $stalking as $stalk )
+  {
+    print "<vim> $stalk->DisplayName </li>";
   }
 ?>
 </ul>
