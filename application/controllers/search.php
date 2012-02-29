@@ -86,7 +86,8 @@ class Search extends CI_Controller {
     
     // ------------------------------------------------------------------------
     // Return all information on ingredients selected based on the target
-    // input. Use for general ingreadient searching.
+    // input; note that page refers to a perceived page number and not to the
+    // SQL OFFSET value. Use for general ingreadient searching.
     //
     // http://.../search/ingredients/__target__/__page__
     // ------------------------------------------------------------------------
@@ -122,10 +123,10 @@ class Search extends CI_Controller {
     // value. Use for displaying existing tags while the user is typing in the
     // search box; pass only the single ingredient currently being typed.
     //
-    // http://.../search/ingredients_like_name/target
+    // http://.../search/ingredients_like_name/__target__/__page__
     // ------------------------------------------------------------------------
     
-    public function ingredients_like_name($target = "")
+    public function ingredients_like_name($target = "", $page = 0)
     {
         // Create result array and empty sub-array
         $result = array("json" => array("ingredients_like_name" => array()));
@@ -134,7 +135,8 @@ class Search extends CI_Controller {
         $this->db->select("Name");
         $this->db->like("Name", $this->tag_escape($target), "after");
         $this->db->order_by("CHAR_LENGTH(Name), Name");
-        $this->db->limit($this->SEARCH_TAG_NAME_LIMIT);
+        $this->db->limit($this->SEARCH_TAG_NAME_LIMIT,
+                $page * $this->SEARCH_TAG_PAGE_OFFSET);
         
         // Execute database query
         $query = $this->db->get("Ingredients");
