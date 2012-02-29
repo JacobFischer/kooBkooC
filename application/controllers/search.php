@@ -83,20 +83,20 @@ class Search extends CI_Controller {
     // Return all information on ingredients selected based on the target
     // input. Use for general ingreadient searching.
     //
-    // http://.../search/ingredients/target
+    // http://.../search/ingredients/__target__/__page__
     // ------------------------------------------------------------------------
     
-    public function ingredients($target = "")
+    public function ingredients($target = "", $page = 0)
     {
         // Create result array and empty sub-array
         $result = array("json" => array("ingredients" => array()));
         
         // Prepare database query
-        $this->db->select("id, name, baseunitofmeasure, description, "
-                ."imageurl");
-        $this->db->like("name", $this->tag_escape($target), "after");
-        $this->db->order_by("CHAR_LENGTH(name), name");
-        $this->db->limit($this->SEARCH_TAG_GENERAL_LIMIT);
+        $this->db->select("ID, Name, BaseUnitOfMeasure, Description, "
+                ."ImageURL");
+        $this->db->like("Name", $this->tag_escape($target), "after");
+        $this->db->order_by("CHAR_LENGTH(Name), Name");
+        $this->db->limit($this->SEARCH_TAG_GENERAL_LIMIT, $page);
         
         // Execute database query
         $query = $this->db->get("Ingredients");
@@ -125,9 +125,9 @@ class Search extends CI_Controller {
         $result = array("json" => array("ingredients_like_name" => array()));
         
         // Prepare database query
-        $this->db->select("name");
-        $this->db->like("name", $this->tag_escape($target), "after");
-        $this->db->order_by("CHAR_LENGTH(name), name");
+        $this->db->select("Name");
+        $this->db->like("Name", $this->tag_escape($target), "after");
+        $this->db->order_by("CHAR_LENGTH(Name), Name");
         $this->db->limit($this->SEARCH_TAG_NAME_LIMIT);
         
         // Execute database query
