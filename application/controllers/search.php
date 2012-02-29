@@ -24,6 +24,11 @@ class Search extends CI_Controller {
     // large result sets.
     protected $SEARCH_TAG_GENERAL_LIMIT = 5000;
     
+    // Value for SQL LIMIT when querying the database for general search
+    // results; use to prevent unnecessary result preparation in case of very
+    // large result sets.
+    protected $SEARCH_TAG_PAGE_OFFSET = 25;
+    
     // ------------------------------------------------------------------------
     // Return the target string stripped of non-alphanumeric characters and
     // converted to lower case. For future-proofing and security reasons, do
@@ -96,7 +101,8 @@ class Search extends CI_Controller {
                 ."ImageURL");
         $this->db->like("Name", $this->tag_escape($target), "after");
         $this->db->order_by("CHAR_LENGTH(Name), Name");
-        $this->db->limit($this->SEARCH_TAG_GENERAL_LIMIT, $page);
+        $this->db->limit($this->SEARCH_TAG_GENERAL_LIMIT,
+                $page * $this->SEARCH_TAG_PAGE_OFFSET);
         
         // Execute database query
         $query = $this->db->get("Ingredients");
