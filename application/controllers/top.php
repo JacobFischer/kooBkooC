@@ -32,7 +32,7 @@ class Top extends CI_Controller {
         
         // Append query records to result sub-array
         foreach($query->result() as $row) {
-          $result["json"]["top_ingredients"][] = $row;
+            $result["json"]["top_ingredients"][] = $row;
         }
         
         // Load result records into view for retrieval

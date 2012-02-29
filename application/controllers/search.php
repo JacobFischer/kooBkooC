@@ -96,7 +96,7 @@ class Search extends CI_Controller {
     {
         // Check invalid page
         if($page < 0) {
-          $page = 0;
+            $page = 0;
         }
         
         // Create result array and empty sub-array
@@ -109,8 +109,8 @@ class Search extends CI_Controller {
         $this->db->order_by("CHAR_LENGTH(Name), Name");
         
         if(strlen($target)) {
-          $this->db->limit($this->SEARCH_TAG_GENERAL_LIMIT,
-                  $page * $this->SEARCH_TAG_PAGE_OFFSET);
+            $this->db->limit($this->SEARCH_TAG_GENERAL_LIMIT,
+                    $page * $this->SEARCH_TAG_PAGE_OFFSET);
         }
         
         // Execute database query
@@ -118,7 +118,7 @@ class Search extends CI_Controller {
         
         // Append query records to result sub-array
         foreach($query->result() as $row) {
-          $result["json"]["ingredients"][] = $row;
+            $result["json"]["ingredients"][] = $row;
         }
         
         // Load result records into view for retrieval
@@ -136,6 +136,11 @@ class Search extends CI_Controller {
     
     public function ingredients_like_name($target = "", $page = 0)
     {
+        // Check invalid page
+        if($page < 0) {
+            $page = 0;
+        }
+        
         // Create result array and empty sub-array
         $result = array("json" => array("ingredients_like_name" => array()));
         
@@ -143,8 +148,11 @@ class Search extends CI_Controller {
         $this->db->select("Name");
         $this->db->like("Name", $this->tag_escape($target), "after");
         $this->db->order_by("CHAR_LENGTH(Name), Name");
-        $this->db->limit($this->SEARCH_TAG_NAME_LIMIT,
-                $page * $this->SEARCH_TAG_PAGE_OFFSET);
+        
+        if(strlen($target)) {
+            $this->db->limit($this->SEARCH_TAG_NAME_LIMIT,
+                    $page * $this->SEARCH_TAG_PAGE_OFFSET);
+        }
         
         // Execute database query
         $query = $this->db->get("Ingredients");
