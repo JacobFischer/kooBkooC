@@ -94,6 +94,11 @@ class Search extends CI_Controller {
     
     public function ingredients($target = "", $page = 0)
     {
+        // Check invalid page
+        if($page < 0) {
+          $page = 0;
+        }
+        
         // Create result array and empty sub-array
         $result = array("json" => array("ingredients" => array()));
         
@@ -102,8 +107,11 @@ class Search extends CI_Controller {
                 ."ImageURL");
         $this->db->like("Name", $this->tag_escape($target), "after");
         $this->db->order_by("CHAR_LENGTH(Name), Name");
-        $this->db->limit($this->SEARCH_TAG_GENERAL_LIMIT,
-                $page * $this->SEARCH_TAG_PAGE_OFFSET);
+        
+        if(strlen($target)) {
+          $this->db->limit($this->SEARCH_TAG_GENERAL_LIMIT,
+                  $page * $this->SEARCH_TAG_PAGE_OFFSET);
+        }
         
         // Execute database query
         $query = $this->db->get("Ingredients");
