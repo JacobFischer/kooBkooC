@@ -68,6 +68,94 @@ class User extends CI_Controller {
     }
   }
 
+  public function reg()
+  {
+    $this->template->load( 'reg.php' );
+  }
+
+  public function register()
+  {
+    $username = $this->input->post( "username" );
+    // PLAINTEXT
+    $password = $this->input->post( "password" );
+    $email = $this->input->post( "email" );
+    $avatarURL = $this->input->post( "avatarURL" );
+
+    if( strlen( $username ) < 4 )
+    {
+      $this->template->load('error', array('title' => 'User Registration Failed', "message" => "Please make your username at least 4 characters!") );
+      return;
+    }
+    if( strlen( $password ) < 4 )
+    {
+      $this->template->load('error', array('title' => 'User Registration Failed', "message" => "Please make your password at least 4 characters!") );
+      return;
+    }
+
+    $this->db->select('*');
+    $this->db->from('Users');
+    $this->db->where('Email', $email);
+    $this->db->or_where('DisplayName', $username);
+    $query = $this->db->get();
+
+    if( $query->num_rows() > 0 )
+    {
+      // TODO: Determine which is in use
+      $this->template->load('error', array('title' => 'User Registration Failed', "message" => "Username or email is already in use!") );
+      return;
+    }
+
+    $this->db->flush_cache();
+
+    $data = array(
+      'DisplayName' => $username,
+      'Email' => $email,
+      'HashedPassword' => crypt( $password, 'WoolyWilly' ),
+      'AvatarURL' => $avatarURL
+    );
+
+    $this->db->insert('Users', $data);
+
+    $this->template->load('register_successful', array( 'username' => $username ) );
+    
+  }
+
+  public function user_login()
+  {
+    $this->template->load( 'user_login.php' );
+  }
+
+  public function login()
+  {
+    $username = $this->input->post( "username" );
+    // PLAINTEXT
+    $password = $this->input->post( "password" );
+
+    $this->db->select('*');
+    $this->db->from('Users');
+    $this->db->where('DisplayName', $username);
+
+    $query = $this->db->get();
+    if( $query->num_rows == 1 )
+    {
+      if( crypt( $password, 'WoolyWilly' ) ==  $query->row(0)->HashedPassword )
+      {
+        $this->template->load('login_successful', array() );
+        return;
+      }
+      else
+      {
+        $this->template->load('error', array('title' => 'User Login Failed', "message" => "Invalid password!") );
+        return;
+      }
+
+    }
+    else
+    {
+      $this->template->load('error', array('title' => 'User Login Failed', "message" => "A user with that username does not exist!") );
+    }
+
+  }
 
   public function name($username)
   {
