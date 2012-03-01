@@ -16,8 +16,6 @@ class Top extends CI_Controller {
     
     public function ingredients()
     {
-        return 0;
-        
         // Create result array and empty sub-array
         $result = array("json" => array("top_ingredients" => array()));
         
@@ -27,9 +25,6 @@ class Top extends CI_Controller {
                 ."(SELECT IngredientsID FROM RecipesIngredients GROUP BY "
                 ."RecipesID ORDER BY COUNT(RecipesID) DESC LIMIT "
                 ."${this->TOP_QUERY_GENERAL_LIMIT}) ORDER BY Name");
-        
-        // Execute database query
-        $query = $this->db->get("Ingredients");
         
         // Append query records to result sub-array
         foreach($query->result() as $row) {
