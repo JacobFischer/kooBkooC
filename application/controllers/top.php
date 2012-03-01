@@ -16,6 +16,8 @@ class Top extends CI_Controller {
     
     public function ingredients()
     {
+        return 0;
+        
         // Create result array and empty sub-array
         $result = array("json" => array("top_ingredients" => array()));
         
