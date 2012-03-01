@@ -19,13 +19,12 @@ class Top extends CI_Controller {
         // Create result array and empty sub-array
         $result = array("json" => array("top_ingredients" => array()));
         
-        // Prepare database query
-        // ####################################################################
-        $this->db->select("ID, Name, BaseUnitOfMeasure, Description, "
-                ."ImageURL");
-        $this->db->order_by("CHAR_LENGTH(Name), Name");
-        $this->db->limit($this->$TOP_QUERY_GENERAL_LIMIT);
-        // ####################################################################
+        // Execute database query
+        $query = $this->db->query("SELECT ID, Name, BaseUnitOfMeasure, "
+                ."Description, ImageURL FROM Ingredients WHERE ID IN "
+                ."(SELECT IngredientsID FROM RecipesIngredients GROUP BY "
+                ."RecipesID ORDER BY COUNT(RecipesID) DESC LIMIT "
+                ."${this->TOP_QUERY_GENERAL_LIMIT}) ORDER BY Name");
         
         // Execute database query
         $query = $this->db->get("Ingredients");
