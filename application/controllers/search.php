@@ -134,13 +134,8 @@ class Search extends CI_Controller {
     // http://.../search/ingredients_like_name/__target__/__page__
     // ------------------------------------------------------------------------
     
-    public function ingredients_like_name($target = "", $page = 1)
+    public function ingredients_like_name($target = "")
     {
-        // Check invalid page
-        if($page < 1) {
-            $page = 1;
-        }
-        
         // Create result array and empty sub-array
         $result = array("json" => array("ingredients_like_name" => array()));
         
@@ -151,7 +146,7 @@ class Search extends CI_Controller {
         
         if(strlen($target)) {
             $this->db->limit($this->SEARCH_TAG_NAME_LIMIT,
-              ($page - 1) * $this->SEARCH_TAG_PAGE_OFFSET);
+              $this->SEARCH_TAG_PAGE_OFFSET);
         }
         
         // Execute database query
