@@ -95,8 +95,8 @@ class Search extends CI_Controller {
     public function ingredients($target = "", $page = 1)
     {
         // Check invalid page
-        if($page < 0) {
-            $page = 0;
+        if($page < 1) {
+            $page = 1;
         }
         
         // Create result array and empty sub-array
@@ -137,8 +137,8 @@ class Search extends CI_Controller {
     public function ingredients_like_name($target = "", $page = 1)
     {
         // Check invalid page
-        if($page < 0) {
-            $page = 0;
+        if($page < 1) {
+            $page = 1;
         }
         
         // Create result array and empty sub-array
