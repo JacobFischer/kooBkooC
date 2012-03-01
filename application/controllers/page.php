@@ -9,6 +9,7 @@ class Page extends CI_Controller {
     
     public function home()
     {
+        $this->template->load_js("frontPageSearch.js");
         $this->template->load( 'page_home' );
     }
     
