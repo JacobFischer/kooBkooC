@@ -21,8 +21,10 @@ class Top extends CI_Controller {
         
         // Execute database query
         $query = $this->db->query("SELECT ID, Name, BaseUnitOfMeasure, "
-                ."Description, ImageURL FROM Ingredients WHERE ID IN "
-                ."(SELECT * FROM (SELECT IngredientsID FROM RecipesIngredients GROUP BY RecipesID ORDER BY COUNT(RecipesID) DESC LIMIT {$this->TOP_QUERY_GENERAL_LIMIT}) AS subtable) ORDER BY Name");
+            ."Description, ImageURL FROM Ingredients WHERE ID IN (SELECT * "
+            ."FROM (SELECT IngredientsID FROM RecipesIngredients GROUP BY "
+            ."RecipesID ORDER BY COUNT(RecipesID) DESC LIMIT "
+            ."{$this->TOP_QUERY_GENERAL_LIMIT}) AS subtable) ORDER BY Name");
         
         // Append query records to result sub-array
         foreach($query->result() as $row) {
