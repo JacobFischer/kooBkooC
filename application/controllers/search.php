@@ -92,7 +92,7 @@ class Search extends CI_Controller {
     // http://.../search/ingredients/__target__/__page__
     // ------------------------------------------------------------------------
     
-    public function ingredients($target = "", $page = 0)
+    public function ingredients($target = "", $page = 1)
     {
         // Check invalid page
         if($page < 0) {
@@ -110,7 +110,7 @@ class Search extends CI_Controller {
         
         if(strlen($target)) {
             $this->db->limit($this->SEARCH_TAG_GENERAL_LIMIT,
-              $page * $this->SEARCH_TAG_PAGE_OFFSET);
+              ($page - 1) * $this->SEARCH_TAG_PAGE_OFFSET);
         }
         
         // Execute database query
@@ -134,7 +134,7 @@ class Search extends CI_Controller {
     // http://.../search/ingredients_like_name/__target__/__page__
     // ------------------------------------------------------------------------
     
-    public function ingredients_like_name($target = "", $page = 0)
+    public function ingredients_like_name($target = "", $page = 1)
     {
         // Check invalid page
         if($page < 0) {
@@ -151,7 +151,7 @@ class Search extends CI_Controller {
         
         if(strlen($target)) {
             $this->db->limit($this->SEARCH_TAG_NAME_LIMIT,
-              $page * $this->SEARCH_TAG_PAGE_OFFSET);
+              ($page - 1) * $this->SEARCH_TAG_PAGE_OFFSET);
         }
         
         // Execute database query
