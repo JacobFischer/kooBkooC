@@ -145,8 +145,7 @@ class Search extends CI_Controller {
         $this->db->order_by("CHAR_LENGTH(Name), Name");
         
         if(strlen($target)) {
-            $this->db->limit($this->SEARCH_TAG_NAME_LIMIT,
-              $this->SEARCH_TAG_PAGE_OFFSET);
+            $this->db->limit($this->SEARCH_TAG_NAME_LIMIT);
         }
         
         // Execute database query
