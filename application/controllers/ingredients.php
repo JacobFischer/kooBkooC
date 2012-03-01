@@ -25,7 +25,7 @@ class Ingredients extends CI_Controller{       //display ingredients by id
 	//return ingredient view for a supplied recipeid
 	public function recipes($id)
 	{
-		$query2 = $this->db->query("SELECT * FROM RecipesIngredients JOIN Recipes on RecipesIngredients.RecipesID = Recipes.ID WHERE RecipesIngredients.IngredientsID = \"$id\" ");
+		$query = $this->db->query("SELECT * FROM RecipesIngredients JOIN Recipes on RecipesIngredients.RecipesID = Recipes.ID WHERE RecipesIngredients.IngredientsID = \"$id\" ");
 	 
 		if($query->num_rows() < 1)
 		{
