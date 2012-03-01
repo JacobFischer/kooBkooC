@@ -24,7 +24,7 @@ class Top extends CI_Controller {
                 ."Description, ImageURL FROM Ingredients WHERE ID IN "
                 ."(SELECT IngredientsID FROM RecipesIngredients GROUP BY "
                 ."RecipesID ORDER BY COUNT(RecipesID) DESC LIMIT "
-                ."${this->TOP_QUERY_GENERAL_LIMIT}) ORDER BY Name");
+                ."{$this->TOP_QUERY_GENERAL_LIMIT}) ORDER BY Name");
         
         // Append query records to result sub-array
         foreach($query->result() as $row) {
