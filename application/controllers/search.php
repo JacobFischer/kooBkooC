@@ -104,13 +104,13 @@ class Search extends CI_Controller {
         
         // Prepare database query
         $this->db->select("ID, Name, BaseUnitOfMeasure, Description, "
-                ."ImageURL");
+          ."ImageURL");
         $this->db->like("Name", $this->tag_escape($target), "after");
         $this->db->order_by("CHAR_LENGTH(Name), Name");
         
         if(strlen($target)) {
             $this->db->limit($this->SEARCH_TAG_GENERAL_LIMIT,
-                    $page * $this->SEARCH_TAG_PAGE_OFFSET);
+              $page * $this->SEARCH_TAG_PAGE_OFFSET);
         }
         
         // Execute database query
@@ -151,7 +151,7 @@ class Search extends CI_Controller {
         
         if(strlen($target)) {
             $this->db->limit($this->SEARCH_TAG_NAME_LIMIT,
-                    $page * $this->SEARCH_TAG_PAGE_OFFSET);
+              $page * $this->SEARCH_TAG_PAGE_OFFSET);
         }
         
         // Execute database query
@@ -159,7 +159,7 @@ class Search extends CI_Controller {
         
         // Append query records to result sub-array
         foreach($query->result() as $row) {
-            $result["json"]["ingredients_like_name"][] = $row->name;
+            $result["json"]["ingredients_like_name"][] = $row->Name;
         }
         
         // Load result records into view for retrieval
