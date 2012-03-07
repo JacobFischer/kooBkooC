@@ -19,6 +19,35 @@ class Ingredients extends CI_Controller //display ingredients by id
       $this->template->load('ingredients_id',array("ingredient" => $query->row(0) ));	//load view of the ingredient and pas in params
     }             
   }
+		if($query->num_rows() != 1)
+                {
+                	$this->template->load('error', array("Ingredient" => "Ingredient with ID of \"$id\"not found" ));//load error view  
+		}
+		else
+		{
+			$this->template->load('ingredients_id',array("ingredient" => $query->row(0) ));	//load view of the ingredient and pas in params
+		}
+               
+	
+		
+	}
+
+	//return ingredient view for a supplied recipeid
+	public function recipes($id)
+	{
+		$query = $this->db->query("SELECT * FROM RecipesIngredients JOIN Recipes on RecipesIngredients.RecipesID = Recipes.ID WHERE RecipesIngredients.IngredientsID = \"$id\" ");
+	 
+		if($query->num_rows() < 1)
+		{
+			$this->template->load('error', array('title' => 'No recipes found for this ingredient!', "message" => "The recipe with id  \"$id\" returned no ingredients") );//load error view
+		}
+		else
+		{
+			$this->template->load('ingredientsview', array("ingredient" => $query) );  //load view to display results
+		}
+	
+
+	} 
 
   //return ingredient view for a supplied recipeid
   public function recipes($id)
