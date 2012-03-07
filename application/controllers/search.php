@@ -104,6 +104,9 @@ class Search extends CI_Controller {
         // Create result array and empty sub-array
         $result = array("json" => array("ingredients" => array()));
         
+		$limit = $this->SEARCH_TAG_PAGE_OFFSET;
+		$offset = ($page - 1) * $this->SEARCH_TAG_PAGE_OFFSET;
+		
         // Execute database query
         if(strlen($target)) {
             $target = $this->db->escape_like_str($this->tag_escape($target));
@@ -111,7 +114,7 @@ class Search extends CI_Controller {
 			$query2 = $this->db->query("SELECT ID, Name, BaseUnitOfMeasure, Description, ImageURL FROM Ingredients WHERE Name LIKE '%".$target."%' AND Name NOT LIKE '".$target."%' ORDER BY Name LIMIT ".$this->SEARCH_TAG_PAGE_OFFSET." OFFSET ".$page * $this->SEARCH_TAG_PAGE_OFFSET);
         }
         else {
-            $query1 = $this->db->query("SELECT ID, Name, BaseUnitOfMeasure, Description, ImageURL FROM Ingredients ORDER BY Name LIMIT ".$this->SEARCH_TAG_PAGE_OFFSET." OFFSET ".$page * $this->SEARCH_TAG_PAGE_OFFSET);
+            $query1 = $this->db->query("SELECT ID, Name, BaseUnitOfMeasure, Description, ImageURL FROM Ingredients ORDER BY Name LIMIT ".$limit." OFFSET ".$offset);
         }
         
         // Append query records to result sub-array
