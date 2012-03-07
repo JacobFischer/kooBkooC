@@ -112,13 +112,19 @@ class Search extends CI_Controller {
 		//           REALLY REALLY KNOW WHAT YOU ARE DOING!!!
 		// ####################################################################
         if(strlen($target)) {
-            //$target = $this->db->escape_like_str($this->tag_escape($target));
-            $query1 = $this->db->query("SELECT ID, Name, BaseUnitOfMeasure, Description, ImageURL FROM Ingredients ORDER BY Name LIMIT ".$limit." OFFSET ".$offset);
-            //$query1 = $this->db->query("SELECT ID, Name, BaseUnitOfMeasure, Description, ImageURL FROM Ingredients WHERE Name LIKE '".$target."%' ORDER BY Name LIMIT ".$limit." OFFSET ".$offset);
-            //$query2 = $this->db->query("SELECT ID, Name, BaseUnitOfMeasure, Description, ImageURL FROM Ingredients WHERE Name LIKE '%".$target."%' AND Name NOT LIKE '".$target."%' ORDER BY Name LIMIT ".$limit." OFFSET ".$offset);
+            $target = $this->db->escape_like_str($this->tag_escape($target));
+            $query1 = $this->db->query("SELECT ID, Name, BaseUnitOfMeasure, "
+			  ."Description, ImageURL FROM Ingredients WHERE Name LIKE '"
+			  .$target."%' ORDER BY Name LIMIT ".$limit." OFFSET ".$offset);
+            $query2 = $this->db->query("SELECT ID, Name, BaseUnitOfMeasure, "
+			  ."Description, ImageURL FROM Ingredients WHERE Name LIKE '%"
+			  .$target."%' AND Name NOT LIKE '".$target."%' ORDER BY Name "
+			  ."LIMIT ".$limit." OFFSET ".$offset);
         }
         else {
-            $query1 = $this->db->query("SELECT ID, Name, BaseUnitOfMeasure, Description, ImageURL FROM Ingredients ORDER BY Name LIMIT ".$limit." OFFSET ".$offset);
+            $query1 = $this->db->query("SELECT ID, Name, BaseUnitOfMeasure, "
+			  ."Description, ImageURL FROM Ingredients ORDER BY Name LIMIT "
+			  .$limit." OFFSET ".$offset);
 		}
         
         // Append query records to result sub-array
@@ -126,16 +132,15 @@ class Search extends CI_Controller {
             $result["json"]["ingredients"][] = $row;
         }
 		
-		/*
-		if(strlen($target)) {
+		if(isset($query2)) {
             foreach($query2->result() as $row) {
                 $result["json"]["ingredients"][] = $row;
             }
 		}
-		*/
 		
         // Load result records into view for retrieval
-        $this->load->view('search_json', array_slice($result, 0, $limit);
+        $this->load->view('search_json', $result);
+        //$this->load->view('search_json', array_slice($result, 0, $limit);
     }
     
     // ------------------------------------------------------------------------
