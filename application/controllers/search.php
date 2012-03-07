@@ -40,6 +40,7 @@ class Search extends CI_Controller {
       return strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $target));
     }
     
+    
     // ------------------------------------------------------------------------
     
     public function index()
@@ -184,6 +185,89 @@ class Search extends CI_Controller {
      
     public function recipe($text = "default" )
     {
+      //http://home.jacobfischer.me/swilliams/cs397/index.php/search/recipe?ingredient[]=8&ingredient[]=11
+	    $data = array("json" => array("recipe" => array() ) );
+      // create data object mapped to json
+  
+      // Build query
+      $this->db->select('*');
+      $this->db->from('Recipes');
+      $this->db->like('Description',$text);
+      // Execute query
+      $query = $this->db->get();
+      // Iterate through each result in the query and build the cookware to return
+      $i = 0;
+      foreach($query->result() as $recipe)
+      {
+        $data['json']['recipe'][$i] = $recipe;
+        $i++;
+      }
+      $this->db->flush_cache();
+      $this->db->select('*');
+      $this->db->from('Recipes');
+      $this->db->like('Directions',$text);
+      $query = $this->db->get();
+      $same = 0;
+      foreach($query->result() as $result)
+      {
+        for($j=0; $j<$i; $j++)
+        {
+          if($data['json']['recipe'][$j]==$result)
+          {
+            $same=1;
+          }
+        }
+        if($same==0)
+        {
+          $data['json']['recipe'][$i]=$result;
+          $i++;
+        }
+        $same=0;
+      }
+      // return the recipes to the "views/search_json.php" view so it can build valid JSON from the data
+      $this->load->view('search_json', $data);
+    }
+	
+	// ------------------------------------------------------------------------
+	//  This function is for taking ingredients and returning the corresponding
+	//  recipes.
+	// ------------------------------------------------------------------------
+	
+  public function get()
+  {
+      $q = $this->input->get('ingredient', TRUE);
+  }
+  
+  public function reverse($ingredients)
+  {
+    // create data object mapped to json
+    $data = array("json" => array("recipe" => array() ) );
+    
+    $query = array();
+    // Build query
+    foreach($ingredients as $ingredient)
+    {
+      $this->db->select('*');
+      $this->db->from('Recipes');
+      $this->db->join('RecipesIngredients','Recipes.ID = RecipesIngredients.RecipesID');
+      $this->db->join('Votes','Recipes.ID = Votes.RecipesID');
+      $this->db->like("IngredientsID", $ingredient);
+      $this->db->order_by("SUM('Votes.Direction')",'asc');   
+      // Execute query
+      $query = $this->db->get();
+    }
+    
+    // Iterate through each result in the query and build the cookware to return
+    $i = 0;
+    foreach($query->result() as $recipe)
+    {
+        $data['json']['recipe'][$i] = $recipe;
+        $i++;
+    }
+    
+    // return the recipes to the "views/search_json.php" view so it can build valid JSON from the data
+    $this->load->view('search_json', $data);
+  }
         // create data object mapped to json
         $data = array("json" => array("recipe" => array() ) );
         
@@ -232,39 +316,7 @@ class Search extends CI_Controller {
         // return the recipes to the "views/search_json.php" view so it can build valid JSON from the data
         $this->load->view('search_json', $data);
     }
-    
-    // ------------------------------------------------------------------------
-    //  This function is for taking ingredients and returning the corresponding
-    //  recipes.
-    // ------------------------------------------------------------------------
-    
-    public function reverse($ingredientID = 1)
-    {
-        // create data object mapped to json
-        $data = array("json" => array("recipe" => array() ) );
-        
-        // Build query
-        $this->db->select('*');
-        $this->db->from('Recipes');
-        $this->db->join('RecipesIngredients','Recipes.ID = RecipesIngredients.RecipesID');
-        $this->db->join('Votes','Recipes.ID = Votes.RecipesID');
-        $this->db->like("IngredientsID", $ingredientID);
-        $this->db->order_by("SUM('Votes.Direction')",'asc');
-        
-        // Execute query
-        $query = $this->db->get();
-        
-        // Iterate through each result in the query and build the cookware to return
-        $i = 0;
-        foreach($query->result() as $recipe)
-        {
-            $data['json']['recipe'][$i] = $recipe;
-            $i++;
-        }
-        
-        // return the recipes to the "views/search_json.php" view so it can build valid JSON from the data
-        $this->load->view('search_json', $data);
-    }
+
 }
 
 /* End of file search.php */

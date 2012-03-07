@@ -75,17 +75,12 @@ class User extends CI_Controller {
 
   public function register()
   {
-    $username = $this->input->post( "username" );
+    $displayName = $this->input->post( "name" );
     // PLAINTEXT
     $password = $this->input->post( "password" );
     $email = $this->input->post( "email" );
     $avatarURL = $this->input->post( "avatarURL" );
 
-    if( strlen( $username ) < 4 )
-    {
-      $this->template->load('error', array('title' => 'User Registration Failed', "message" => "Please make your username at least 4 characters!") );
-      return;
-    }
     if( strlen( $password ) < 4 )
     {
       $this->template->load('error', array('title' => 'User Registration Failed', "message" => "Please make your password at least 4 characters!") );
@@ -95,51 +90,65 @@ class User extends CI_Controller {
     $this->db->select('*');
     $this->db->from('Users');
     $this->db->where('Email', $email);
-    $this->db->or_where('DisplayName', $username);
     $query = $this->db->get();
 
     if( $query->num_rows() > 0 )
     {
       // TODO: Determine which is in use
-      $this->template->load('error', array('title' => 'User Registration Failed', "message" => "Username or email is already in use!") );
+      $this->template->load('error', array('title' => 'User Registration Failed', "message" => "E-mail is already in use!") );
       return;
     }
 
     $this->db->flush_cache();
 
     $data = array(
-      'DisplayName' => $username,
+      'DisplayName' => $displayName,
       'Email' => $email,
-      'HashedPassword' => crypt( $password, 'WoolyWilly' ),
+      'HashedPassword' => crypt( $password ),
       'AvatarURL' => $avatarURL
     );
 
     $this->db->insert('Users', $data);
 
-    $this->template->load('register_successful', array( 'username' => $username ) );
+    $this->template->load('register_successful', array( 'username' => $displayName) );
     
   }
 
   public function user_login()
   {
-    $this->template->load( 'user_login.php' );
+    $this->load->library('session');
+    $logged_in = $this->session->userdata('logged_in');
+    if( $logged_in )
+    { 
+      $this->template->load('error', array('title' => 'Already Logged In', "message" => "Dude! You're already logged in!") );
+    }
+    else
+    {
+      $this->template->load( 'user_login.php' );
+    }
   }
 
   public function login()
   {
-    $username = $this->input->post( "username" );
+
+    $email = $this->input->post( "email" );
     // PLAINTEXT
     $password = $this->input->post( "password" );
 
     $this->db->select('*');
     $this->db->from('Users');
-    $this->db->where('DisplayName', $username);
+    $this->db->where('Email', $email );
 
     $query = $this->db->get();
     if( $query->num_rows == 1 )
     {
-      if( crypt( $password, 'WoolyWilly' ) ==  $query->row(0)->HashedPassword )
+      
+      if( crypt( $password, $query->row(0)->HashedPassword ) ==  $query->row(0)->HashedPassword )
       {
+        $this->load->library('session');
+        $userData = array( 'email' => $email, 'logged_in' => TRUE );
+        $this->session->set_userdata($userData);
+
         $this->template->load('login_successful', array() );
         return;
       }
@@ -152,7 +161,7 @@ class User extends CI_Controller {
     }
     else
     {
-      $this->template->load('error', array('title' => 'User Login Failed', "message" => "A user with that username does not exist!") );
+      $this->template->load('error', array('title' => 'User Login Failed', "message" => "A user with that email does not exist!") );
     }
 
   }
