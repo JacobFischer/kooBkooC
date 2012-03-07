@@ -112,7 +112,7 @@ class Search extends CI_Controller {
 		//           REALLY REALLY KNOW WHAT YOU ARE DOING!!!
 		// ####################################################################
         if(strlen($target)) {
-            $target = $this->db->escape_like_str($this->tag_escape($target));
+            //$target = $this->db->escape_like_str($this->tag_escape($target));
             $query1 = $this->db->query("SELECT ID, Name, BaseUnitOfMeasure, Description, ImageURL FROM Ingredients ORDER BY Name LIMIT ".$limit." OFFSET ".$offset);
             //$query1 = $this->db->query("SELECT ID, Name, BaseUnitOfMeasure, Description, ImageURL FROM Ingredients WHERE Name LIKE '".$target."%' ORDER BY Name LIMIT ".$limit." OFFSET ".$offset);
             //$query2 = $this->db->query("SELECT ID, Name, BaseUnitOfMeasure, Description, ImageURL FROM Ingredients WHERE Name LIKE '%".$target."%' AND Name NOT LIKE '".$target."%' ORDER BY Name LIMIT ".$limit." OFFSET ".$offset);
@@ -126,7 +126,7 @@ class Search extends CI_Controller {
             $result["json"]["ingredients"][] = $row;
         }
 		
-		if(strlen($target)) {
+		if(isset($query2)) {
             foreach($query2->result() as $row) {
                 $result["json"]["ingredients"][] = $row;
             }
