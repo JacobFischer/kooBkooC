@@ -93,13 +93,10 @@ class Search extends CI_Controller {
     
     public function ingredients($target = "", $page = 1)
     {
-        // Set page to range 0..INF
+        // Check invalid page
         if($page < 1) {
             $page = 0;
         }
-        else {
-		  $page--;
-		}
         
         // Create result array and empty sub-array
         $result = array("json" => array("ingredients" => array()));
