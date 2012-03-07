@@ -1,30 +1,29 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Top extends CI_Controller {
+class Random extends CI_Controller {
     // ------------------------------------------------------------------------
     // Class variable declarations.
     // ------------------------------------------------------------------------
     
-    // Value for SQL LIMIT when querying the database for top results.
-    protected $TOP_QUERY_GENERAL_LIMIT = 10;
+    // Value for SQL LIMIT when querying the database for random results.
+    protected $RANDOM_QUERY_GENERAL_LIMIT = 10;
     
     // ------------------------------------------------------------------------
-    // Return all information on the top ingredients.
+    // Return all information on random ingredients. If limit is not specified,
+	// the default value will be used.
     //
-    // http://.../top/ingredients
+    // http://.../random/ingredients/__limit__
     // ------------------------------------------------------------------------
     
-    public function ingredients(limit = $this->TOP_QUERY_GENERAL_LIMIT)
+    public function ingredients(limit = $this->RANDOM_QUERY_GENERAL_LIMIT)
     {
         // Create result array and empty sub-array
         $result = array("json" => array("top_ingredients" => array()));
         
         // Execute database query
         $query = $this->db->query("SELECT ID, Name, BaseUnitOfMeasure, "
-          ."Description, ImageURL FROM Ingredients WHERE ID IN (SELECT * FROM "
-          ."(SELECT IngredientsID FROM RecipesIngredients GROUP BY RecipesID "
-          ."ORDER BY COUNT(RecipesID) DESC LIMIT ".$limit.") AS subtable) "
-		  ."ORDER BY Name");
+          ."Description, ImageURL FROM Ingredients ORDER BY RAND(), Name "
+		  ."LIMIT ".$limit);
         
         // Append query records to result sub-array
         foreach($query->result() as $row) {
@@ -36,5 +35,5 @@ class Top extends CI_Controller {
     }
 }
 
-/* End of file top.php */
-/* Location: ./application/controllers/top.php */
+/* End of file random.php */
+/* Location: ./application/controllers/random.php */
