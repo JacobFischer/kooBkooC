@@ -18,11 +18,11 @@ class Random extends CI_Controller {
     public function ingredients(limit = $this->RANDOM_QUERY_GENERAL_LIMIT)
     {
         // Create result array and empty sub-array
-        $result = array("json" => array("top_ingredients" => array()));
+        $result = array("json" => array("random_ingredients" => array()));
         
         // Execute database query
         $query = $this->db->query("SELECT ID, Name, BaseUnitOfMeasure, "
-          ."Description, ImageURL FROM Ingredients ORDER BY RAND(), Name "
+          ."Description, ImageURL FROM Ingredients ORDER BY Name "
 		  ."LIMIT ".$limit);
         
         // Append query records to result sub-array
