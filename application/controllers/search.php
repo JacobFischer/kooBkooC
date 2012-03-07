@@ -113,16 +113,23 @@ class Search extends CI_Controller {
         
         // Execute database query
         if(strlen($target)) {
-            $query = $this->db->query("SELECT ID, Name, BaseUnitOfMeasure, Description, ImageURL FROM Ingredients WHERE Name LIKE '".$target."%' ORDER BY Name LIMIT ".$this->SEARCH_TAG_PAGE_OFFSET." OFFSET ".$page * $this->SEARCH_TAG_PAGE_OFFSET).$this->db->query("SELECT ID, Name, BaseUnitOfMeasure, Description, ImageURL FROM Ingredients WHERE Name LIKE '".$target."%' ORDER BY Name LIMIT ".$this->SEARCH_TAG_PAGE_OFFSET." OFFSET ".$page * $this->SEARCH_TAG_PAGE_OFFSET);
+            $query1 = $this->db->query("SELECT ID, Name, BaseUnitOfMeasure, Description, ImageURL FROM Ingredients WHERE Name LIKE '".$target."%' ORDER BY Name LIMIT ".$this->SEARCH_TAG_PAGE_OFFSET." OFFSET ".$page * $this->SEARCH_TAG_PAGE_OFFSET)
+			$query2 = $this->db->query("SELECT ID, Name, BaseUnitOfMeasure, Description, ImageURL FROM Ingredients WHERE Name LIKE '%".$target."%' AND Name NOT LIKE '".$target."%' ORDER BY Name LIMIT ".$this->SEARCH_TAG_PAGE_OFFSET." OFFSET ".$page * $this->SEARCH_TAG_PAGE_OFFSET);
         }
         else {
-            $query = $this->db->query("SELECT ID, Name, BaseUnitOfMeasure, Description, ImageURL FROM Ingredients ORDER BY Name LIMIT ".$this->SEARCH_TAG_PAGE_OFFSET." OFFSET ".$page * $this->SEARCH_TAG_PAGE_OFFSET);
+            $query1 = $this->db->query("SELECT ID, Name, BaseUnitOfMeasure, Description, ImageURL FROM Ingredients ORDER BY Name LIMIT ".$this->SEARCH_TAG_PAGE_OFFSET." OFFSET ".$page * $this->SEARCH_TAG_PAGE_OFFSET);
         }
         
         // Append query records to result sub-array
-        foreach($query->result() as $row) {
+        foreach($query1->result() as $row) {
             $result["json"]["ingredients"][] = $row;
         }
+		
+		if(strlen($target)) {
+            foreach($query2->result() as $row) {
+                $result["json"]["ingredients"][] = $row;
+            }
+		}
 		
         // Load result records into view for retrieval
         $this->load->view('search_json', $result);
