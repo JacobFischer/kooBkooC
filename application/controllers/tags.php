@@ -19,10 +19,12 @@ class Tags extends CI_Controller {
 
 	public function recipes($id)
 	{
-		$this->db->select('*');
+	/*	$this->db->select('*');
 		$this->db->from('Recipes');
 		$this->db->where('TagID', $id);
-		$this->db->get();
+		$this->db->get();*/
+	$query = $this->db->query("SELECT ID FROM RecipesTags JOIN Recipes on RecipesTags.RecipesID = Recipes.ID WHERE RecipesTags.TagsID = \"$id\" ");
+
 
 		 if($query->num_rows() == 0)
                 {
