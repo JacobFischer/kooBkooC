@@ -132,7 +132,7 @@ class Search extends CI_Controller {
             $result["json"]["ingredients"][] = $row;
         }
 		
-		if(isset($query2)) {
+		if(strlen($target)) {
             foreach($query2->result() as $row) {
                 $result["json"]["ingredients"][] = $row;
             }
