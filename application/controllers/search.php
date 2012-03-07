@@ -99,7 +99,7 @@ class Search extends CI_Controller {
         }
         
         // Decrement page number
-        $page = $page - 1;
+        $page--;
         
         // Escape target string
         //
@@ -111,6 +111,7 @@ class Search extends CI_Controller {
         // Create result array and empty sub-array
         $result = array("json" => array("ingredients" => array()));
         
+		/*
         // Execute database query
         if(strlen($target)) {
             $query = $this->db->query("SELECT DISTINCT ID, Name, BaseUnitOfMeasure, Description, ImageURL FROM ((SELECT ID, Name, BaseUnitOfMeasure, Description, ImageURL, 0 AS SortOrder FROM Ingredients WHERE Name LIKE '{$target}%') UNION (SELECT ID, Name, BaseUnitOfMeasure, Description, ImageURL, 1 AS SortOrder FROM Ingredients WHERE Name LIKE '%{$target}%')) ORDER BY SortOrder, Name LIMIT {$this->SEARCH_TAG_PAGE_OFFSET} OFFSET {$page * $this->SEARCH_TAG_PAGE_OFFSET}");
@@ -123,7 +124,8 @@ class Search extends CI_Controller {
         foreach($query->result() as $row) {
             $result["json"]["ingredients"][] = $row;
         }
-        
+        */
+		
         // Load result records into view for retrieval
         $this->load->view('search_json', $result);
     }
