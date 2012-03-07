@@ -15,7 +15,7 @@ class Random extends CI_Controller {
     // http://.../random/ingredients/__limit__
     // ------------------------------------------------------------------------
     
-    public function ingredients(limit = $this->RANDOM_QUERY_GENERAL_LIMIT)
+    public function ingredients(limit = 10)
     {
         // Create result array and empty sub-array
         $result = array("json" => array("random_ingredients" => array()));
