@@ -126,11 +126,13 @@ class Search extends CI_Controller {
             $result["json"]["ingredients"][] = $row;
         }
 		
-		if(isset($query2)) {
+		/*
+		if(strlen($target)) {
             foreach($query2->result() as $row) {
                 $result["json"]["ingredients"][] = $row;
             }
 		}
+		*/
 		
         // Load result records into view for retrieval
         $this->load->view('search_json', array_slice($result, 0, $limit);
