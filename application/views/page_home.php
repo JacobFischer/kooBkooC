@@ -5,3 +5,4 @@
 <p>Searching Ingredients:</p>
 <ul id="searchList"></ul>
 <button id="searchButton">Find Recipes</button>
+<div id="searchResult"></div>
