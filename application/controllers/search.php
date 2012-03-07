@@ -101,18 +101,12 @@ class Search extends CI_Controller {
 		  $page--;
 		}
         
-        // Escape target string
-        //
-        // ##############
-        // DO NOT MODIFY!
-        // ##############
-        $target = $this->db->escape_like_str($this->tag_escape($target));
-        
         // Create result array and empty sub-array
         $result = array("json" => array("ingredients" => array()));
         
         // Execute database query
         if(strlen($target)) {
+            $target = $this->db->escape_like_str($this->tag_escape($target));
             $query1 = $this->db->query("SELECT ID, Name, BaseUnitOfMeasure, Description, ImageURL FROM Ingredients WHERE Name LIKE '".$target."%' ORDER BY Name LIMIT ".$this->SEARCH_TAG_PAGE_OFFSET." OFFSET ".$page * $this->SEARCH_TAG_PAGE_OFFSET)
 			$query2 = $this->db->query("SELECT ID, Name, BaseUnitOfMeasure, Description, ImageURL FROM Ingredients WHERE Name LIKE '%".$target."%' AND Name NOT LIKE '".$target."%' ORDER BY Name LIMIT ".$this->SEARCH_TAG_PAGE_OFFSET." OFFSET ".$page * $this->SEARCH_TAG_PAGE_OFFSET);
         }
