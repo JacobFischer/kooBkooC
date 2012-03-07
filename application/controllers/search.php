@@ -113,7 +113,7 @@ class Search extends CI_Controller {
         
         // Execute database query
         if(strlen($target)) {
-            $query = $this->db->query("SELECT DISTINCT ID, Name, BaseUnitOfMeasure, Description, ImageURL FROM ((SELECT * FROM (SELECT ID, Name, BaseUnitOfMeasure, Description, ImageURL, 0 AS SortOrder FROM Ingredients WHERE Name LIKE '".$target."%') AS SubTable1) UNION (SELECT * FROM (SELECT ID, Name, BaseUnitOfMeasure, Description, ImageURL, 1 AS SortOrder FROM Ingredients WHERE Name LIKE '%".$target."%') AS SubTable2)) ORDER BY SortOrder, Name LIMIT ".$this->SEARCH_TAG_PAGE_OFFSET." OFFSET ".$page * $this->SEARCH_TAG_PAGE_OFFSET);
+            $query = $this->db->query("SELECT DISTINCT ID, Name, BaseUnitOfMeasure, Description, ImageURL FROM ((SELECT ID, Name, BaseUnitOfMeasure, Description, ImageURL, 0 AS SortOrder FROM Ingredients WHERE Name LIKE '".$target."%' AS SubTable1) UNION (SELECT ID, Name, BaseUnitOfMeasure, Description, ImageURL, 1 AS SortOrder FROM Ingredients WHERE Name LIKE '%".$target."%' AS SubTable2)) ORDER BY SortOrder, Name LIMIT ".$this->SEARCH_TAG_PAGE_OFFSET." OFFSET ".$page * $this->SEARCH_TAG_PAGE_OFFSET);
         }
         else {
             $query = $this->db->query("SELECT DISTINCT ID, Name, BaseUnitOfMeasure, Description, ImageURL FROM Ingredients ORDER BY Name LIMIT ".$this->SEARCH_TAG_PAGE_OFFSET." OFFSET ".$page * $this->SEARCH_TAG_PAGE_OFFSET);
