@@ -139,8 +139,8 @@ class Search extends CI_Controller {
 		}
 		
         // Load result records into view for retrieval
-        $this->load->view('search_json', $result);
-        //$this->load->view('search_json', array_slice($result, 0, $limit);
+        $this->load->view('search_json', array_slice($result, 0, $limit,
+		  TRUE));
     }
     
     // ------------------------------------------------------------------------
