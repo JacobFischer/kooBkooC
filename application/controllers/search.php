@@ -83,7 +83,6 @@ class Search extends CI_Controller {
         $this->load->view('search_json', $data);
     }
 
-    
     // ------------------------------------------------------------------------
     // Return all information on ingredients selected based on the target
     // input; note that page refers to a perceived page number and not to the
@@ -99,22 +98,26 @@ class Search extends CI_Controller {
             $page = 1;
         }
         
+        // Decrement page number
+        $page = $page - 1;
+        
+        // Escape target string
+        //
+        // ##############
+        // DO NOT MODIFY!
+        // ##############
+        $target = $this->db->escape_like_str($this->tag_escape($target));
+        
         // Create result array and empty sub-array
         $result = array("json" => array("ingredients" => array()));
         
-        // Prepare database query
-        $this->db->select("ID, Name, BaseUnitOfMeasure, Description, "
-          ."ImageURL");
-        $this->db->like("Name", $this->tag_escape($target), "after");
-        $this->db->order_by("CHAR_LENGTH(Name), Name");
-        
-        if(strlen($target)) {
-            $this->db->limit($this->SEARCH_TAG_GENERAL_LIMIT,
-              ($page - 1) * $this->SEARCH_TAG_PAGE_OFFSET);
-        }
-        
         // Execute database query
-        $query = $this->db->get("Ingredients");
+        if(strlen($target)) {
+            $query = $this->db->query("SELECT DISTINCT ID, Name, BaseUnitOfMeasure, Description, ImageURL FROM ((SELECT ID, Name, BaseUnitOfMeasure, Description, ImageURL, 0 AS SortOrder FROM Ingredients WHERE Name LIKE '{$target}%') UNION (SELECT ID, Name, BaseUnitOfMeasure, Description, ImageURL, 1 AS SortOrder FROM Ingredients WHERE Name LIKE '%{$target}%')) ORDER BY SortOrder, Name LIMIT {$this->SEARCH_TAG_PAGE_OFFSET} OFFSET {$page * $this->SEARCH_TAG_PAGE_OFFSET}");
+        }
+        else {
+            $query = $this->db->query("SELECT DISTINCT ID, Name, BaseUnitOfMeasure, Description, ImageURL FROM Ingredients ORDER BY Name LIMIT {$this->SEARCH_TAG_PAGE_OFFSET} OFFSET {$page * $this->SEARCH_TAG_PAGE_OFFSET}");
+        }
         
         // Append query records to result sub-array
         foreach($query->result() as $row) {
