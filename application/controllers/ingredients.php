@@ -29,7 +29,7 @@ class Ingredients extends CI_Controller{       //display ingredients by id
 	 
 		if($query->num_rows() < 1)
 		{
-			$this->template->load('error', array('title' => 'Ingredients not found!', "message" => "The recipe with id  \"$id\" returned no ingredients") );//load error view
+			$this->template->load('error', array('title' => 'No recipes found for this ingredient!', "message" => "The recipe with id  \"$id\" returned no ingredients") );//load error view
 		}
 		else
 		{
