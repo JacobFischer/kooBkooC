@@ -14,8 +14,9 @@ class Top extends CI_Controller {
     // http://.../top/ingredients
     // ------------------------------------------------------------------------
     
-    public function ingredients(limit = $this->TOP_QUERY_GENERAL_LIMIT)
+    public function ingredients(limit = 10)
     {
+	    /*
         // Create result array and empty sub-array
         $result = array("json" => array("top_ingredients" => array()));
         
@@ -33,6 +34,7 @@ class Top extends CI_Controller {
         
         // Load result records into view for retrieval
         $this->load->view('search_json', $result);
+		*/
     }
 }
 
