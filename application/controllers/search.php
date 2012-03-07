@@ -113,12 +113,13 @@ class Search extends CI_Controller {
 		// ####################################################################
         if(strlen($target)) {
             $target = $this->db->escape_like_str($this->tag_escape($target));
-            $query1 = $this->db->query("SELECT ID, Name, BaseUnitOfMeasure, Description, ImageURL FROM Ingredients WHERE Name LIKE '".$target."%' ORDER BY Name LIMIT ".$limit." OFFSET ".$offset);
-            $query2 = $this->db->query("SELECT ID, Name, BaseUnitOfMeasure, Description, ImageURL FROM Ingredients WHERE Name LIKE '%".$target."%' AND Name NOT LIKE '".$target."%' ORDER BY Name LIMIT ".$limit." OFFSET ".$offset);
+            $query1 = $this->db->query("SELECT ID, Name, BaseUnitOfMeasure, Description, ImageURL FROM Ingredients ORDER BY Name LIMIT ".$limit." OFFSET ".$offset);
+            //$query1 = $this->db->query("SELECT ID, Name, BaseUnitOfMeasure, Description, ImageURL FROM Ingredients WHERE Name LIKE '".$target."%' ORDER BY Name LIMIT ".$limit." OFFSET ".$offset);
+            //$query2 = $this->db->query("SELECT ID, Name, BaseUnitOfMeasure, Description, ImageURL FROM Ingredients WHERE Name LIKE '%".$target."%' AND Name NOT LIKE '".$target."%' ORDER BY Name LIMIT ".$limit." OFFSET ".$offset);
         }
         else {
             $query1 = $this->db->query("SELECT ID, Name, BaseUnitOfMeasure, Description, ImageURL FROM Ingredients ORDER BY Name LIMIT ".$limit." OFFSET ".$offset);
-        }
+		}
         
         // Append query records to result sub-array
         foreach($query1->result() as $row) {
