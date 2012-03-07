@@ -1,6 +1,6 @@
 
 <form action="login" method="post">
-Username: <input type="text" name="username" /><br />
+E-mail: <input type="text" name="email" /><br />
 Password: <input type="password" name="password" /><br />
 <input type="submit" />
 </form>
