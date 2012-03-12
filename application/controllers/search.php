@@ -317,6 +317,77 @@ class Search extends CI_Controller {
         $this->load->view('search_json', $data);
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////
+       // The basic JSON search function for Tags
+       // http://home.jacobfischer.me/USERNAME/cs397/index.php/search/tags/
+       public function tags()
+       {
+         // We want to return the $data object with a map key to json, and in the  json we are building the cookware
+         $data = array("json" => array("tags" => array() ) );
+        
+         // Build the SQL-ish query using CodeIgniters's Active Record
+         $this->db->select('*');
+         $this->db->from('Tags');
+        
+         // Actually execute the SQL Query on the database
+         $query = $this->db->get();
+        
+         // Iterate through each result in the query and build the cookware to  return
+         $i = 0;
+         foreach($query->result() as $tags)
+         {
+            $data['json']['tags'][$i] = $tags;
+            $i++;
+         }
+        
+        // return the tags to the "views/search_json.php" view so it can build  valid JSON from the data
+        $this->load->view('search_json', $data);
+      }
+      /////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+ /////////////////////////////////////////////////////////////////////////////////////////
+          // ------------------------------------------------------------------------
+    // Return all information on tags selected based on the target
+    // input; note that page refers to a perceived page number and not to the
+    // SQL OFFSET value. Use for general tag searching.
+    //
+    // http://home.jacobfischer.me/USERNAME/cs397/index.php/search/tag/_tagname_/_page#_
+    // ------------------------------------------------------------------------
+    
+    public function tag($target = "", $page = 1)
+    {
+        // Check invalid page
+        if($page < 1) {
+            $page = 1;
+        }
+        
+        // Create result array and empty sub-array
+        $result = array("json" => array("tag" => array()));
+        
+        // Prepare database query //////////////////////////////////////////////////////
+        $this->db->select("ID, Name, Description");
+        $this->db->like("Name", $this->tag_escape($target), "after");
+        $this->db->order_by("CHAR_LENGTH(Name), Name");
+        
+        if(strlen($target)) {
+            $this->db->limit($this->SEARCH_TAG_GENERAL_LIMIT,
+              ($page - 1) * $this->SEARCH_TAG_PAGE_OFFSET);
+        }///////////////////////////////////////////////////////////////////////////////
+        
+        // Execute database query
+        $query = $this->db->get("Tags");
+        
+        // Append query records to result sub-array
+        foreach($query->result() as $row) {
+            $result["json"]["tag"][] = $row;
+        }
+        
+        // Load result records into view for retrieval
+        $this->load->view('search_json', $result);
+    }
+
 }
 
 /* End of file search.php */
