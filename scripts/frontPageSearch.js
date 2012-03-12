@@ -34,6 +34,11 @@ $(document).ready(function(){
       }
     });
   });
+  //Not sure about this clikc part
+  $("li.recipe-matching").on("click", function(){
+    url = base_url + "index.php/recipe/id" + $(this).val();
+    window.location(url);
+  });
 });
 
 //'<ul><li>obj.cookware[0].ID</li><li>obj.cookware[0].Name</li><ul>'
