@@ -29,7 +29,7 @@ class Top extends CI_Controller {
     // http://.../top/ingredients
     // ------------------------------------------------------------------------
     
-    public function ingredients(limit = 10)
+    public function ingredients($limit = 10)
     {
         // Create result array and empty sub-array
         $result = array("json" => array("top_ingredients" => array()));
