@@ -6,32 +6,30 @@ class Top extends CI_Controller {
     // ------------------------------------------------------------------------
     
     // Value for SQL LIMIT when querying the database for top results.
+    //
+    // ########################################################################
+    // THE VALUES OF THIS VARIABLE MUST BE AN INTEGER!
+    // ########################################################################
     protected $TOP_QUERY_GENERAL_LIMIT = 10;
     
     // ------------------------------------------------------------------------
-    // Return all information on the top ingredients.
+    // Return all information on the top ingredients; top ingredients are those
+    // that appear most often in recipes.
     //
     // http://.../top/ingredients
     // ------------------------------------------------------------------------
     
     public function ingredients()
     {
-        // Assign limit
-        $limit = $this->TOP_QUERY_GENERAL_LIMIT;
-        
         // Create result array and empty sub-array
         $result = array("json" => array("top_ingredients" => array()));
         
         // Execute database query
-        //
-        // ####################################################################
-        // ENSURE THAT LIMIT IS NOT SUPPLIED BY AN UNTRUSTED SOURCE!
-        // ####################################################################
         $query = $this->db->query("SELECT ID, Name, BaseUnitOfMeasure, "
           ."Description, ImageURL FROM Ingredients WHERE ID IN (SELECT * FROM "
           ."(SELECT IngredientsID FROM RecipesIngredients GROUP BY RecipesID "
-          ."ORDER BY COUNT(RecipesID) DESC LIMIT ".$limit.") AS subtable) "
-          ."ORDER BY Name");
+          ."ORDER BY COUNT(RecipesID) DESC LIMIT "
+          .$this->TOP_QUERY_GENERAL_LIMIT.") AS subtable) ORDER BY Name");
         
         // Append query records to result sub-array
         foreach($query->result() as $row) {
