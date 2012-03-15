@@ -38,6 +38,10 @@ class Top extends CI_Controller {
         $result = array("json" => array("top_ingredients" => array()));
         
         // Execute database query
+        //
+        // ####################################################################
+        // ENSURE THAT LIMIT IS NOT SUPPLIED BY AN UNTRUSTED SOURCE!
+        // ####################################################################
         $query = $this->db->query("SELECT ID, Name, BaseUnitOfMeasure, "
           ."Description, ImageURL FROM Ingredients WHERE ID IN (SELECT * FROM "
           ."(SELECT IngredientsID FROM RecipesIngredients GROUP BY RecipesID "
