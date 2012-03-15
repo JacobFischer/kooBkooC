@@ -268,6 +268,9 @@ class Search extends CI_Controller {
     // return the recipes to the "views/search_json.php" view so it can build valid JSON from the data
     $this->load->view('search_json', $data);
   }
+  
+  public function WHAT_IS_THIS_FUNCTION($ingredients)
+  {
         // create data object mapped to json
         $data = array("json" => array("recipe" => array() ) );
         
