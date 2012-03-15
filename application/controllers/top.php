@@ -9,6 +9,21 @@ class Top extends CI_Controller {
     protected $TOP_QUERY_GENERAL_LIMIT = 10;
     
     // ------------------------------------------------------------------------
+    
+    public function index()
+    {
+        // data map with one variable, "$json" which is anouther map for
+        // whatever data you want to see in json
+        $data = array("json" => array());
+        
+        $data["json"] = array('a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5);
+        $this->load->view('search_json', $data);
+        
+        // templated view:
+        //$this->template->load('template', 'welcome_message', $data);
+    }
+    
+    // ------------------------------------------------------------------------
     // Return all information on the top ingredients.
     //
     // http://.../top/ingredients
