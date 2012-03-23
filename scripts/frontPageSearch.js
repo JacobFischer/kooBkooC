@@ -17,15 +17,19 @@ $(document).ready(function(){
     });
   })
   $("#searchButton").click(function(){
-    var url_string = ""
-    for(item in $("ul#searchList li.ingedient-using span.ingredient-id")){
-      url_string.concat('ingredient[]=' + item.val() + '&')
-    } 
+    var url_string = base_url + "index.php/search/reverse?";
+    $('ul#searchList').each(function(){
+      $(this).find('li.ingredient-using span.ingredient-id').each(function(){
+        url_string = url_string + "ingredients[]=" + $(this).text() + "&";
+      });
+    });
+    alert(url_string);
     $.ajax({
-      url: base_url + "index.php/search/reverse?" + url_string,
+      url: url_string,
       context: document.body,
       success: function(data){
         var obj = jQuery.parseJSON(data); 
+        alert("Got here");
         $("#searchResult").html('<p>Recipes:</p><ul id="recipe-list">');
         for(i in obj.recipes){
           $("#searchResult").append('<li class="recipe-matching"><span class="recipe-description">' + obj.recipes[i].Description + '</span><span class="recipe-id" style="display: none;">' + obj.ingredients[i].ID + '</span></li>');
@@ -34,7 +38,7 @@ $(document).ready(function(){
       }
     });
   });
-  //Not sure about this clikc part
+  //Not sure about this click part
   $("li.recipe-matching").on("click", function(){
     url = base_url + "index.php/recipe/id" + $(this).val();
     window.location(url);
