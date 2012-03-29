@@ -35,7 +35,7 @@ class AutoCorrect extends CI_Controller {
     
     public function ingredients($target = "")
     {
-        $this->load->view('__text__', "aaaagh");
+        $this->load->view('__text__', $target = "aaaagh");
         /*
         // Create result array and empty sub-array
         $result = array("json" => array("ingredients" => array()));
