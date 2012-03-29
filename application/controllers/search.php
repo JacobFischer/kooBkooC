@@ -24,6 +24,11 @@ class Search extends CI_Controller {
     // large result sets.
     protected $SEARCH_TAG_GENERAL_LIMIT = 5000;
     
+    // Value for SQL LIMIT when querying the database for general search
+    // results; use to prevent unnecessary result preparation in case of very
+    // large result sets.
+    protected $SEARCH_TAG_PAGE_OFFSET = 25;
+    
     // ------------------------------------------------------------------------
     // Return the target string stripped of non-alphanumeric characters and
     // converted to lower case. For future-proofing and security reasons, do
@@ -77,8 +82,88 @@ class Search extends CI_Controller {
         // return the cookware to the "views/search_json.php" view so it can build valid JSON from the data
         $this->load->view('search_json', $data);
     }
-
     
+    // ------------------------------------------------------------------------
+    // Return all information on ingredients selected based on the target
+    // input; note that page refers to a perceived page number and not to the
+    // SQL OFFSET value. If target is not given, all the ingredients will be
+    // returned; if page is not given, it will be set to 1. Use for general
+    // ingreadient searching.
+    //
+    // http://.../search/ingredients/__target__/__page__
+    // ------------------------------------------------------------------------
+    
+    public function ingredients($target = "", $page = 1)
+    {
+        // Check invalid page
+        if($page < 1) {
+            $page = 1;
+        }
+        
+        // Create result array and empty sub-array
+        $result = array("json" => array("ingredients" => array()));
+        
+        // Assign limit, offset, and target
+        $limit = $this->SEARCH_TAG_PAGE_OFFSET;
+        $offset = ($page - 1) * $this->SEARCH_TAG_PAGE_OFFSET;
+        $target = $this->tag_escape($target);
+        
+        if(strlen($target)) {
+            // Prepare statement (select where target at beginning)
+            $this->db->select("ID, Name, BaseUnitOfMeasure, Description, "
+              ."ImageURL");
+            $this->db->like("Name", $target, "after");
+            $this->db->order_by("Name");
+            $this->db->limit($limit, $offset);
+            
+            // Execute statement
+            $query1 = $this->db->get("Ingredients");
+            
+            // Clear query cache
+            $this->db->flush_cache();
+            
+            // Prepare statement (select where target only within)
+            $this->db->select("ID, Name, BaseUnitOfMeasure, Description, "
+              ."ImageURL");
+            $this->db->like("Name", $target, "both");
+            $this->db->not_like("Name", $target, "after");
+            $this->db->order_by("Name");
+            $this->db->limit($limit, $offset);
+            
+            // Execute statement
+            $query2 = $this->db->get("Ingredients");
+            
+            // Append query records to result sub-array
+            foreach($query1->result() as $row) {
+                $result["json"]["ingredients"][] = $row;
+            }
+            
+            foreach($query2->result() as $row) {
+                $result["json"]["ingredients"][] = $row;
+            }
+        }
+        else {
+            // Prepare statement (select without pattern matching)
+            $this->db->select("ID, Name, BaseUnitOfMeasure, Description, "
+              ."ImageURL");
+            $this->db->order_by("Name");
+            $this->db->limit($limit, $offset);
+            
+            // Execute statement
+            $query = $this->db->get("Ingredients");
+            
+            // Append query records to result sub-array
+            foreach($query->result() as $row) {
+                $result["json"]["ingredients"][] = $row;
+            }
+        }
+        
+        // Load result records into view for retrieval
+        $this->load->view('search_json', array_slice($result, 0, $limit,
+          TRUE));
+    }
+    
+    /*
     // ------------------------------------------------------------------------
     // Return all information on ingredients selected based on the target
     // input. Use for general ingreadient searching.
@@ -93,7 +178,7 @@ class Search extends CI_Controller {
         
         // Prepare database query
         $this->db->select("id, name, baseunitofmeasure, description, "
-                ."imageurl");
+          ."imageurl");
         $this->db->like("name", $this->tag_escape($target));
         $this->db->order_by("CHAR_LENGTH(name), name");
         $this->db->limit($this->SEARCH_TAG_GENERAL_LIMIT);
@@ -103,44 +188,13 @@ class Search extends CI_Controller {
         
         // Append query records to result sub-array
         foreach($query->result() as $row) {
-          $result["json"]["ingredients"][] = $row;
+            $result["json"]["ingredients"][] = $row;
         }
         
         // Load result records into view for retrieval
         $this->load->view('search_json', $result);
     }
-    
-    // ------------------------------------------------------------------------
-    // Return a short list of ingrendient names based on the target input; the
-    // database should be queried again each time the user changes the input
-    // value. Use for displaying existing tags while the user is typing in the
-    // search box; pass only the single ingredient currently being typed.
-    //
-    // http://.../search/ingredients_like_name/target
-    // ------------------------------------------------------------------------
-    
-    public function ingredients_like_name($target = "")
-    {
-        // Create result array and empty sub-array
-        $result = array("json" => array("ingredients_like_name" => array()));
-        
-        // Prepare database query
-        $this->db->select("name");
-        $this->db->like("name", $this->tag_escape($target), "after");
-        $this->db->order_by("CHAR_LENGTH(name), name");
-        $this->db->limit($this->SEARCH_TAG_NAME_LIMIT);
-        
-        // Execute database query
-        $query = $this->db->get("Ingredients");
-        
-        // Append query records to result sub-array
-        foreach($query->result() as $row) {
-            $result["json"]["ingredients_like_name"][] = $row->name;
-        }
-        
-        // Load result records into view for retrieval
-        $this->load->view('search_json', $result);
-    }
+    */
     
     // ------------------------------------------------------------------------
      
