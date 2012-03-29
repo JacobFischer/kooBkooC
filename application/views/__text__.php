@@ -1,1 +1,1 @@
-<?php echo $target; ?>
+FUNCTION RESPONDING
