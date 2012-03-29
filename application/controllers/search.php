@@ -403,7 +403,7 @@ class Search extends CI_Controller {
         $this->load->view('search_json', $result);
     }
 
->>>>>>> 2d41820e31e995b1b518e402049914b619b757bc
+//>>>>>>> 2d41820e31e995b1b518e402049914b619b757bc
 }
 
 /* End of file search.php */
