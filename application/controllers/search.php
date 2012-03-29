@@ -230,6 +230,14 @@ class Search extends CI_Controller {
     $this->load->view('search_json', $data);
   }
   
+  // ##########################################################################
+  // START UNKNOWN HERE
+  // IF THIS IS YOUR FUNCTION PLEASE FIX IT
+  // but I think it's just old code that got left behind in a merge conflict
+  // ##########################################################################
+  
+  /*
+  
   public function WHAT_IS_THIS_FUNCTION($ingredients)
   {
         // create data object mapped to json
@@ -264,22 +272,23 @@ class Search extends CI_Controller {
 				$i++;
 			}
 			
-			/*$this->db->select('*');
-			$this->db->from('Recipes');
-			$this->db->join('RecipesIngredients','Recipes.ID = RecipesIngredients.RecipesID','inner');
-			$this->db->join('Votes','Recipes.ID = Votes.RecipesID');
-			$this->db->where_in("IngredientsID", "( $ings )");
-			$this->db->order_by("SUM('Votes.Direction')",'asc');
+      
+			//$this->db->select('*');
+			//$this->db->from('Recipes');
+			//$this->db->join('RecipesIngredients','Recipes.ID = RecipesIngredients.RecipesID','inner');
+			//$this->db->join('Votes','Recipes.ID = Votes.RecipesID');
+			//$this->db->where_in("IngredientsID", "( $ings )");
+			//$this->db->order_by("SUM('Votes.Direction')",'asc');
 			
-			// Execute query
-			$query = $this->db->get();
+			//// Execute query
+			//$query = $this->db->get();
 			
-			$i = 0;
-			foreach($query->result() as $recipe)
-			{
-				$data['json']['recipes'][$i] = $recipe;
-				$i++;
-			}*/
+			//$i = 0;
+			//foreach($query->result() as $recipe)
+			//{
+			//	$data['json']['recipes'][$i] = $recipe;
+			//	$i++;
+			//}
 		}	
 		
 		// return the recipes to the "views/search_json.php" view so it can build valid JSON from the data
@@ -316,6 +325,12 @@ class Search extends CI_Controller {
         // return the recipes to the "views/search_json.php" view so it can build valid JSON from the data
         $this->load->view('search_json', $data);
     }
+    
+    */
+    
+    // ########################################################################
+    // END OF UNKNOWN
+    // ########################################################################
 
     /////////////////////////////////////////////////////////////////////////////////////////
        // The basic JSON search function for Tags
