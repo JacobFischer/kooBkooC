@@ -35,6 +35,8 @@ class AutoCorrect extends CI_Controller {
     
     public function ingredients($target = "")
     {
+        $this->load->view('__text__', "aaaagh");
+        /*
         // Create result array and empty sub-array
         $result = array("json" => array("ingredients" => array()));
         
@@ -59,5 +61,6 @@ class AutoCorrect extends CI_Controller {
         
         // Load result records into view for retrieval
         $this->load->view('search_json', $result);
+        */
     }
 }
