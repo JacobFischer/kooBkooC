@@ -35,13 +35,11 @@ class AutoCorrect extends CI_Controller {
     
     public function ingredients($target = "")
     {
-        $this->load->view('__text__');
-        /*
         // Create result array and empty sub-array
         $result = array("json" => array("ingredients" => array()));
         
         // Tag-escape target
-        $target = tag_escape($target);
+        //$target = tag_escape($target);
         
         if(strlen($target)) {
             // Prepare database query
@@ -61,6 +59,5 @@ class AutoCorrect extends CI_Controller {
         
         // Load result records into view for retrieval
         $this->load->view('search_json', $result);
-        */
     }
 }
