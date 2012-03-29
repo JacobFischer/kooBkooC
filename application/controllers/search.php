@@ -84,11 +84,15 @@ class Search extends CI_Controller {
     }
     
     // ------------------------------------------------------------------------
-    // Return all information on ingredients selected based on the target
-    // input; note that page refers to a perceived page number and not to the
-    // SQL OFFSET value. If target is not given, all the ingredients will be
-    // returned; if page is not given, it will be set to 1. Use for general
-    // ingreadient searching.
+    // Return all information on ingredients contained in the search results.
+    //
+    // `target` refers to the ingredient name. The default value is the empty
+    // string; the result set obtained by searching against this value will be
+    // all existing ingredients.
+    //
+    // `page` refers to a perceived page number and not to the SQL OFFSET
+    // value; that is, the first page is 1, the second is 2, and so on. The
+    // default value is 1.
     //
     // http://.../search/ingredients/__target__/__page__
     // ------------------------------------------------------------------------

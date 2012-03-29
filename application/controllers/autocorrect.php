@@ -26,9 +26,11 @@ class AutoCorrect extends CI_Controller {
     }
     
     // ------------------------------------------------------------------------
-    // Return a short list of ingrendient names based on the target input. Use
-    // for displaying existing tags while the user is typing in the search box;
-    // pass only the single ingredient being typed.
+    // Return a short list of suggested ingrendient names.
+    //
+    // `target` is the ingredient name currently being entered by the user into
+    // the search field. The default value is the empty string; the result set
+    // obtained by searching against this value is empty.
     //
     // http://.../autocorrect/ingredients/__target__
     // ------------------------------------------------------------------------
