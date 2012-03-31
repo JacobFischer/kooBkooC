@@ -1,0 +1,34 @@
+/* CSS3 Font Imports
+*********************************************************/
+@import url(http://fonts.googleapis.com/css?family=Bitter|Felipa);
+
+
+.color { background-color: #009B95 }
+.color-darkoff { background-color: #1D7471 }
+.color-dark { background-color: #006561 }
+.primary-light { background-color: #33CDC7 }
+.primary-lightoff { background-color: #5CCDC9 }
+
+/* Main
+*********************************************************/
+html { background: url(Cooking_secrets.jpg) no-repeat center center fixed; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover; }
+body { overflow-y: scroll; font-family: 'Bitter', sans-serif; }
+h1 { font-family: 'Felipa', cursive; font-size: 1.7em; color: #009B95; margin-bottom: 0.25em; }
+input { border: 0.125em solid #009B95; background: #FEFAFD; padding: 0.125em; }
+button { background-color: #009B95; border: 0.125em solid #006561; color: #FEFAFD; padding: 0.125em; }
+
+/* Template Specific
+*********************************************************/
+a#website-title { font-family: 'Felipa', cursive; font-size: 3.75em; color: #1D7471;  font-weight: bold; display: inline; }
+a#website-title span.cap { color: #006561; }
+
+div#profile-top { float: right; /* yuck */ background-color: #009B95; border: 0.125em #006561 solid; border-top: none; padding: 0.125em; }
+div#profile-top a { color: #FEFAFD; font-weight: bold; }
+
+div#wrapper-top { background-color: #009B95; margin: 0 0 1.5em 0; border: 0.125em #006561 solid; border-left: none; border-right: none; }
+div#template-title, header#template-top, div#template-main { margin: 0 auto; width: 56em; }
+
+nav#website-links, nav#website-links ul, nav#website-links ul li { display: inline; }
+nav#website-links ul li a { color: #FEFAFD; margin: 0 0.75em; }
+
+div#template-main { background: #FEFAFD; padding: 0.5em 1em; border: 0.125em solid #006561; }
