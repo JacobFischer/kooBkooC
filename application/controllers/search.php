@@ -257,21 +257,22 @@ class Search extends CI_Controller {
       $q = $this->input->get('ingredient', TRUE);
   }
   
-  public function reverse($ingredients)
+  public function reverse($ingredients="some string")
   {
+	//$ingredients = "some string";
     // create data object mapped to json
     $data = array("json" => array("recipe" => array() ) );
     
     $query = array();
     // Build query
-    foreach($ingredients as $ingredient)
+    foreach(explode(" ",$ingredients) as $ingredient)
     {
       $this->db->select('*');
       $this->db->from('Recipes');
-      $this->db->join('RecipesIngredients','Recipes.ID = RecipesIngredients.RecipesID');
-      $this->db->join('Votes','Recipes.ID = Votes.RecipesID');
-      $this->db->like("IngredientsID", $ingredient);
-      $this->db->order_by("SUM('Votes.Direction')",'asc');   
+      //$this->db->join('RecipesIngredients','Recipes.ID = RecipesIngredients.RecipesID');
+      //$this->db->join('Votes','Recipes.ID = Votes.RecipesID');
+      //$this->db->like("IngredientsID", $ingredient);
+      //$this->db->order_by("SUM('Votes.Direction')",'asc');   
       // Execute query
       $query = $this->db->get();
     }
