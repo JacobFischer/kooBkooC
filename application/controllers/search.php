@@ -257,26 +257,42 @@ class Search extends CI_Controller {
       $q = $this->input->get('ingredient', TRUE);
   }
   
-  public function reverse($ingredients="some string")
+  public function reverse()
   {
-	//$ingredients = "some string";
-    // create data object mapped to json
+	// create data object mapped to json
     $data = array("json" => array("recipe" => array() ) );
+	
+	if (isset($_GET["ingredients"]))
+	{
+		$ingredients = $_GET["ingredients"];
+	}
+	else
+	{
+		$this->load->view('search_json', $data);
+		return;
+	}
     
     $query = array();
     // Build query
-    foreach(explode(" ",$ingredients) as $ingredient)
+	
+	$this->db->select('*');
+    $this->db->from('Recipes');
+    $this->db->join('RecipesIngredients','Recipes.ID = RecipesIngredients.RecipesID');
+	
+	
+    foreach($ingredients as $ingredient)
     {
-      $this->db->select('*');
-      $this->db->from('Recipes');
+	  $this->db->or_where_in("RecipesIngredients.IngredientsID",$ingredient);
+      //$this->db->select('*');
+      //$this->db->from('Recipes');
       //$this->db->join('RecipesIngredients','Recipes.ID = RecipesIngredients.RecipesID');
       //$this->db->join('Votes','Recipes.ID = Votes.RecipesID');
       //$this->db->like("IngredientsID", $ingredient);
       //$this->db->order_by("SUM('Votes.Direction')",'asc');   
       // Execute query
-      $query = $this->db->get();
     }
-    
+    $query = $this->db->get();
+	
     // Iterate through each result in the query and build the cookware to return
     $i = 0;
     foreach($query->result() as $recipe)
