@@ -2,6 +2,11 @@
 
 class Recipe extends CI_Controller {
 
+    public function index()
+    {
+      $this->template->load('error', array('title' => 'Page Not Done!', "message" => "We need to do this") );
+    }
+    
     public function id($id)
     {
         // Build the SQL-ish query using CodeIgniters's Active Record to get the Cookware with the id passed in

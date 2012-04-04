@@ -34,10 +34,10 @@
                 <nav id="website-links">
                     <ul>
                         <li>
-                            <a href="#">Home</a>
+                            <a href="<?=base_url()?>">Home</a>
                         </li>
                         <li>
-                            <a href="#">Recipies</a>
+                            <a href="<?=site_url(array('recipe'))?>">Recipies</a>
                         </li>
                         <li>
                             <a href="#">About Us</a>
