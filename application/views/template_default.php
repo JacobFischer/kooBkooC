@@ -40,6 +40,9 @@
                             <a href="<?=site_url(array('recipe'))?>">Recipies</a>
                         </li>
                         <li>
+                            <a href="<?=site_url(array('tags'))?>">Tags</a>
+                        </li>
+                        <li>
                             <a href="#">About Us</a>
                         </li>
                         <li>
