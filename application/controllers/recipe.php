@@ -8,7 +8,7 @@ class Recipe extends CI_Controller {
 		$this->db->from('Recipes');
 		$query = $this->db->get();*/
 		
-		$query = $this->db->query("SELECT RecipesID, SUM(Direction), Name FROM Votes JOIN Recipes on Votes.RecipesID = Recipes.ID GROUP BY RecipesID ORDER BY SUM(Direction) DESC LIMIT 4" ); 
+		$query = $this->db->query("SELECT RecipesID, SUM(Direction), Name FROM Votes JOIN Recipes on Votes.RecipesID = Recipes.ID GROUP BY RecipesID ORDER BY SUM(Direction) DESC LIMIT 5" ); 
 		
 		
 
