@@ -23,26 +23,19 @@ $(document).ready(function(){
         url_string = url_string + "ingredients[]=" + $(this).text() + "&";
       });
     });
-    alert(url_string);
     $.ajax({
       url: url_string,
       context: document.body,
       success: function(data){
         var obj = jQuery.parseJSON(data); 
-        alert("Got here");
         $("#searchResult").html('<p>Recipes:</p><ul id="recipe-list">');
-        for(i in obj.recipes){
-          $("#searchResult").append('<li class="recipe-matching"><span class="recipe-description">' + obj.recipes[i].Description + '</span><span class="recipe-id" style="display: none;">' + obj.ingredients[i].ID + '</span></li>');
+        for(i in obj.recipe){
+          $("#searchResult").append('<li class="recipe-matching"> <a href="' + base_url + 'index.php/recipe/id/' + obj.recipe[i].ID + '">' + obj.recipe[i].Description + '</a></li>');
         } 
-        $("#searchResult").append('</ul>');        
+        $("#searchResult").append('</ul>');          
       }
     });
-  });
-  //Not sure about this click part
-  $("li.recipe-matching").on("click", function(){
-    url = base_url + "index.php/recipe/id" + $(this).val();
-    window.location(url);
-  });
+  })
 });
 
 //'<ul><li>obj.cookware[0].ID</li><li>obj.cookware[0].Name</li><ul>'
