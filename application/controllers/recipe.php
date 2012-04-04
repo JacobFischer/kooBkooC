@@ -4,11 +4,30 @@ class Recipe extends CI_Controller {
 
     public function index()
     {
-      $this->template->load('error', array('title' => 'Page Not Done!', "message" => "We need to do this") );
-    }
+		/*$this->db->select('*');
+		$this->db->from('Recipes');
+		$query = $this->db->get();*/
+		
+		$query = $this->db->query("SELECT RecipesID, SUM(Direction), Name FROM Votes JOIN Recipes on Votes.RecipesID = Recipes.ID GROUP BY RecipesID ORDER BY SUM(Direction) DESC LIMIT 5" ); 
+		
+		
+
+		if($query->num_rows() == 0)
+		{
+			$this->template->load('error' , array('title' => 'No recipes found!' , "message" => "Sorry, no recipes were found :( ") );
+		}
+
+		else
+		{
+			$this->template->load('recipes_page' , array("recipes" => $query));
+		}
+     
+	}
     
     public function id($id)
     {
+        $this->template->load_js("recipe_id.js");
+        
         // Build the SQL-ish query using CodeIgniters's Active Record to get the Cookware with the id passed in
         $this->db->select('*');
         $this->db->from('Recipes');
@@ -29,6 +48,15 @@ class Recipe extends CI_Controller {
         $this->db->where('RecipesID', $id);
         $commentquery= $this->db->get();
         
+        $tagquery= $this->db->query("SELECT *
+                                                    FROM Tags
+                                                    JOIN RecipesTags ON Tags.ID = RecipesTags.TagsID
+                                                    WHERE RecipesID=\"$id\"");
+                                                    
+        $ingredientsquery=$this->db->query("SELECT *
+                                                             FROM Ingredients
+                                                             JOIN RecipesIngredients ON Ingredients.ID = RecipesIngredients.IngredientsID
+                                                             WHERE RecipesID = \"$id\"");
         
         if($recipequery->num_rows() != 1)
         {
@@ -36,10 +64,15 @@ class Recipe extends CI_Controller {
         }
         else
         {
-            $this->template->load('recipe_id', array("recipe" => $recipequery->row(0) , "vote_count" => $votequery->row(0),"comments"=> $commentquery->result() ) );
+            $this->template->load('recipe_id', array("recipe" => $recipequery->row(0) ,
+                                                                     "vote_count" => $votequery->row(0),
+                                                                     "comments"=> $commentquery->result(),
+                                                                     "tags"=>$tagquery->result() ,
+                                                                     "ingredients"=>$ingredientsquery->result()) );
         }
     }
 }
 
 /* End of file recipe.php */
 /* Location: ./application/controllers/recipe.php */
+

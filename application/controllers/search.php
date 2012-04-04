@@ -275,23 +275,43 @@ class Search extends CI_Controller {
     $query = array();
     // Build query
 	
-	$this->db->select('*');
+	/*$ingredientString = "";
+	foreach($ingredients as $ingredient)
+	{
+		$ingredientString += 
+	}*/
+	
+	$query = $this->db->query("SELECT re.ID, re.SubmitterUsersID, re.Name, re.Directions, re.Servings, re.ImageURL, re.Description, us.DisplayName, SUM(vo.Direction) AS VoteSum 
+	                  FROM Recipes re 
+					  INNER JOIN RecipesIngredients ri ON re.ID = ri.RecipesID 
+					  INNER JOIN Votes vo ON re.ID = vo.RecipesID 
+					  INNER JOIN Users us ON re.SubmitterUsersID = us.ID 
+					  WHERE ri.IngredientsID IN 
+						(SELECT ID 
+						 FROM Ingredients 
+						 WHERE Name IN ('Cheese')) 
+					  GROUP BY vo.RecipesID ORDER BY VoteSum DESC;
+					  ");
+	
+	/*$this->db->select('*');
     $this->db->from('Recipes');
     $this->db->join('RecipesIngredients','Recipes.ID = RecipesIngredients.RecipesID');
+	$this->db->join('Votes','Recipes.ID = Votes.RecipesID');
+	$this->db->group_by('Recipes.ID','asc'); */
 	
 	
-    foreach($ingredients as $ingredient)
+    /*
     {
-	  $this->db->or_where_in("RecipesIngredients.IngredientsID",$ingredient);
+	  //$this->db->where_in("RecipesIngredients.IngredientsID",$ingredient);
       //$this->db->select('*');
       //$this->db->from('Recipes');
       //$this->db->join('RecipesIngredients','Recipes.ID = RecipesIngredients.RecipesID');
-      //$this->db->join('Votes','Recipes.ID = Votes.RecipesID');
+      //
       //$this->db->like("IngredientsID", $ingredient);
-      //$this->db->order_by("SUM('Votes.Direction')",'asc');   
+      //
       // Execute query
-    }
-    $query = $this->db->get();
+    }*/
+    //$query = $this->db->get();
 	
     // Iterate through each result in the query and build the cookware to return
     $i = 0;
