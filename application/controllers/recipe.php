@@ -4,8 +4,25 @@ class Recipe extends CI_Controller {
 
     public function index()
     {
-      $this->template->load('error', array('title' => 'Page Not Done!', "message" => "We need to do this") );
-    }
+		/*$this->db->select('*');
+		$this->db->from('Recipes');
+		$query = $this->db->get();*/
+		
+		$query = $this->db->query("SELECT RecipesID, SUM(Direction), Name FROM Votes JOIN Recipes on Votes.RecipesID = Recipes.ID GROUP BY RecipesID ORDER BY SUM(Direction) DESC LIMIT 4" ); 
+		
+		
+
+		if($query->num_rows() == 0)
+		{
+			$this->template->load('error' , array('title' => 'No recipes found!' , "message" => "Sorry, no recipes were found :( ") );
+		}
+
+		else
+		{
+			$this->template->load('recipes_page' , array("recipes" => $query));
+		}
+     
+	}
     
     public function id($id)
     {
