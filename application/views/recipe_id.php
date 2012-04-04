@@ -1,15 +1,7 @@
-<?php function displayComments($com)
-{
-  foreach($com as $c):
-    
-    foreach($com as $d):
-    endforeach;
-  endforeach;
-}
-?>
+
 
 <div id="testDiv"></div>
-<div id="recipeid"><?=$recipe->ID?></div>
+<div id="recipeid"></div>
 
 <h1>Recipe: <?=$recipe->Description?></h1>
 <br/>
@@ -28,8 +20,6 @@ Tags:
 <?php endforeach;?><br/>
 
 Comments:<br/>
-<?php displayComments($comments)?>
-
 <?php foreach( $comments as $comment ): ?>
 <?=$comment->DisplayName?> 
 Date: 
@@ -40,4 +30,4 @@ Date:
 Post Comment:
 <textarea id="postcomment" style="height: 100px; width: 500px"></textarea>
 <button id="comment_button"> Post! </button>
-<marquee> Made by Tim!</marquee> by Tim!</marquee>
+<marquee> Made by Tim!</marquee>
