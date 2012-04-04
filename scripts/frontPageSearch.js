@@ -27,19 +27,16 @@ $(document).ready(function(){
       url: url_string,
       context: document.body,
       success: function(data){
-        var obj = jQuery.parseJSON(data); 
+        var obj = jQuery.parseJSON(data);       
         $("#searchResult").html('<p>Recipes:</p><ul id="recipe-list">');
         for(i in obj.recipe){
-          $("#searchResult").append('<li class="recipe-matching"> <a href="' + base_url + 'index.php/recipe/id/' + obj.recipe[i].ID + '">' + obj.recipe[i].Description + '</a></li>');
+          $("#searchResult").append('<li class="recipe-matching"> <a href="' + base_url + 'index.php/recipe/id/' + obj.recipe[i].ID + '">' + obj.recipe[i].Name + '</a> - ' + obj.recipe[i].Description + '</li>');
         } 
         $("#searchResult").append('</ul>');          
       }
     });
   })
 });
-
-//'<ul><li>obj.cookware[0].ID</li><li>obj.cookware[0].Name</li><ul>'
-//$(this).children("span.ingredient-name:first").text()
 
 
 
