@@ -40,7 +40,7 @@ class Search extends CI_Controller {
       return strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $target));
     }
     
-    // ------------------------------------------------------------------------
+ // ------------------------------------------------------------------------
     
     public function index()
     {
@@ -55,8 +55,9 @@ class Search extends CI_Controller {
         //$this->template->load('template', 'welcome_message', $data);
     }
     
-    // ------------------------------------------------------------------------
-    
+//--------------------------------------------------------------------------------------------------------
+//BEGIN COOKWARE SEARCH
+   
     // The basic implimentation of a JSON search function for cookware
     //   ex URL: http://home.jacobfischer.me/USERNAME/cs397/index.php/search/cookware/
     public function cookware()
@@ -82,7 +83,13 @@ class Search extends CI_Controller {
         // return the cookware to the "views/search_json.php" view so it can build valid JSON from the data
         $this->load->view('search_json', $data);
     }
-    
+
+
+//END COOKWARE SEARCH
+//--------------------------------------------------------------------------------------------------------
+//BEGIN INGREDIENTS SEARCH    
+
+
     // ------------------------------------------------------------------------
     // Return all information on ingredients contained in the search results.
     //
@@ -96,9 +103,9 @@ class Search extends CI_Controller {
     //
     // http://.../search/ingredients/__target__/__page__
     // ------------------------------------------------------------------------
-    
     public function ingredients($target = "", $page = 1)
     {
+	$this->load->library('unit_test');
         // Check invalid page
         if($page < 1) {
             $page = 1;
@@ -122,6 +129,7 @@ class Search extends CI_Controller {
             
             // Execute statement
             $query1 = $this->db->get("Ingredients");
+	     $this->unit->run(($query1->num_rows()>0), TRUE, 'Ingredient Search generates results');
             
             // Clear query cache
             $this->db->flush_cache();
@@ -136,14 +144,14 @@ class Search extends CI_Controller {
             
             // Execute statement
             $query2 = $this->db->get("Ingredients");
-            
             // Append query records to result sub-array
             foreach($query1->result() as $row) {
+		  $this->unit->run($this->tag_escape($row->Name), $target, 'Exact Ingredients Match');
                 $result["json"]["ingredients"][] = $row;
             }
             
             foreach($query2->result() as $row) {
-                $result["json"]["ingredients"][] = $row;
+            $result["json"]["ingredients"][] = $row;
             }
         }
         else {
@@ -165,54 +173,40 @@ class Search extends CI_Controller {
         // Load result records into view for retrieval
         $this->load->view('search_json', array_slice($result, 0, $limit,
           TRUE));
+	echo $this->unit->report();
     }
     
-    /*
-    // ------------------------------------------------------------------------
-    // Return all information on ingredients selected based on the target
-    // input. Use for general ingreadient searching.
-    //
-    // http://.../search/ingredients/target
-    // ------------------------------------------------------------------------
-    
-    public function ingredients($target = "")
-    {
-        // Create result array and empty sub-array
-        $result = array("json" => array("ingredients" => array()));
-        
-        // Prepare database query
-        $this->db->select("id, name, baseunitofmeasure, description, "
-          ."imageurl");
-        $this->db->like("name", $this->tag_escape($target));
-        $this->db->order_by("CHAR_LENGTH(name), name");
-        $this->db->limit($this->SEARCH_TAG_GENERAL_LIMIT);
-        
-        // Execute database query
-        $query = $this->db->get("Ingredients");
-        
-        // Append query records to result sub-array
-        foreach($query->result() as $row) {
-            $result["json"]["ingredients"][] = $row;
-        }
-        
-        // Load result records into view for retrieval
-        $this->load->view('search_json', $result);
-    }
-    */
-    
-    // ------------------------------------------------------------------------
+// END INGREDIENTS SEARCH  
+//--------------------------------------------------------------------------------------------------------
+// BEGIN RECIPE SEARCH
      
-    public function recipe($text = "default" )
+    public function recipes($text = "default", $page=1 )
     {
+	$this->load->library('unit_test');
+	
+	if($page < 1)
+       {
+          $page = 1;
+       }
+
+	// create data object mapped to json
 	$data = array("json" => array("recipe" => array() ) );
-        // create data object mapped to json
+       // Assign limit, offset, and target
+        $limit = $this->SEARCH_TAG_PAGE_OFFSET;
+        $offset = ($page - 1) * $this->SEARCH_TAG_PAGE_OFFSET;
+        $text = $this->tag_escape($text);
+	//$text = str_replace("_", '\s', $text);
+	//echo $text;
+ 
       
           // Build query
           $this->db->select('*');
           $this->db->from('Recipes');
           $this->db->like('Description',$text);
+	   $this->db->limit($limit, $offset);
           // Execute query
           $query = $this->db->get();
+	   $this->unit->run(($query->num_rows()>0), TRUE, 'Recipe Search generates results');
           // Iterate through each result in the query and build the cookware to return
           $i = 0;
           foreach($query->result() as $recipe)
@@ -224,6 +218,7 @@ class Search extends CI_Controller {
 	   $this->db->select('*');
 	   $this->db->from('Recipes');
 	   $this->db->like('Directions',$text);
+	   $this->db->limit($limit, $offset);
 	   $query = $this->db->get();
 	   $same = 0;
 	   foreach($query->result() as $result)
@@ -244,8 +239,15 @@ class Search extends CI_Controller {
 
           }
         // return the recipes to the "views/search_json.php" view so it can build valid JSON from the data
-        $this->load->view('search_json', $data);
+        $this->load->view('search_json', array_slice($data, 0, $limit,
+          TRUE));
+	echo $this->unit->report();
+
     }
+
+//END RECIPE SEARCH
+//--------------------------------------------------------------------------------------------------------
+//BEGIN REVERSE SEARCH
 	
 	// ------------------------------------------------------------------------
 	//  This function is for taking ingredients and returning the corresponding
@@ -324,114 +326,17 @@ class Search extends CI_Controller {
     // return the recipes to the "views/search_json.php" view so it can build valid JSON from the data
     $this->load->view('search_json', $data);
   }
-  
-  // ##########################################################################
-  // START UNKNOWN HERE
-  // IF THIS IS YOUR FUNCTION PLEASE FIX IT
-  // but I think it's just old code that got left behind in a merge conflict
-  // ##########################################################################
-  
-  /*
-  
-  public function WHAT_IS_THIS_FUNCTION($ingredients)
-  {
-        // create data object mapped to json
-        $data = array("json" => array("recipe" => array() ) );
-        
-        // Build query
-        $this->db->select('*');
-        $this->db->from('Recipes');
-        $this->db->like('Description',$text);
-		
-		$data = array("json" => array("recipes" => array() ) );
-		if (isset($ingredients))
-		{
-			// create data object mapped to json
-			//$query = new 
-			
-			// Build query
-			$ings = "";
-			foreach ($ingredients as $ingredient)
-			{
-				$ings .= "$ingredient, ";
-			}
-			
-			$this->db->select('*');
-			$this->db->from('Recipes');
-			$query = $this->db->get();
-			
-			$i = 0;
-			foreach($query->result() as $recipe)
-			{
-				$data['json']['recipes'][$i] = $recipe;
-				$i++;
-			}
-			
-      
-			//$this->db->select('*');
-			//$this->db->from('Recipes');
-			//$this->db->join('RecipesIngredients','Recipes.ID = RecipesIngredients.RecipesID','inner');
-			//$this->db->join('Votes','Recipes.ID = Votes.RecipesID');
-			//$this->db->where_in("IngredientsID", "( $ings )");
-			//$this->db->order_by("SUM('Votes.Direction')",'asc');
-			
-			//// Execute query
-			//$query = $this->db->get();
-			
-			//$i = 0;
-			//foreach($query->result() as $recipe)
-			//{
-			//	$data['json']['recipes'][$i] = $recipe;
-			//	$i++;
-			//}
-		}	
-		
-		// return the recipes to the "views/search_json.php" view so it can build valid JSON from the data
-		$this->load->view('search_json', $data);
-		
 
-	}
-        $this->db->flush_cache();
-        $this->db->select('*');
-        $this->db->from('Recipes');
-        $this->db->like('Directions',$text);
-        $query = $this->db->get();
-        $same = 0;
-		
-        foreach($query->result() as $result)
-        {
-            for($j=0; $j<$i; $j++)
-            {
-                if($data['json']['recipe'][$j]==$result)
-                {
-                    $same=1;
-                }
-            }
-            if($same==0)
-            {
-                $data['json']['recipe'][$i]=$result;
-                $i++;
-            }
-            
-		    $same=0;
-        
-        }
-		
-        // return the recipes to the "views/search_json.php" view so it can build valid JSON from the data
-        $this->load->view('search_json', $data);
-    }
+//END REVERSE SEARCH
+//--------------------------------------------------------------------------------------------------------
+//BEGIN TAG SEARCH
     
-    */
-    
-    // ########################################################################
-    // END OF UNKNOWN
-    // ########################################################################
-
     ///////////////////////////////////////////////////////////////////////////////////////
     //Tag search for tags containing user entered text.
     ///////////////////////////////////////////////////////////////////////////////////////
     public function tags($searchVal = "", $page = 1)
     {
+	$this->load->library('unit_test');
       if($page<1){$page=1;} //Validate Page Number
       $returnVal=array( "json" => array( "tags" => array() ) );
       $delimiter=$this->SEARCH_TAG_PAGE_OFFSET;
@@ -445,6 +350,7 @@ class Search extends CI_Controller {
         $this->db->order_by("Name");
         $this->db->limit($delimiter, $offset);
         $initialQuery=$this->db->get("Tags");
+        $this->unit->run(($initialQuery->num_rows()>0), TRUE, 'Tag Search generates results');
         $this->db->flush_cache();
         $this->db->select("ID, Name, Description");
         $this->db->like("Name", $searchVal, "both");
@@ -455,6 +361,7 @@ class Search extends CI_Controller {
         ///////////////////////////////////////////////////////
         foreach($initialQuery->result() as $result)
         {
+	   $this->unit->run($this->tag_escape($result->Name), $searchVal, 'Exact Tag Match');
           $returnVal["json"]["tags"][] = $result;
         }
         foreach($secondaryQuery->result() as $result)
@@ -476,12 +383,14 @@ class Search extends CI_Controller {
       }
       ///////////////////////////////////////////////////////// 
       $this->load->view( 'search_json', array_slice($returnVal, 0, $delimiter, TRUE) );
+      echo $this->unit->report();
     }
     ///////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////
-    
-    
-//>>>>>>> 2d41820e31e995b1b518e402049914b619b757bc
+
+//END TAG SEARCH
+//--------------------------------------------------------------------------------------------------------
+
 }
 
 /* End of file search.php */
