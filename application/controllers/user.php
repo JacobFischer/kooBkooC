@@ -1,5 +1,16 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+function randomAlphaNum($length)
+{
+  $newRand = "";
+  for ($i=0; $i<$length; $i++)
+  { 
+    $d=rand(1,30)%2; 
+    $newRand .= $d ? chr(rand(65,90)) : chr(rand(48,57)); 
+  }
+  return $newRand; //spit it out 
+} 
+
 class User extends CI_Controller {
 
   public function id( $id )
@@ -193,5 +204,34 @@ class User extends CI_Controller {
       $this->template->load('error', array('title' => 'Username Not Found', "message" => "The username \"$username\" could not be found!") );
     }
     
+  }
+  
+  public function password_reset($userID = -1)
+  {
+    if($userID < 0)
+    {
+      $this->template->load('error', array('title' => 'Password Reset Failed', "message" => "Invalid User ID supplied for password reset.") );
+      return;
+    }
+    
+    $newPassword = randomAlphaNum(12);
+    
+    $this->load->library('email');
+    
+    $config['protocol'] = 'mail';
+    $config['mailtype'] = 'html';
+    $config['charset']  = 'utf-8';
+    $config['newline']  = "\r\n";
+    $this->email->initialize($config);
+    
+    $this->email->from('noreply@koobkooc.net', 'kooBkooC');
+    $this->email->to('jtf3m8@mst.edu'); 
+
+    $this->email->subject('kooBkooC Password Reset');
+    $this->email->message("Your new password on kooBkooC.net is: <strong>$newPassword</strong>");
+
+    $this->email->send();
+    
+    $this->template->load('error', array('title' => 'Worked for ' . $userID, "message" => $this->email->print_debugger()) );
   }
 }
