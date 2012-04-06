@@ -51,8 +51,8 @@ class Vote extends CI_Controller {
           } else
           {
 
-            $this->db->set($data);
-            $this->db->update('Votes');
+            $this->db->where('UsersID', $id);
+            $this->db->update('Votes', $data);
           }
 
         }
