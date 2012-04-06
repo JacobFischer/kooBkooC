@@ -26,9 +26,10 @@ class Recipe extends CI_Controller
     $this->db->select('*');
     $this->db->from('Recipes');
     $this->db->where('ID', $id);
-    
-    // Actually execute the SQL Query on the database
     $recipequery = $this->db->get();
+    
+    $recipeInfo = $recipequery->row(0);
+    $recipeInfo->Directions = $this->textile->TextileThis( $recipeInfo->Directions );
 
     $this->db->select('*');
     $this->db->from('Votes');
@@ -41,6 +42,13 @@ class Recipe extends CI_Controller
     $this->db->join('Users','Users.ID = Comments.UsersID');
     $this->db->where('RecipesID', $id);
     $commentquery= $this->db->get();
+    
+    $comments = array();
+    foreach( $commentquery->result() as $comment)
+    {
+      $comment->Text = $this->textile->TextileThis( $comment->Text );
+      $comments[] = $comment;
+    }
     
     // If the user is logged in
     $foundUserVote = false;
@@ -86,10 +94,10 @@ class Recipe extends CI_Controller
       $this->template->load('error', array('title' => 'Recipe Not Found!', "message" => "The Recipe with id \"$id\" could not be found!") );
     }
     else
-    {
-      $this->template->load('recipe_id', array("recipe" => $recipequery->row(0) ,
+    {      
+      $this->template->load('recipe_id', array("recipe" => $recipeInfo ,
                                                "vote_count" => $votequery->row(0),
-                                               "comments" => $commentquery->result(),
+                                               "comments" => $comments,
                                                "tags" => $tagquery->result() ,
                                                "ingredients" => $ingredientsquery->result(),
                                                "users_vote" => $userVoteInfo

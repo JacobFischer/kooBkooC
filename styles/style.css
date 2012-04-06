@@ -14,9 +14,12 @@
 *********************************************************/
 html { background: url(Cooking_secrets.jpg) no-repeat center center fixed; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover; }
 body { overflow-y: scroll; font-family: 'Bitter', sans-serif; }
-h1 { font-family: 'Felipa', cursive; font-size: 1.7em; color: #009B95; margin-bottom: 0.25em; }
+h1 { font-family: 'Felipa', cursive; font-size: 2.5em; color: #009B95; margin-bottom: 0.25em; }
 input { border: 0.125em solid #009B95; background: #FEFAFD; padding: 0.125em; }
 button { background-color: #009B95; border: 0.125em solid #006561; color: #FEFAFD; padding: 0.125em; }
+h2 { font-size: 1.75em; font-family: 'Felipa', cursive; color: #009B95; }
+a { color: #009B95; }
+a:hover, a:focus, a:active { color: #006561; }
 
 /* Template Specific
 *********************************************************/
@@ -39,7 +42,12 @@ div#template-main { background: #FEFAFD; padding: 0.5em 1em; border: 0.125em sol
 div#recipe-top { min-height: 4em; }
 div#recipe-voter { float: left; margin-right: 1em; background-color: #009B95; border: 0.125em solid #006561; color: #FEFAFD; padding: 0.125em;  }
 button#recipe-up-vote, button#recipe-down-vote, span#recipe-total { display: block; text-align: center; }
-div#recipe-body { width: 100%; }
+section#recipe-body { width: 100%; }
 button#recipe-up-vote, button#recipe-down-vote { border: 0; background: none; cursor: pointer; }
 .voted-up { color: #A1F0EE; }
 .voted-down { color: #FF3500; }
+div#recipe-comments h2 { margin: 1em 0 0 0; }
+li.recipe-comment { margin: 1.75em 0.25em 0 0; }
+li.recipe-comment:first-child { margin-top: 0.5em; }
+li.recipe-comment header { background: #009B95; color: #FEFAFD; font-weight: bold; padding: 0.5em; margin: 0 0 0.5em 0;}
+li.recipe-comment header time { color: #A1F0EE; font-weight: normal; float: right; }
