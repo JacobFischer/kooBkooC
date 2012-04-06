@@ -393,28 +393,27 @@ class Search extends CI_Controller {
 
     // The basic implimentation of a JSON search function for user
     //   ex URL: http://home.jacobfischer.me/USERNAME/cs397/index.php/search/user/
-    public function user()
+    public function user($target = "")
     {
-        // We want to return the $data object with a map key to json, and in the json we are building the UserTest
-        $data = array("json" => array("userInfo" => array() ) );
+        // Create result array and empty sub-array
+        $result = array("json" => array("searchUser" => array()));
         
-        // Build the SQL-ish query using CodeIgniters's Active Record
-        $this->db->select('displayName, email');
-        $this->db->from('User');
+        // Prepare database query
+        $this->db->select("ID, DisplayName, Email ");
+        $this->db->like("DisplayName", $target);
+        $this->db->order_by("CHAR_LENGTH(DisplayName), DisplayName");
+        $this->db->limit($this->SEARCH_TAG_GENERAL_LIMIT);
+
+        // Execute database query
+        $query = $this->db->get("Users");
         
-        // Actually execute the SQL Query on the database
-        $query = $this->db->get();
-        
-        // Iterate through each result in the query and build the info to return
-        $i = 0;
-        foreach($query->result() as $userInfo)
-        {
-            $data['json']['userInfo'][$i] = $userInfo;
-            $i++;
+        // Append query records to result sub-array
+        foreach($query->result() as $row) {
+          $result["json"]["Users"][] = $row;
         }
         
-        // return the userTest to the "views/search_json.php" view so it can build valid JSON from the data
-        $this->load->view('search_json', $data);
+        // Load result records into view for retrieval
+        $this->load->view('search_json', $result);
     }
 }
 
