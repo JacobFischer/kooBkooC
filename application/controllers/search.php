@@ -105,6 +105,7 @@ class Search extends CI_Controller {
     // ------------------------------------------------------------------------
     public function ingredients($target = "", $page = 1)
     {
+	$this->load->library('unit_test');
         // Check invalid page
         if($page < 1) {
             $page = 1;
@@ -128,6 +129,7 @@ class Search extends CI_Controller {
             
             // Execute statement
             $query1 = $this->db->get("Ingredients");
+	     $this->unit->run(($query1->num_rows()>0), TRUE, 'Ingredient Search generates results');
             
             // Clear query cache
             $this->db->flush_cache();
@@ -142,14 +144,14 @@ class Search extends CI_Controller {
             
             // Execute statement
             $query2 = $this->db->get("Ingredients");
-            
             // Append query records to result sub-array
             foreach($query1->result() as $row) {
+		  $this->unit->run($this->tag_escape($row->Name), $target, 'Exact Ingredients Match');
                 $result["json"]["ingredients"][] = $row;
             }
             
             foreach($query2->result() as $row) {
-                $result["json"]["ingredients"][] = $row;
+            $result["json"]["ingredients"][] = $row;
             }
         }
         else {
@@ -171,6 +173,7 @@ class Search extends CI_Controller {
         // Load result records into view for retrieval
         $this->load->view('search_json', array_slice($result, 0, $limit,
           TRUE));
+	echo $this->unit->report();
     }
     
 // END INGREDIENTS SEARCH  
@@ -179,6 +182,8 @@ class Search extends CI_Controller {
      
     public function recipes($text = "default", $page=1 )
     {
+	$this->load->library('unit_test');
+	
 	if($page < 1)
        {
           $page = 1;
@@ -190,6 +195,8 @@ class Search extends CI_Controller {
         $limit = $this->SEARCH_TAG_PAGE_OFFSET;
         $offset = ($page - 1) * $this->SEARCH_TAG_PAGE_OFFSET;
         $text = $this->tag_escape($text);
+	//$text = str_replace("_", '\s', $text);
+	//echo $text;
  
       
           // Build query
@@ -199,6 +206,7 @@ class Search extends CI_Controller {
 	   $this->db->limit($limit, $offset);
           // Execute query
           $query = $this->db->get();
+	   $this->unit->run(($query->num_rows()>0), TRUE, 'Recipe Search generates results');
           // Iterate through each result in the query and build the cookware to return
           $i = 0;
           foreach($query->result() as $recipe)
@@ -233,6 +241,8 @@ class Search extends CI_Controller {
         // return the recipes to the "views/search_json.php" view so it can build valid JSON from the data
         $this->load->view('search_json', array_slice($data, 0, $limit,
           TRUE));
+	echo $this->unit->report();
+
     }
 
 //END RECIPE SEARCH
@@ -306,6 +316,7 @@ class Search extends CI_Controller {
     ///////////////////////////////////////////////////////////////////////////////////////
     public function tags($searchVal = "", $page = 1)
     {
+	$this->load->library('unit_test');
       if($page<1){$page=1;} //Validate Page Number
       $returnVal=array( "json" => array( "tags" => array() ) );
       $delimiter=$this->SEARCH_TAG_PAGE_OFFSET;
@@ -319,6 +330,7 @@ class Search extends CI_Controller {
         $this->db->order_by("Name");
         $this->db->limit($delimiter, $offset);
         $initialQuery=$this->db->get("Tags");
+        $this->unit->run(($initialQuery->num_rows()>0), TRUE, 'Tag Search generates results');
         $this->db->flush_cache();
         $this->db->select("ID, Name, Description");
         $this->db->like("Name", $searchVal, "both");
@@ -329,6 +341,7 @@ class Search extends CI_Controller {
         ///////////////////////////////////////////////////////
         foreach($initialQuery->result() as $result)
         {
+	   $this->unit->run($this->tag_escape($result->Name), $searchVal, 'Exact Tag Match');
           $returnVal["json"]["tags"][] = $result;
         }
         foreach($secondaryQuery->result() as $result)
@@ -350,6 +363,7 @@ class Search extends CI_Controller {
       }
       ///////////////////////////////////////////////////////// 
       $this->load->view( 'search_json', array_slice($returnVal, 0, $delimiter, TRUE) );
+      echo $this->unit->report();
     }
     ///////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////
