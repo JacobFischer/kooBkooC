@@ -110,7 +110,7 @@ class User extends CI_Controller {
 
     $this->db->insert('Users', $data);
 
-    $this->template->load('register_successful', array( 'username' => $displayName) );
+    $this->template->load('register_successful', array( 'username' => $displayName));
     
   }
 
@@ -128,6 +128,14 @@ class User extends CI_Controller {
     }
   }
 
+  public function logout()
+  {
+    $this->load->library('session');
+    $this->session->sess_destroy();
+
+    $this->template->load( 'user_logout.php' );
+  }
+
   public function login()
   {
 
@@ -143,7 +151,7 @@ class User extends CI_Controller {
     if( $query->num_rows == 1 )
     {
       
-      if( crypt( $password, $query->row(0)->HashedPassword ) ==  $query->row(0)->HashedPassword )
+      if(crypt($password, $query->row(0)->HashedPassword ) ==  $query->row(0)->HashedPassword)
       {
         $this->load->library('session');
         $userData = array( 'email' => $email, 'logged_in' => TRUE );

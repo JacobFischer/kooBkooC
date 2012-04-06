@@ -26,7 +26,18 @@
         <div id="template-title">
             <a href="#" id="website-title">koo<span class="cap">B</span>koo<span class="cap">C</span></a>
             <div id="profile-top">
-                <a href="#">Login</a> - <a href="#">Register</a>
+<?php
+if($logged_in)
+{
+?>
+  <a href="<?=site_url(array('user', 'logout'))?>">Logout <?=$username?>?</a>
+<?php
+} else {
+?>
+  <a href="<?=site_url(array('user', 'user_login'))?>">Login</a> - <a href="<?=site_url(array('user', 'reg'))?>">Register</a>
+<?php
+}
+?>
             </div>
         </div>
         <div id="wrapper-top">  
@@ -34,10 +45,13 @@
                 <nav id="website-links">
                     <ul>
                         <li>
-                            <a href="#">Home</a>
+                            <a href="<?=base_url()?>">Home</a>
                         </li>
                         <li>
-                            <a href="#">Recipies</a>
+                            <a href="<?=site_url(array('recipe'))?>">Recipies</a>
+                        </li>
+                        <li>
+                            <a href="<?=site_url(array('tags'))?>">Tags</a>
                         </li>
                         <li>
                             <a href="#">About Us</a>
