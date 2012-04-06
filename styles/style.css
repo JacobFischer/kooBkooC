@@ -8,6 +8,7 @@
 .color-dark { background-color: #006561 }
 .primary-light { background-color: #33CDC7 }
 .primary-lightoff { background-color: #5CCDC9 }
+.very-light { background-color: #A1F0EE; }
 
 /* Main
 *********************************************************/
@@ -32,3 +33,13 @@ nav#website-links, nav#website-links ul, nav#website-links ul li { display: inli
 nav#website-links ul li a { color: #FEFAFD; margin: 0 0.75em; }
 
 div#template-main { background: #FEFAFD; padding: 0.5em 1em; border: 0.125em solid #006561; }
+
+/* Recipe
+*********************************************************/
+div#recipe-top { min-height: 4em; }
+div#recipe-voter { float: left; margin-right: 1em; background-color: #009B95; border: 0.125em solid #006561; color: #FEFAFD; padding: 0.125em;  }
+button#recipe-up-vote, button#recipe-down-vote, span#recipe-total { display: block; text-align: center; }
+div#recipe-body { width: 100%; }
+button#recipe-up-vote, button#recipe-down-vote { border: 0; background: none; cursor: pointer; }
+.voted-up { color: #A1F0EE; }
+.voted-down { color: #FF3500; }
