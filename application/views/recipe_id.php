@@ -17,9 +17,6 @@
   <?=$ingredient->Name?><br/>
   <?php endforeach;?><br/>
   <p>Directions:<br/><?=$recipe->Directions?></p><br/>
-  Total Rating: <?=$vote_count->Direction?><br/><br/>
-  <button id="buttonUp">Up! ^</button>
-  <button id="buttonDown">Down! v</button><br/>
   Tags:
   <? foreach( $tags as $tag):?>
   <?$j = $tag->ID?>
