@@ -26,7 +26,7 @@ class Search extends CI_Controller {
     
     // The basic implimentation of a JSON search function for user
     //   ex URL: http://home.jacobfischer.me/USERNAME/cs397/index.php/search/userTest/
-    public function userTest()
+    /*public function userTest()
     {
         // We want to return the $data object with a map key to json, and in the json we are building the cookware
         $data = array("json" => array("cookware" => array() ) );
@@ -48,7 +48,7 @@ class Search extends CI_Controller {
         
         // return the cookware to the "views/search_json.php" view so it can build valid JSON from the data
         $this->load->view('search_json', $data);
-    }
+    }*/
 }
 
 /* End of file search.php */
