@@ -68,4 +68,21 @@ $(document).ready(function(){
   $("#recipe-down-vote").click(function() {
     recipe_ajax_vote( "down" ) 
   });
+  
+  $("#add-comment").click(function(){
+      $.ajax({
+        url: base_url + "index.php/comment/add/" + $("#recipe-id").html() + "/" + encodeURIComponent($("#new-comment-body").val()),
+        context:document.body,
+        success:function(data) {
+          var obj = jQuery.parseJSON(data);
+          if(obj.success) {
+            $("ul#recipie-comments-tree").append( atob( obj.newHTML ) );
+            $("ul#recipie-comments-tree li:last-child").fadeIn( 1000 );
+          }
+          else {
+            alert( obj.reason );
+          }
+        }
+      });
+  })
 });

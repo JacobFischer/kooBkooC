@@ -20,6 +20,7 @@ button { background-color: #009B95; border: 0.125em solid #006561; color: #FEFAF
 h2 { font-size: 1.75em; font-family: 'Felipa', cursive; color: #009B95; }
 a { color: #009B95; }
 a:hover, a:focus, a:active { color: #006561; }
+textarea { font-family: 'Bitter', sans-serif; border: 0.125em solid #009B95; width: 100%; height: 4em; margin: 0; }
 
 /* Template Specific
 *********************************************************/
@@ -51,3 +52,7 @@ li.recipe-comment { margin: 1.75em 0.25em 0 0; }
 li.recipe-comment:first-child { margin-top: 0.5em; }
 li.recipe-comment header { background: #009B95; color: #FEFAFD; font-weight: bold; padding: 0.5em; margin: 0 0 0.5em 0;}
 li.recipe-comment header time { color: #A1F0EE; font-weight: normal; float: right; }
+section#recipe-new-comment h2 { margin: 2em 0 0.25em 0; }
+div#recipe-new-comment-info { background: #009B95; color: #FEFAFD; display: block; margin: 0; padding: 0.25em 0.75em; }
+div#recipe-new-comment-info a { color: #A1F0EE; }
+div#recipe-new-comment-info a:hover, div#recipe-new-comment-info a:active, div#recipe-new-comment-info a:focus { text-decoration: underline; }

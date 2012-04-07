@@ -28,20 +28,15 @@
     <h2>Comments</h2>
     <ul id="recipie-comments-tree">
 <?php foreach( $comments as $comment ): ?>
-      <li class="recipe-comment">
-        <header>
-          <?=$comment->DisplayName?> 
-          <time datetime="<?=gmdate("Y-m-d\TH:i:s\Z", strtotime($comment->Time))?>"><?=date('n/j/Y g:iA',  strtotime($comment->Time) )?></time>
-        </header>
-        <section>
-          <?=$comment->Text?> 
-        </section>
-      </li>
+      <?=$this->load->view('recipe_comment', array('comment' => $comment ) )?>
 <?php endforeach; ?>
+<?= count($comments) == 0 ? "      <p>No Comments...</p>" : "" ?>
     </ul>
   </div>
-
-  Post Comment:
-  <textarea id="postcomment" style="height: 100px; width: 500px"></textarea>
-  <button id="comment_button"> Post! </button>
+  <section id="recipe-new-comment">
+    <h2>Add Your Comment</h2>
+    <div id="recipe-new-comment-info">kooBkooC uses <a href="http://www.textism.com/tools/textile/">Textile formatting</a> on submissions.</div>
+    <textarea id="new-comment-body"></textarea>
+    <button id="add-comment">Post Comment</button>
+  </section>
 </section>

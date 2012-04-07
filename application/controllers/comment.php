@@ -1,27 +1,67 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Recipe extends CI_Controller {
-
-    public function index()
+class Comment extends CI_Controller
+{
+  public function index()
+  {
+    $this->template->load('error', array('title' => 'Page Not Done!', "message" => "We need to do this") );
+  }
+  
+  public function add($recipeID = -1, $contents = "")
+  {
+    $r = array( "json" => array() );
+    $r["json"]["success"] = false;
+    
+    $this->db->select('*');
+    $this->db->from('Recipes');
+    $this->db->where('ID', $recipeID);
+    $query = $this->db->get();
+    
+    if($query->num_rows() != 1)
     {
-      $this->template->load('error', array('title' => 'Page Not Done!', "message" => "We need to do this") );
+      $r["json"]["reason"] = "The recipe you voted could not be found.";
+      $this->load->view('json', $r);
+      return;
     }
     
-    public function add($userid,$recipeid, $contents)
+    if(!$this->session->userdata('logged_in') || !$this->session->userdata('email'))
     {
-        $this->template->load_js("recipe_id.js");
-        $data = array('ID' => $id,'UsersID'=>$userid,'ParentCommentsID' => 0, 'RecipesID' => $recipeid, 'Text' => $contents, 'Time' => $time);
-        // Build the SQL-ish query using CodeIgniters's Active Record to get the Cookware with the id passed in
-        
-        
-        if(!($this->db->insert("Comments",$data)) )
-        {
-            $this->template->load('error', array('title' => 'Recipe Not Found!', "message" => "The Recipe with id \"$id\" could not be found!") );
-        }
-        else
-        {
-            $this->template->load('recipe_id',0);
-        }
+      $r["json"]["reason"] = "You must be logged in to comment.";
+      $this->load->view('json', $r);
+      return;
     }
+
+    $this->db->select('*');
+    $this->db->from('Users');
+    $this->db->where('Email', $this->session->userdata('email'));
+    $query = $this->db->get();
+    
+    if($query->num_rows() != 1)
+    {
+      $r["json"]["reason"] = "There is an error in your current session, try clearing your cookies for kooBkooC.net";
+      $this->load->view('json', $r);
+      return;
+    }
+    
+    $contents = urldecode($contents);
+    $data = array('UsersID'=> $query->row(0)->ID, 'RecipesID' => $recipeID, 'Text' => $contents, 'Time' => date( 'Y-m-d H:i:s') );
+    
+    if(!($this->db->insert("Comments", $data)) )
+    {
+      $r["json"]["reason"] = "There was an error ading your comment to our database.";
+      $this->load->view('json', $r);
+      return;
+    }
+    else
+    {
+      $comment->DisplayName = $query->row(0)->DisplayName;
+      $comment->Time = date( 'Y-m-d H:i:s');
+      $comment->Text = $contents;
+      $r["json"]["success"] = true;
+      $r["json"]["newHTML"] = base64_encode($this->load->view('recipe_comment', array('comment' => $comment, "hide" => true ), true ));
+      $this->load->view('json', $r);
+      return;
+    }
+  }
 }
 
