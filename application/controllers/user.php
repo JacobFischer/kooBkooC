@@ -206,32 +206,57 @@ class User extends CI_Controller {
     
   }
   
+  public function password($page, $arg = "")
+  {
+    if($page == "reset")
+    {
+      $this->password_reset($arg);
+    }
+    else if($page == "change")
+    {
+      $this->password_change();
+    }
+    else
+    {
+      $this->template->load( '404_error' );
+    }
+  }
+  
   public function password_reset($userID = -1)
   {
-    if($userID < 0)
+    $this->db->from('Users');
+    $this->db->where('ID', $userID );
+    $query = $this->db->get();
+    
+    if($query->num_rows() != 1)
     {
       $this->template->load('error', array('title' => 'Password Reset Failed', "message" => "Invalid User ID supplied for password reset.") );
       return;
     }
     
+    $user = $query->row(0);
+    
     $newPassword = randomAlphaNum(12);
     
-    $this->load->library('email');
+    $this->load->library('email');  
     
-    $config['protocol'] = 'mail';
-    $config['mailtype'] = 'html';
-    $config['charset']  = 'utf-8';
-    $config['newline']  = "\r\n";
-    $this->email->initialize($config);
-    
-    $this->email->from('noreply@koobkooc.net', 'kooBkooC');
-    $this->email->to('jtf3m8@mst.edu'); 
+    $this->email->from('koobkooc.net@gmail.com', 'kooBkooC.net');
+    $this->email->to( $user->Email ); 
 
-    $this->email->subject('kooBkooC Password Reset');
-    $this->email->message("Your new password on kooBkooC.net is: <strong>$newPassword</strong>");
+    $this->email->subject('kooBkooC.net Password Reset');
+    $this->email->message("<p>Your new password on kooBkooC.net is: <strong>$newPassword</strong> </p><p>enjoy,<br />The kooBkooC Team</p>");
 
     $this->email->send();
     
-    $this->template->load('error', array('title' => 'Worked for ' . $userID, "message" => $this->email->print_debugger()) );
+    $this->db->flush_cache();
+    $this->db->where('ID', $user->ID);
+    $this->db->update('Users', array( 'HashedPassword' => crypt( $newPassword ) ) );
+    
+    $this->template->load('user_password_reset', array('email' => $user->Email ) );
+  }
+  
+  public function password_change()
+  {
+    $this->template->load('error', array('title' => 'Password Change', "message" => "Need to do this." ) );
   }
 }
