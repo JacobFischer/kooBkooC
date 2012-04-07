@@ -18,12 +18,14 @@
   <?php endforeach;?><br/>
   <h2>Directions</h2>
   <p><?=$recipe->Directions?></p>
-  <h2>Tags</h2>
-  <? foreach( $tags as $tag):?>
-  <?$j = $tag->ID?>
-  <a href="<?=base_url() . "index.php/tags/recipes/$j"?>"><?=$tag->Name?></a>
-  <?php endforeach;?><br/>
-
+  <section id="recipe-tags">
+    <h2>Tags</h2>
+    <ul>
+<? foreach( $tags as $tag):?>
+      <li><a href="<?=site_url( array( 'tags', 'recipies', $tag->ID) )?>"><?=$tag->Name?></a></li>
+<?php endforeach;?>
+    </ul>
+  </section>
   <div id="recipe-comments">
     <h2>Comments</h2>
     <ul id="recipie-comments-tree">
