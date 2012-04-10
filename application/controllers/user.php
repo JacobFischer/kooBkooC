@@ -152,6 +152,7 @@ class User extends CI_Controller {
   {
     $this->load->library('session');
     $this->session->set_userdata('logged_in', 0);
+    $this->session->set_userdata('email', 0);
     $this->session->sess_destroy();
 
     $this->template->load( 'user_logout.php' );
@@ -214,6 +215,11 @@ class User extends CI_Controller {
       $this->template->load('error', array('title' => 'Username Not Found', "message" => "The username \"$username\" could not be found!") );
     }
     
+  }
+
+  public function me()
+  {
+    $this->library->load('session');
   }
   
   public function password($page, $arg = "")
