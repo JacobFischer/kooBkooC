@@ -82,10 +82,6 @@ class User extends CI_Controller {
   public function reg()
   {
     $this->load->library('recaptcha');
-    $this->load->library('form_validation');
-    $this->lang->load('recaptcha');
-    $this->load->helper('form');
-
     $this->template->load( 'reg.php', array('recaptcha'=>$this->recaptcha->get_html()));
   }
 
@@ -140,6 +136,7 @@ class User extends CI_Controller {
   public function user_login()
   {
     $this->load->library('session');
+    $this->load->library('recaptcha');
     $logged_in = $this->session->userdata('logged_in');
     if( $logged_in )
     { 
@@ -147,7 +144,7 @@ class User extends CI_Controller {
     }
     else
     {
-      $this->template->load( 'user_login.php' );
+      $this->template->load( 'user_login.php', array('recaptcha'=>$this->recaptcha->get_html()));
     }
   }
 
@@ -235,10 +232,12 @@ class User extends CI_Controller {
     }
   }
   
-  public function password_reset($userID = -1)
+  public function password_reset()
   {
+    $this->load->library('recaptcha');
     $this->db->from('Users');
-    $this->db->where('ID', $userID );
+    $email = $this->input->post( "email" );
+    $this->db->where('email', $email);
     $query = $this->db->get();
     
     if($query->num_rows() != 1)
@@ -247,6 +246,11 @@ class User extends CI_Controller {
       return;
     }
     
+	  if (!$this->recaptcha->check_answer($this->input->ip_address(),$this->input->post('recaptcha_challenge_field'),$this->input->post("recaptcha_response_field"))) {
+      $this->template->load('error', array('title' => 'You Failed At Typing', "message" => "ReRecaptcha Please") );
+      return;
+    }
+
     $user = $query->row(0);
     
     $newPassword = randomAlphaNum(12);
@@ -272,14 +276,5 @@ class User extends CI_Controller {
   {
     $this->template->load('error', array('title' => 'Password Change', "message" => "Need to do this." ) );
   }
-
-	function check_captcha($val) {
-	  if ($this->recaptcha->check_answer($this->input->ip_address(),$this->input->post('recaptcha_challenge_field'),$val)) {
-	    return TRUE;
-	  } else {
-	    $this->form_validation->set_message('check_captcha',$this->lang->line('recaptcha_incorrect_response'));
-	    return FALSE;
-	  }
-	}
 
 }
