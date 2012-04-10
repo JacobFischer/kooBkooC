@@ -20,19 +20,138 @@ class Recipe extends CI_Controller
   
   public function submit()
   {
-    $this->template->load('error' , array('title' => 'Recipe Submitted!' , "message" => "Recipe has been successfully submitted ") );
+    //$this->template->load('error' , array('title' => 'Recipe Submitted!' , "message" => "Recipe has been successfully submitted ") );
+    //Load all of the variables that should have been passed from the form
     $name = $this->input->post("recipeName");
     $description = $this->input->post("recipe-description");
     $directions = $this->input->post("recipe-directions");
     $ingredients = $this->input->post("ingredients");
-    $tag= $this->input->post("tags");
-    print($name);
-    print($description);
-    print($directions);
-    foreach( $ingredients as $ingredient):
-      print ($ingredient);
-    endforeach;
-    print($tag);
+    $tags = $this->input->post("tags");
+    $servings = $this->input->post("servings");
+    $ingredientAmounts = $this->input->post("ingredientAmount");
+    
+    //Removes the 0 value ingredients form the list
+    $index = 0;
+    foreach($ingredients as $ingredient)
+    {
+      if ($ingredientAmounts[$index] == 0 or $ingredient == "")
+      {
+        unset($ingredients[$index]);
+      }
+      $index += 1;
+    }   
+   
+    $index = 0;
+    foreach($tags as $tag)
+    {
+      if($tag == "")
+      {
+        unset($tags[$index]);
+      }
+      $index += 1;
+    }
+    
+      
+    //Checks that all input amounts are numeric
+    foreach($ingredientAmounts as $amount)
+    {
+      if(is_numeric($amount) == False)
+      {
+        $this->template->load('error' , array('title' => 'Invalid Measurement!' , "message" => "Please make sure all input ingredient ammounts are numeric "));
+        return;
+      }
+    }
+       
+    //Checks to see that the name of the recipe is still available
+    $this->db->select('*');
+    $this->db->from('Recipes');
+    $this->db->where('Name', $name );
+    $nameCheckQuery = $this->db->get();
+    if($nameCheckQuery->num_rows() > 0)
+    {
+      $this->template->load('error' , array('title' => 'Recipe Already Exists!' , "message" => "This recipe already exists in the system!"));
+      return;
+    }
+    
+    //Make sure the recipe has at least 2 
+    if(sizeof($ingredients) < 2)
+    {
+      $this->template->load('error' , array('title' => 'Not Enough Ingredients!' , "message" => "You need more ingredients for this is be a recipe...come on now!"));
+      return;
+    }
+    
+    //Makes sure the submitted recipe has a name
+    if(!$name)
+    {
+      $this->template->load('error' , array('title' => 'Your Recipe Needs a Name!' , "message" => "Please enter a name for the recipe"));
+      return;
+    }
+    
+    //Makes sure there are no duplicate ingredients
+    if(count(array_unique($ingredients))<count($ingredients))
+    { 
+      $this->template->load('error' , array('title' => 'Duplicate Ingredient!' , "message" => "You may not include the same ingredient more than once in a recipe "));
+      return;
+    }
+    
+    //Makes sure all selected tags are unique
+    if(count(array_unique($tags))<count($tags))
+    { 
+      $this->template->load('error' , array('title' => 'Duplicate Tag!' , "message" => "You may not include the same tag more than once in a recipe "));
+      return;
+    }
+       
+    //Get the user's e-mail
+    $this->db->select('*');
+    $this->db->from('Users');
+    $this->db->where('Email', $this->session->userdata('email'));
+    $query = $this->db->get();
+    
+    //Add all of the retreived information to an array to be passed when the recipes is added
+    $recipeData = array('SubmitterUsersID' => $query->row(0)->ID, 'Name' => $name,'Directions' => $directions, 
+      'Servings' => $servings, 'ImageURL' => 'NULL', 'Description' => $description);   
+     
+    //Inserting the information to the database
+    if(!($this->db->insert("Recipes", $recipeData)) )
+    {
+      $this->template->load('error' , array('title' => 'Recipe Not Sumbitted!' , "message" => "One of the values you input are invalid!"));
+      return;
+    }
+    else
+    {
+      $this->db->select('*');
+      $this->db->from('Recipes');
+      $this->db->where('Name', $name);
+      $newRecipe = $this->db->get();
+
+      //Constructing array for the recipe tag  
+      foreach($tags as $tag)
+      {      
+        $tagData = array('RecipesID' => $newRecipe->row(0)->ID ,'TagsID' => $tag);
+        if(!($this->db->insert("RecipesTags", $tagData)) )
+        {
+          $this->template->load('error' , array('title' => 'Tags Not Submitted!' , "message" => "UH OH! BAD THINGS HAPPENED"));
+          return;
+        }    
+      }      
+      //Adding all of the ingredients and their amounts to the database
+      $index = 0;
+      foreach($ingredients as $ingredient)
+      {
+        if ($ingredientAmounts[$index] > 0)
+        {
+          $ingredientData = array('RecipesID' => $newRecipe->row(0)->ID, 'IngredientsID' => $ingredient, 'Amount' =>$ingredientAmounts[$index]); 
+          if(!($this->db->insert("RecipesIngredients", $ingredientData)) )
+          {
+            $this->template->load('error' , array('title' => 'Ingredient Not Submitted!' , "message" => "UH OH! BAD THINGS HAPPENED"));
+            return;
+          }
+        }
+        $index += 1;
+      }
+      id($newRecipe->row(0)->ID);
+      return;
+    }
   }
   
   public function id($id)
@@ -122,6 +241,18 @@ class Recipe extends CI_Controller
                            );
     }
   }
+  
+  public function add()
+  {
+    $tagquery= $this->db->query("SELECT * FROM Tags");
+    $ingredientsquery=$this->db->query("SELECT * FROM Ingredients");       
+    $this->template->load_js("recipe_add.js");
+    $this->template->load( 'recipe_add', array("tags" => $tagquery->result(),
+                                        "ingredients" => $ingredientsquery->result()));
+  }
+  
+  
+  
   /*
   public function add($name, $tag, $ingredients)
   {
