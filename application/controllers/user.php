@@ -81,7 +81,12 @@ class User extends CI_Controller {
 
   public function reg()
   {
-    $this->template->load( 'reg.php' );
+    $this->load->library('recaptcha');
+    $this->load->library('form_validation');
+    $this->lang->load('recaptcha');
+    $this->load->helper('form');
+
+    $this->template->load( 'reg.php', array('recaptcha'=>$this->recaptcha->get_html()));
   }
 
   public function register()
@@ -91,6 +96,13 @@ class User extends CI_Controller {
     $password = $this->input->post( "password" );
     $email = $this->input->post( "email" );
     $avatarURL = $this->input->post( "avatarURL" );
+
+    $this->load->library('recaptcha');
+                
+	  if (!$this->recaptcha->check_answer($this->input->ip_address(),$this->input->post('recaptcha_challenge_field'),$this->input->post("recaptcha_response_field"))) {
+      $this->template->load('error', array('title' => 'You Failed At Typing', "message" => "ReRecaptcha Please") );
+	    return;
+	  }
 
     if( strlen( $password ) < 4 )
     {
@@ -260,4 +272,14 @@ class User extends CI_Controller {
   {
     $this->template->load('error', array('title' => 'Password Change', "message" => "Need to do this." ) );
   }
+
+	function check_captcha($val) {
+	  if ($this->recaptcha->check_answer($this->input->ip_address(),$this->input->post('recaptcha_challenge_field'),$val)) {
+	    return TRUE;
+	  } else {
+	    $this->form_validation->set_message('check_captcha',$this->lang->line('recaptcha_incorrect_response'));
+	    return FALSE;
+	  }
+	}
+
 }
