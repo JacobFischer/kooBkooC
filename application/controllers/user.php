@@ -142,6 +142,7 @@ class User extends CI_Controller {
   public function logout()
   {
     $this->load->library('session');
+    $this->session->set_userdata('logged_in', 0);
     $this->session->sess_destroy();
 
     $this->template->load( 'user_logout.php' );
