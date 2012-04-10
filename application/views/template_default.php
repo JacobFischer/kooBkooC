@@ -48,19 +48,19 @@ if($logged_in)
                             <a href="<?=base_url()?>">Home</a>
                         </li>
                         <li>
-                            <a href="<?=site_url(array('recipe'))?>">Recipies</a>
+                            <a href="<?=site_url(array('recipe'))?>">Recipes</a>
                         </li>
                         <li>
                             <a href="<?=site_url(array('tags'))?>">Tags</a>
                         </li>
                         <li>
-                            <a href="#">About Us</a>
+                            <a href="<?=site_url(array('aboutus'))?>">About Us</a>
                         </li>
                         <li>
-                            <a href="#">FAQ</a>
+                            <a href="<?=site_url(array('faqs'))?>">FAQ</a>
                         </li>
                         <li>
-                            <a href="#">Contact Us</a>
+                            <a href="<?=site_url(array('contactus'))?>">Contact Us</a>
                         </li>
                     <ul>
                 </nav>
