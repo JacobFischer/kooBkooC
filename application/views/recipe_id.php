@@ -24,7 +24,7 @@
     <h2>Tags</h2>
     <ul>
 <? foreach( $tags as $tag):?>
-      <li><a href="<?=site_url( array( 'tags', 'recipies', $tag->ID) )?>"><?=$tag->Name?></a></li>
+      <li><a href="<?=site_url( array( 'tags', 'recipes', $tag->ID) )?>"><?=$tag->Name?></a></li>
 <?php endforeach;?>
     </ul>
   </section>
