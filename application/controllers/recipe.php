@@ -149,7 +149,9 @@ class Recipe extends CI_Controller
         }
         $index += 1;
       }
-      id($newRecipe->row(0)->ID);
+      
+      redirect('recipe/id/' + $newRecipe->row(0)->ID, 'location', 301);
+      
       return;
     }
   }
