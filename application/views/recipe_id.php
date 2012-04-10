@@ -13,9 +13,11 @@
 <hr style="float: left; width: 100%;"/>
 <section id="recipe-body">
   <h2>You'll need</h2>
-  <? foreach( $ingredients as $ingredient):?>
-  <?=$ingredient->Name?><br/>
-  <?php endforeach;?><br/>
+  <ul>
+<? foreach( $ingredients as $ingredient):?>
+	<li><?=$ingredient->Amount?> <?=$ingredient->BaseUnitOfMeasure?> of <a href="<?=site_url(array( 'ingredients', 'id', $ingredient->ID ))?>"><?=$ingredient->Name?></a></li>
+<?php endforeach;?><br/>
+  </ul>
   <h2>Directions</h2>
   <p><?=$recipe->Directions?></p>
   <section id="recipe-tags">
