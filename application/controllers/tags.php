@@ -3,9 +3,20 @@
 class Tags extends CI_Controller {
 	public function index()
 	{
-		$this->db->select('*');
-		$this->db->from('Tags');
-		$query = $this->db->get();
+			
+		$query	= $this->db->query("SELECT ID, COUNT(TagsID) as freq , Name FROM RecipesTags JOIN Tags on Tags.ID = RecipesTags.TagsID GROUP BY TagsID DESC");   	
+
+
+		$total = 0;
+		$max_font_size = 200;
+
+		foreach($query->result() as $i)
+		{
+			$total = $total + $i->freq;
+		}
+		
+	
+	
 		if($query->num_rows() == 0)
 		{
 			$this->template->load('error', array('title' => 'No tags found' , "message" => "did not work"));//load error view  
@@ -13,7 +24,7 @@ class Tags extends CI_Controller {
 		}
 		else
 		{
-			$this->template->load('tag_view' , array("tag" => $query ));
+			$this->template->load('tag_view' , array("tag" => $query  , "total" => $total, "max_font" => $max_font_size ));
 		}
 	}
 

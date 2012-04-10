@@ -1,8 +1,8 @@
 <h1>Tags</h1>
-<ul>
+
 <?foreach($tag->result() as $i):?>
 <?$j = $i->ID?>
-<li><a href="<?=base_url() . "index.php/tags/recipes/$j"?>"><?=$i->Name?></a></li>
+<a href="<?=base_url() . "index.php/tags/recipes/$j"?>" style="font-size:<?=($i->freq * $max_font)/$total?>pt;"><?=$i->Name?></a>
 <? endforeach; ?>
-</ul>
+
 
