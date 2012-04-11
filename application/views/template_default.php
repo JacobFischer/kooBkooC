@@ -30,7 +30,7 @@
 if($logged_in)
 {
 ?>
-  <a href="<?=site_url(array('user', 'logout'))?>">Logout <strong><?=$username?></strong></a>
+  <a href="<?=site_url(array('user', 'logout'))?>">Logout <strong><?=$username?></strong></a> - <a href="<?=site_url(array('user', 'me'))?>">Your Account!</a>
 <?php
 } else {
 ?>
