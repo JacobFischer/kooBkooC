@@ -49,36 +49,41 @@ class Tags extends CI_Controller {
     		}
 	}
 
-  public function add()
-  {	
-    if(!$this->session->userdata('logged_in') || !$this->session->userdata('email'))
-    {
-      $this->template->load('error', array('title' => 'Not logged in.' , "message" => "You must be logged in to add a tag."));
-      return;
-    }
-    $this->template->load('add_tag' , array("recipe" => 0, "tag" => 0 ));
-  }
-  public function submit()
-  {
-    $name = $this->input->post("tag_name");
-    $desc = $this->input->post("description");
-    $data = array('Name' => $name,'Description' =>$desc);
-    $query = $this->db->query("SELECT * FROM Tags WHERE Name = '$name'");
-    if($query->num_rows()>0)
-    {
-      $this->template->load('error',array('title'=>'Tag already exists', "message"=>"The tag is already in the database"));
-      return;
-    }
-    if(!($this->db->insert("Tags", $data)) )
-    {
-      $this->template->load('error', array('title' => 'Could not add tag.' , "message" => "Error in creating tag."));
-      return;
-    }
-    else
-    {
-      $this->template->load('tag_success',array("name" =>$name));
-    }
-  }
+	public function add()
+  	{	
+    		if(!$this->session->userdata('logged_in') || !$this->session->userdata('email'))
+    		{
+      			$this->template->load('error', array('title' => 'Not logged in.' , "message" => "You must be logged in to add a tag."));
+      			return;
+    		}
+    		$this->template->load('add_tag' , array("recipe" => 0, "tag" => 0 ));
+  	}
+  
+	public function submit()
+  	{
+    		$name = $this->input->post("tag_name");
+    		$desc = $this->input->post("description");
+    		$data = array('Name' => $name,'Description' =>$desc);
+    		$query = $this->db->query("SELECT * FROM Tags WHERE Name = '$name'");
+    		
+		if($query->num_rows()>0)
+    		{
+			$this->template->load('error',array('title'=>'Tag already exists', "message"=>"The tag is already in the database"));
+			return;
+    		}
+    
+		if(!($this->db->insert("Tags", $data)) )
+    		{
+      			$this->template->load('error', array('title' => 'Could not add tag.' , "message" => "Error in creating tag."));
+      			return;
+    		}
+    		
+		else
+    		{
+      			$this->template->load('tag_success',array("name" =>$name));
+		}
+	}	
+
 }
 
 		
