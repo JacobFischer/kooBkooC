@@ -11,6 +11,7 @@
   </div>
 </div>
 <hr style="float: left; width: 100%;"/>
+<img src="<?=base_url() . 'uploads/recipes/' . $recipe->ID . '.jpg'?>" id="recipe-img" />
 <section id="recipe-body">
   <h2>You'll need</h2>
   <ul>
@@ -24,7 +25,7 @@
     <h2>Tags</h2>
     <ul>
 <? foreach( $tags as $tag):?>
-      <li><a href="<?=site_url( array( 'tags', 'recipies', $tag->ID) )?>"><?=$tag->Name?></a></li>
+      <li><a href="<?=site_url( array( 'tags', 'recipes', $tag->ID) )?>"><?=$tag->Name?></a></li>
 <?php endforeach;?>
     </ul>
   </section>

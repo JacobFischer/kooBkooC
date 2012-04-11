@@ -81,7 +81,8 @@ class User extends CI_Controller {
 
   public function reg()
   {
-    $this->template->load( 'reg.php' );
+    $this->load->library('recaptcha');
+    $this->template->load( 'reg.php', array('recaptcha'=>$this->recaptcha->get_html()));
   }
 
   public function register()
@@ -91,6 +92,13 @@ class User extends CI_Controller {
     $password = $this->input->post( "password" );
     $email = $this->input->post( "email" );
     $avatarURL = $this->input->post( "avatarURL" );
+
+    $this->load->library('recaptcha');
+                
+	  if (!$this->recaptcha->check_answer($this->input->ip_address(),$this->input->post('recaptcha_challenge_field'),$this->input->post("recaptcha_response_field"))) {
+      $this->template->load('error', array('title' => 'You Failed At Typing', "message" => "ReRecaptcha Please") );
+	    return;
+	  }
 
     if( strlen( $password ) < 4 )
     {
@@ -128,6 +136,7 @@ class User extends CI_Controller {
   public function user_login()
   {
     $this->load->library('session');
+    $this->load->library('recaptcha');
     $logged_in = $this->session->userdata('logged_in');
     if( $logged_in )
     { 
@@ -135,13 +144,15 @@ class User extends CI_Controller {
     }
     else
     {
-      $this->template->load( 'user_login.php' );
+      $this->template->load( 'user_login.php', array('recaptcha'=>$this->recaptcha->get_html()));
     }
   }
 
   public function logout()
   {
     $this->load->library('session');
+    $this->session->set_userdata('logged_in', 0);
+    $this->session->set_userdata('email', 0);
     $this->session->sess_destroy();
 
     $this->template->load( 'user_logout.php' );
@@ -205,6 +216,28 @@ class User extends CI_Controller {
     }
     
   }
+
+  public function me()
+  {
+    if($this->session->userdata('logged_in'))
+    {
+      $email = $this->session->userdata('email');
+      $this->db->select('*');
+      $this->db->from('Users');
+      $this->db->where('Email', $email);
+
+      $query = $this->db->get();
+      if($query->num_rows == 1)
+      {
+        $this->template->load( 'user_me.php' );
+        
+        return;
+      }
+    }
+
+    $this->template->load('error', array('title' => 'You\'re not logged in.', "message" => "This would go a lot easier if you'd just log in!") );
+
+  }
   
   public function password($page, $arg = "")
   {
@@ -221,11 +254,13 @@ class User extends CI_Controller {
       $this->template->load( '404_error' );
     }
   }
-  
-  public function password_reset($userID = -1)
+
+  public function password_reset()
   {
+    $this->load->library('recaptcha');
     $this->db->from('Users');
-    $this->db->where('ID', $userID );
+    $email = $this->input->post( "email" );
+    $this->db->where('email', $email);
     $query = $this->db->get();
     
     if($query->num_rows() != 1)
@@ -234,6 +269,11 @@ class User extends CI_Controller {
       return;
     }
     
+	  if (!$this->recaptcha->check_answer($this->input->ip_address(),$this->input->post('recaptcha_challenge_field'),$this->input->post("recaptcha_response_field"))) {
+      $this->template->load('error', array('title' => 'You Failed At Typing', "message" => "ReRecaptcha Please") );
+      return;
+    }
+
     $user = $query->row(0);
     
     $newPassword = randomAlphaNum(12);
@@ -257,6 +297,55 @@ class User extends CI_Controller {
   
   public function password_change()
   {
-    $this->template->load('error', array('title' => 'Password Change', "message" => "Need to do this." ) );
+
+    if($this->session->userdata('logged_in'))
+    {
+      $email = $this->session->userdata('email');
+      $this->db->select('*');
+      $this->db->from('Users');
+      $this->db->where('Email', $email);
+
+      $query = $this->db->get();
+      if($query->num_rows == 1)
+      {
+
+        $oldPassword = $this->input->post( "oldPassword" );
+      
+        if(crypt($oldPassword, $query->row(0)->HashedPassword ) !=  $query->row(0)->HashedPassword)
+        {
+          $this->template->load('error', array('title' => 'Your old password is incorrect.', "message" => "Please try to remember better!") );
+          return;
+        }
+        
+
+        $password1 = $this->input->post( "password1" );
+        $password2 = $this->input->post( "password2" );
+
+
+        if($password1 != $password2)
+        {
+          $this->template->load('error', array('title' => 'Passwords Do Not Match', "message" => "Match your passwords before wasting my time!") );
+          return;
+        }
+
+        $data = array(
+          'DisplayName' => $query->row(0)->DisplayName,
+          'Email' => $query->row(0)->Email,
+          'HashedPassword' => crypt( $password1 ),
+          'AvatarURL' => $query->row(0)->DisplayName        
+        );
+
+        $this->db->where('Email', $email);
+        $this->db->update('Users', $data);
+        
+        $this->template->load('error', array('title' => 'Password Changed', "message" => "Goodjob!!") );
+        return;
+        
+      }
+    }
+
+    $this->template->load('error', array('title' => 'You\'re not logged in.', "message" => "This would go a lot easier if you'd just log in!") );
+
   }
+
 }

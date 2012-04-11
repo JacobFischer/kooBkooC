@@ -48,7 +48,7 @@ class Comment extends CI_Controller
     
     if(!($this->db->insert("Comments", $data)) )
     {
-      $r["json"]["reason"] = "There was an error ading your comment to our database.";
+      $r["json"]["reason"] = "There was an error adding your comment to our database.";
       $this->load->view('json', $r);
       return;
     }
