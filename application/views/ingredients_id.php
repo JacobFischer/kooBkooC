@@ -1,11 +1,17 @@
-<h1>Ingredient: <?=$ingredient->Name?></h1>
+<h1>Ingredients</h1>
+
+<a href="<?=base_url() . "index.php/ingredients/add"?>">Add an Ingredient!</a>
 <ul>
-    <li>ID: <?=$ingredient->ID?></li>
-    <li>Description: <?=$ingredient->Description?></li>
-    <li>Base Unit of Measure:<?=$ingredient->BaseUnitOfMeasure?></li>
-    <li>ImageURL: <?=$ingredient->ImageURL?></li>
+   <?foreach ($ingredient->result() as $i):?>
+   <br/>
+   <li>Ingredient: <?=$i->Name?></li>
+    <li>ID: <?=$i->ID?></li>
+    <li>Description: <?=$i->Description?></li>
+    <li>Base Unit of Measure:<?=$i->BaseUnitOfMeasure?></li>
+    <li>ImageURL: <?=$i->ImageURL?></li>
+    <br/>
+    <?endforeach;?>
    
      
-
 </ul>
 
