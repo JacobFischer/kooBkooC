@@ -24,7 +24,7 @@
     </head>
     <body>
         <div id="template-title">
-            <a href="#" id="website-title">koo<span class="cap">B</span>koo<span class="cap">C</span></a>
+            <a href="<?=base_url()?>" id="website-title">koo<span class="cap">B</span>koo<span class="cap">C</span></a>
             <div id="profile-top">
 <?php
 if($logged_in)
