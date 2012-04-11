@@ -30,7 +30,7 @@
 if($logged_in)
 {
 ?>
-  <a href="<?=site_url(array('user', 'profile'))?>"><?=$username?></a> - <a href="<?=site_url(array('user', 'logout'))?>">Logout</a>
+  <a href="<?=site_url(array('user', 'logout'))?>">Logout <strong><?=$username?></strong></a> - <a href="<?=site_url(array('user', 'me'))?>">Your Account!</a>
 <?php
 } else {
 ?>
@@ -49,6 +49,9 @@ if($logged_in)
                         </li>
                         <li>
                             <a href="<?=site_url(array('recipe'))?>">Recipes</a>
+                        </li>
+                        <li>
+                            <a href="<?=site_url(array('ingredients'))?>">Ingredients</a>
                         </li>
                         <li>
                             <a href="<?=site_url(array('tags'))?>">Tags</a>
