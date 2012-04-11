@@ -5,22 +5,26 @@ class Recipe extends CI_Controller
 
   public function index()
   {
-    $query = $this->db->query("SELECT RecipesID, SUM(Direction), Name FROM Votes JOIN Recipes on Votes.RecipesID = Recipes.ID GROUP BY RecipesID ORDER BY SUM(Direction) DESC LIMIT 5" ); 
+	$query = $this->db->query("SELECT RecipesID, SUM(Direction), Name FROM Votes JOIN Recipes on Votes.RecipesID = Recipes.ID GROUP BY RecipesID ORDER BY SUM(Direction) DESC LIMIT 5" ); 
 
-    if($query->num_rows() == 0)
-    {
-      $this->template->load('error' , array('title' => 'No recipes found!' , "message" => "Sorry, no recipes were found :( ") );
-    }
+	if($query->num_rows() == 0)
+	{
+		$this->template->load('error' , array('title' => 'No recipes found!' , "message" => "Sorry, no recipes were found :( ") );
+    	}
 
-    else
-    {
-      $this->template->load('recipes_page' , array("recipes" => $query));
-    }
+	else
+    	{
+		$this->template->load('recipes_page' , array("recipes" => $query));
+	}
   }
   
   public function submit()
-  {
-    //$this->template->load('error' , array('title' => 'Recipe Submitted!' , "message" => "Recipe has been successfully submitted ") );
+  {  
+    if(!$this->session->userdata('logged_in') || !$this->session->userdata('email'))
+    {
+      $this->template->load('error' , array('title' => 'Please Login or Sign Up!' , "message" => "You must be logged in to submit a recipe!"));
+      return;
+    }
     //Load all of the variables that should have been passed from the form
     $name = $this->input->post("recipeName");
     $description = $this->input->post("recipe-description");
@@ -57,9 +61,15 @@ class Recipe extends CI_Controller
     {
       if(is_numeric($amount) == False)
       {
-        $this->template->load('error' , array('title' => 'Invalid Measurement!' , "message" => "Please make sure all input ingredient ammounts are numeric "));
+        $this->template->load('error' , array('title' => 'Invalid Measurement!' , "message" => "Please make sure all input ingredient amounts are numeric "));
         return;
       }
+    }
+    
+    if(is_numeric($servings) == False)
+    {
+      $this->template->load('error' , array('title' => 'Invalid Serving!' , "message" => "Please make sure you amount is numeric "));
+        return;
     }
        
     //Checks to see that the name of the recipe is still available
@@ -108,7 +118,7 @@ class Recipe extends CI_Controller
     $query = $this->db->get();
     
     //Add all of the retreived information to an array to be passed when the recipes is added
-    $recipeData = array('SubmitterUsersID' => $query->row(0)->ID, 'Name' => $name,'Directions' => $directions, 
+    $recipeData = array('SubmitterUsersID' => $this->session->userdata('email'), 'Name' => $name,'Directions' => $directions, 
       'Servings' => $servings, 'ImageURL' => 'NULL', 'Description' => $description);   
      
     //Inserting the information to the database
@@ -123,11 +133,12 @@ class Recipe extends CI_Controller
       $this->db->from('Recipes');
       $this->db->where('Name', $name);
       $newRecipe = $this->db->get();
+      $recipeID = $newRecipe->row(0)->ID;
 
       //Constructing array for the recipe tag  
       foreach($tags as $tag)
       {      
-        $tagData = array('RecipesID' => $newRecipe->row(0)->ID ,'TagsID' => $tag);
+        $tagData = array('RecipesID' => $recipeID ,'TagsID' => $tag);
         if(!($this->db->insert("RecipesTags", $tagData)) )
         {
           $this->template->load('error' , array('title' => 'Tags Not Submitted!' , "message" => "UH OH! BAD THINGS HAPPENED"));
@@ -140,7 +151,7 @@ class Recipe extends CI_Controller
       {
         if ($ingredientAmounts[$index] > 0)
         {
-          $ingredientData = array('RecipesID' => $newRecipe->row(0)->ID, 'IngredientsID' => $ingredient, 'Amount' =>$ingredientAmounts[$index]); 
+          $ingredientData = array('RecipesID' => $recipeID, 'IngredientsID' => $ingredient, 'Amount' =>$ingredientAmounts[$index]); 
           if(!($this->db->insert("RecipesIngredients", $ingredientData)) )
           {
             $this->template->load('error' , array('title' => 'Ingredient Not Submitted!' , "message" => "UH OH! BAD THINGS HAPPENED"));
@@ -150,9 +161,22 @@ class Recipe extends CI_Controller
         $index += 1;
       }
       
-      redirect('recipe/id/' + $newRecipe->row(0)->ID, 'location', 301);
+      //Finding the submitter's user ID
+      $this->db->select('*');
+      $this->db->from('Users');
+      $this->db->where('Email', $this->session->userdata('email'));
+      $userQuery = $this->db->get();
+      $userID = $userQuery->row(0)->ID;
       
-      return;
+      //Upvoting your recipe
+      $voteData = array('UsersID' => $userID, 'RecipesID' => $recipeID, 'Direction' => 1); 
+      if(!($this->db->insert("Votes", $voteData)) )
+      {
+        $this->template->load('error' , array('title' => 'Vote Not Submitted!' , "message" => "UH OH! BAD THINGS HAPPENED"));
+        return;
+      }
+      
+      redirect('recipe/id/'.$recipeID, 'location', 301);
     }
   }
   
@@ -246,6 +270,12 @@ class Recipe extends CI_Controller
   
   public function add()
   {
+    if(!$this->session->userdata('logged_in') || !$this->session->userdata('email'))
+    {
+      $this->template->load('error' , array('title' => 'Please Login or Sign Up!' , "message" => "You must be logged in to submit a recipe!"));
+      return;
+    }
+    
     $tagquery= $this->db->query("SELECT * FROM Tags");
     $ingredientsquery=$this->db->query("SELECT * FROM Ingredients");       
     $this->template->load_js("recipe_add.js");
