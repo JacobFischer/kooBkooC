@@ -65,3 +65,4 @@ section#recipe-tags h2 { font-size: 1.25em; color: #006561; font-weight: bold; d
 section#recipe-tags ul, section#recipe-tags ul li { display: inline; }
 section#recipe-tags ul li a { background-color: #009B95; border: 0.125em solid #006561; color: #FEFAFD; padding: 0.125em; }
 section#recipe-tags ul li a:hover, section#recipe-tags ul li a:active, section#recipe-tags ul li a:focus { color: #A1F0EE; }
+img#recipe-img { width: 100%; height: auto; }

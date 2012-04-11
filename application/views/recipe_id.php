@@ -11,6 +11,7 @@
   </div>
 </div>
 <hr style="float: left; width: 100%;"/>
+<img src="<?=base_url() . 'uploads/recipes/' . $recipe->ID . '.jpg'?>" id="recipe-img" />
 <section id="recipe-body">
   <h2>You'll need</h2>
   <ul>
