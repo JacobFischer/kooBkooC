@@ -13,6 +13,32 @@ function randomAlphaNum($length)
 
 class User extends CI_Controller {
 
+  public function profile()
+  {
+    $data = array();
+    
+    if( !$this->session->userdata('logged_in') )
+    {
+      $this->template->load('error', array('title' => 'Not Logged in', "message" => "You must loggin to view your profile") );
+      return;
+    }
+    
+    $this->db->select('*');
+    $this->db->from('Users');
+    $this->db->where('Email', $this->session->userdata('email') );
+    $query = $this->db->get();
+    
+    if($query->num_rows() != 1)
+    {
+      $this->template->load('error', array('title' => 'Error loading user profile', "message" => "There was an error loading the user information from the database.") );
+      return;
+    }
+    
+    $data['user'] = $query->row(0);
+    
+    $this->template->load('user_profile', $data);
+  }
+  
   public function id( $id )
   { 
     $this->db->select('*');
