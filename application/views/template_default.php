@@ -51,6 +51,9 @@ if($logged_in)
                             <a href="<?=site_url(array('recipe'))?>">Recipes</a>
                         </li>
                         <li>
+                            <a href="<?=site_url(array('ingredients'))?>">Ingredients</a>
+                        </li>
+                        <li>
                             <a href="<?=site_url(array('tags'))?>">Tags</a>
                         </li>
                         <li>

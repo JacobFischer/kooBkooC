@@ -3,9 +3,7 @@
 class Tags extends CI_Controller {
 	public function index()
 	{
-			
 		$query	= $this->db->query("SELECT ID, COUNT(TagsID) as freq , Name FROM RecipesTags JOIN Tags on Tags.ID = RecipesTags.TagsID GROUP BY TagsID DESC");   	
-
 
 		$total = 0;
 		$max_font_size = 200;
@@ -14,8 +12,6 @@ class Tags extends CI_Controller {
 		{
 			$total = $total + $i->freq;
 		}
-		
-	
 	
 		if($query->num_rows() == 0)
 		{
@@ -30,7 +26,6 @@ class Tags extends CI_Controller {
 
 	public function recipes($id)
 	{
-	
 	  $query = $this->db->query("SELECT * FROM RecipesTags JOIN Recipes on RecipesTags.RecipesID = Recipes.ID WHERE RecipesTags.TagsID = \"$id\" ");
 	
 	  $this->db->select('*');
@@ -39,7 +34,6 @@ class Tags extends CI_Controller {
 
 	  $tagQuery = $this->db->get();
 
-	
 		if($query->num_rows() == 0)
     {
       $this->template->load('error', array('title' => 'No recipes found' , "message" => "did not work"));//load error view
