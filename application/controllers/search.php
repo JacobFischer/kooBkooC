@@ -276,19 +276,19 @@ class Search extends CI_Controller {
   
   public function reverse()
   {
-	// create data object mapped to json
+    // create data object mapped to json
     $data = array("json" => array("recipe" => array() ) );
-	
-	if (isset($_GET["ingredients"]))
-	{
-		$ingredients = $_GET["ingredients"];
-	}
-	else
-	{
-		$this->load->view('search_json', $data);
-		return;
-	}
-    
+
+    if (isset($_GET["ingredients"]))
+    {
+        $ingredients = $_GET["ingredients"];
+    }
+    else
+    {
+        $this->load->view('search_json', $data);
+        return;
+    }
+
     $query = array();
     // Build query
 	
@@ -311,8 +311,8 @@ class Search extends CI_Controller {
 					  ");
 	
 	/*$this->db->select('*');
-    $this->db->from('Recipes');
-    $this->db->join('RecipesIngredients','Recipes.ID = RecipesIngredients.RecipesID');
+       $this->db->from('Recipes');
+       $this->db->join('RecipesIngredients','Recipes.ID = RecipesIngredients.RecipesID');
 	$this->db->join('Votes','Recipes.ID = Votes.RecipesID');
 	$this->db->group_by('Recipes.ID','asc'); */
 	
