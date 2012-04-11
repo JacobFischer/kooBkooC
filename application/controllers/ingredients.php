@@ -63,7 +63,7 @@ class Ingredients extends CI_Controller //display ingredients by id
     $desc = $this->input->post("description");
     $measure = $this->input->post("measurement");
     
-    $data = array('Name' => $name,'BaseUnitOfMeasurement'=>$measure,'Description' =>$desc);
+    $data = array('Name' => $name,'BaseUnitOfMeasure'=>$measure,'Description' =>$desc);
     $query = $this->db->query("SELECT * FROM Ingredients WHERE Name = '$name'");
     if($query->num_rows()>0)
     {
