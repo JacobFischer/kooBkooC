@@ -1,4 +1,5 @@
-<h1>Recipes Tagged &quot;<?=$tag->Name?>&quot;</h1>
+<h1><?=$tag->Name?> : <?=$tag->Description?></h1>
+<h2>Recipes Tagged &quot;<?=$tag->Name?>&quot;</h2>
 <ul>
 <?foreach($recipe->result() as $i){?>
 <?$j = $i->ID?>
