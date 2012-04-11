@@ -31,23 +31,22 @@ class Tags extends CI_Controller {
 	public function recipes($id)
 	{
 	
-	  $query = $this->db->query("SELECT * FROM RecipesTags JOIN Recipes on RecipesTags.RecipesID = Recipes.ID WHERE RecipesTags.TagsID = \"$id\" ");
-	
-	  $this->db->select('*');
-    $this->db->from('Tags');
-    $this->db->where('ID', $id);
-
-	  $tagQuery = $this->db->get();
+		$query = $this->db->query("SELECT * FROM RecipesTags JOIN Recipes on RecipesTags.RecipesID = Recipes.ID WHERE RecipesTags.TagsID = \"$id\" ");
+		$this->db->select('*');
+		$this->db->from('Tags');
+		$this->db->where('ID', $id);
+		$tagQuery = $this->db->get();
 
 	
 		if($query->num_rows() == 0)
-    {
-      $this->template->load('error', array('title' => 'No recipes found' , "message" => "did not work"));//load error view
-    }
-    else
-    {
-      $this->template->load('recipe_list' , array("recipe" => $query, "tag" => $tagQuery->row(0) ));
-    }
+		{
+      			$this->template->load('error', array('title' => 'No recipes found' , "message" => "did not work"));//load error view
+    		}
+ 
+		else
+    		{
+      			$this->template->load('recipe_list' , array("recipe" => $query, "tag" => $tagQuery->row(0) ));
+    		}
 	}
 
   public function add()
