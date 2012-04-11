@@ -208,8 +208,6 @@ class Search extends CI_Controller {
         $limit = $this->SEARCH_TAG_PAGE_OFFSET;
         $offset = ($page - 1) * $this->SEARCH_TAG_PAGE_OFFSET;
         $text = $this->tag_escape($text);
-		//$text = str_replace('_', ' ', $text);
-		//echo $text;
  
       
           // Build query

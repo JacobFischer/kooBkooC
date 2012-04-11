@@ -26,7 +26,7 @@ class Tags extends CI_Controller {
 
 	public function recipes($id)
 	{
-<<<<<<< HEAD
+
 	  $query = $this->db->query("SELECT * FROM RecipesTags JOIN Recipes on RecipesTags.RecipesID = Recipes.ID WHERE RecipesTags.TagsID = \"$id\" ");
 	
 	  $this->db->select('*');
@@ -34,14 +34,7 @@ class Tags extends CI_Controller {
     $this->db->where('ID', $id);
 
 	  $tagQuery = $this->db->get();
-=======
-	
-		$query = $this->db->query("SELECT * FROM RecipesTags JOIN Recipes on RecipesTags.RecipesID = Recipes.ID WHERE RecipesTags.TagsID = \"$id\" ");
-		$this->db->select('*');
-		$this->db->from('Tags');
-		$this->db->where('ID', $id);
-		$tagQuery = $this->db->get();
->>>>>>> 66d7591d6c7cbb055c2032fb8ab97704e583127a
+
 
 		if($query->num_rows() == 0)
 		{
