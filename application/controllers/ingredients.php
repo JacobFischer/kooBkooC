@@ -2,16 +2,30 @@
 
 class Ingredients extends CI_Controller //display ingredients by id
 {
-  public function index()
-  {
-    $query = $this->db->query("SELECT * FROM Ingredients");
-    
-    if($query->num_rows() <1)
+
+	public function index()
+	{
+		 $query  = $this->db->query("SELECT ID, COUNT(IngredientsID) as freq , Name FROM RecipesIngredients JOIN Ingredients on Ingredients.ID = RecipesIngredients.IngredientsID GROUP BY IngredientsID DESC");
+
+		 $total = 0;
+
+     foreach($query->result() as $i)
     {
-      $this->template->load('error', array("Ingredient" => "Ingredient with ID of \"$id\"not found" ));//load error view  
+      $total = $total + $i->freq;
     }
-    $this->template->load('ingredients_id',array("ingredient" => $query ));	//load view of the ingredient and pas in params
+		
+		$max_font_size = $total * 10;
+		if($query->num_rows() == 0)
+    {
+      $this->template->load('error', array('title' => 'No tags found' , "message" => "did not work"));//load error view
+    }
+    else
+    {
+      $this->template->load('ingredients_cloud_view' , array("ingredient" => $query  , "total" => $total, "max_font" => $max_font_size ));
+    }
   }
+
+
   public function id($id)
   {
     //create a query
@@ -54,6 +68,7 @@ class Ingredients extends CI_Controller //display ingredients by id
       $this->template->load('error', array('title' => 'Not logged in.' , "message" => "You must be logged in to add an ingredient."));
       return;
     }
+    $this->template->load_js("submit_guess.js");
     $this->template->load('add_ingredient' , array("recipe" => 0, "tag" => 0 ));
   }
   
