@@ -277,25 +277,20 @@ class Search extends CI_Controller {
         // create data object mapped to json
         $data = array("json" => array("recipe" => array() ) );
 
-        if (isset($_GET["ingredients"]))
-        {
+        if (isset($_GET["ingredients"])) {
             $ingredients = $_GET["ingredients"];
         }
-        else
-        {
+        else {
             $this->load->view('search_json', $data);
             return;
         }
 
         // Build ingredients string
-        $ingredient_string = "(";
+        $ingredient_string = "";
 
-        foreach($ingredients as $i)
-        {
+        foreach($ingredients as $i) {
             $ingredient_string += "'{$this->tag_escape($i)}', ";
 	      }
-
-        $ingredient_string += "'')";
 
         for($i = sizeof($ingredients) - 1; $i > 0; $i--) {
             // Execute search query
@@ -310,7 +305,7 @@ class Search extends CI_Controller {
               WHERE ri.IngredientsID IN (
                 SELECT ID
                 FROM Ingredients
-                WHERE LOWER(Name) IN ({$ingredient_string})
+                WHERE Name IN ({$ingredient_string})
               )
               GROUP BY vo.RecipesID
                 HAVING COUNT(DISTINCT ri.IngredientsID) = {$i}
