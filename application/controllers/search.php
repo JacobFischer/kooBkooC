@@ -279,24 +279,22 @@ class Search extends CI_Controller {
         
         if (isset($_GET["ingredients"])) {
             $ingredients = $_GET["ingredients"];
+            $ingredient_string = "";
         }
         else {
             $this->load->view('search_json', $data);
             return;
         }
         
-        // Build ingredients string
-        $ingredient_string = "";
-        
+        // Build ingredient string
         foreach($ingredients as $i) {
-            $ingredient_string += "{$this->db->escape($i)}, ";
+            $ingredient_string .= $this->db->escape($this->tag_escape($i));
+            $ingredient_string .= ", ";
 	      }
         
-        //$ingredient_string = substr($ingredient_string, 0, -2);
-        $data['json']['recipe'][] = $ingredient_string;
-        $this->load->view('search_json', $data);
+        $ingredient_string = "(" . substr($ingredient_string, 0, -2) . ")";
         
-        for($i = sizeof($ingredients) - 1; $i > 0; $i--) {
+        for($i = sizeof($ingredients); $i > 0; $i--) {
             // Execute search query
             $query = $this->db->query("
               SELECT re.ID, re.SubmitterUsersID, re.Name, re.Directions,
@@ -309,7 +307,7 @@ class Search extends CI_Controller {
               WHERE ri.IngredientsID IN (
                 SELECT ID
                 FROM Ingredients
-                WHERE Name IN ({$ingredient_string})
+                WHERE LOWER(Name) IN {$ingredient_string}
               )
               GROUP BY vo.RecipesID
                 HAVING COUNT(DISTINCT ri.IngredientsID) = {$i}
