@@ -291,7 +291,7 @@ class Search extends CI_Controller {
         foreach($ingredients as $i) {
             $ingredient_string += "'{$this->tag_escape($i)}', ";
 	      }
-
+        $data['json']['recipe'][] = $ingredient_string;
         for($i = sizeof($ingredients) - 1; $i > 0; $i--) {
             // Execute search query
             $query = $this->db->query("
