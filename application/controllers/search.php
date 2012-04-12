@@ -289,7 +289,7 @@ class Search extends CI_Controller {
         $ingredient_string = "";
         
         foreach($ingredients as $i) {
-            $ingredient_string += "'{$this->tag_escape($i)}', ";
+            $ingredient_string += "{$this->db->escape($i)}, ";
 	      }
         
         $ingredient_string = substr($ingredient_string, 0, -2);
