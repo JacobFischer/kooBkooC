@@ -310,7 +310,7 @@ class Search extends CI_Controller {
               WHERE ri.IngredientsID IN (
                 SELECT ID
                 FROM Ingredients
-                WHERE Name IN ({$ingredient_string})
+                WHERE LOWER(Name) IN ({$ingredient_string})
               )
               GROUP BY vo.RecipesID
                 HAVING COUNT(DISTINCT ri.IngredientsID) = {$i}
