@@ -292,7 +292,7 @@ class Search extends CI_Controller {
             $ingredient_string += "{$this->db->escape($i)}, ";
 	      }
         
-        $ingredient_string = substr($ingredient_string, 0, -2);
+        //$ingredient_string = substr($ingredient_string, 0, -2);
         $data['json']['recipe'][] = $ingredient_string;
         $this->load->view('search_json', $data);
         
