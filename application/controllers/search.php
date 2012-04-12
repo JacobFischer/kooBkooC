@@ -276,7 +276,7 @@ class Search extends CI_Controller {
     {
         // create data object mapped to json
         $data = array("json" => array("recipe" => array() ) );
-
+        
         if (isset($_GET["ingredients"])) {
             $ingredients = $_GET["ingredients"];
         }
@@ -284,14 +284,18 @@ class Search extends CI_Controller {
             $this->load->view('search_json', $data);
             return;
         }
-
+        
         // Build ingredients string
         $ingredient_string = "";
-
+        
         foreach($ingredients as $i) {
             $ingredient_string += "'{$this->tag_escape($i)}', ";
 	      }
-        $data['json']['recipe'][] = $ingredients;
+        
+        $ingredient_string = substr($ingredient_string, 0, -2);
+        $data['json']['recipe'][] = $ingredient_string;
+        $this->load->view('search_json', $data);
+        
         for($i = sizeof($ingredients) - 1; $i > 0; $i--) {
             // Execute search query
             $query = $this->db->query("
@@ -311,13 +315,13 @@ class Search extends CI_Controller {
                 HAVING COUNT(DISTINCT ri.IngredientsID) = {$i}
               ORDER BY VoteSum DESC;
             ");
-
+            
             // Iterate through the query and build the result
             foreach($query->result() as $recipe) {
                 $data['json']['recipe'][] = $recipe;
             }
         }
-
+        
         // return the result array
         $this->load->view('search_json', $data);
     }
