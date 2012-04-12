@@ -1,6 +1,6 @@
 <h1>Home Page</h1>
 <input type="text" id="search" />
-<button id="testButton">Find Ingredients</button><br/>
+<button id="find-ingredient-button">Find Ingredients</button><br/>
 <div id="testDiv"></div><br/>
 <p>Searching Ingredients:</p>
 <ul id="searchList"></ul><br/><br/>
