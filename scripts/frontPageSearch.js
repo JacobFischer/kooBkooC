@@ -22,9 +22,17 @@ $(document).ready(function(){
             });
           });
           if($approved == true){         
-            $("ul#searchList").append('<li class="ingredient-using">' + $(this).html() + ' <button class="remove-ingredient-button">X</button></li>');
+            $("ul#searchList").append('<li class="ingredient-using">' + $(this).html() + ' <button class="remove-ingredient-button" name="' + $item + '" >X</button></li>');
             $('ul#searchList li.ingredient-using button.remove-ingredient-button').on("click", function(){
-              alert("Hello");
+              $item = $(this).attr("name");
+              $('ul#searchList').each(function(){
+                $(this).find('li.ingredient-using span.ingredient-name').each(function(){
+                  if($item == $(this).text()){
+                    $(this).remove();
+                  }
+                });
+              });
+              $(this).remove();
             });
           }         
         });       
