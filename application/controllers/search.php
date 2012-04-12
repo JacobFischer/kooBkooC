@@ -292,7 +292,7 @@ class Search extends CI_Controller {
 
         foreach($ingredients as $i)
         {
-            $ingredient_string += "'{$this->tag_escape(i)}', ";
+            $ingredient_string += "'{$this->tag_escape($i)}', ";
 	      }
 
         $ingredient_string += "'')";
