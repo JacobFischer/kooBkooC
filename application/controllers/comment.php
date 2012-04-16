@@ -54,6 +54,7 @@ class Comment extends CI_Controller
     }
     else
     {
+      $comment->ID = $query->row(0)->ID;
       $comment->DisplayName = $query->row(0)->DisplayName;
       $comment->Time = date( 'Y-m-d H:i:s');
       $comment->Text = $contents;

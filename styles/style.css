@@ -21,6 +21,9 @@ h2 { font-size: 1.75em; font-family: 'Felipa', cursive; color: #009B95; }
 a { color: #009B95; }
 a:hover, a:focus, a:active { color: #006561; }
 textarea { font-family: 'Bitter', sans-serif; border: 0.125em solid #009B95; width: 100%; height: 4em; margin: 0; }
+em { font-style:italic; }
+strong { font-weight: bold; }
+hr { border: none; height: 0.125em; background: #006561; }
 
 /* Template Specific
 *********************************************************/
@@ -43,7 +46,8 @@ div#template-main { background: #FEFAFD; padding: 0.5em 1em; border: 0.125em sol
 div#recipe-top { min-height: 4em; }
 div#recipe-voter { float: left; margin-right: 1em; background-color: #009B95; border: 0.125em solid #006561; color: #FEFAFD; padding: 0.125em;  }
 button#recipe-up-vote, button#recipe-down-vote, span#recipe-total { display: block; text-align: center; }
-section#recipe-body { width: 100%; }
+div#recipe-body { width: 100%; float: left; }
+div#recipe-submitter { font-style:italic; font-size: 0.75em; margin-bottom: 0.5em; }
 button#recipe-up-vote, button#recipe-down-vote { border: 0; background: none; cursor: pointer; }
 button#recipe-up-vote:hover, button#recipe-up-vote:active, button#recipe-up-vote:focus { color: #A1F0EE; }
 button#recipe-down-vote:hover, button#recipe-down-vote:active, button#recipe-down-vote:focus { color: #FF3500; }
@@ -65,4 +69,4 @@ section#recipe-tags h2 { font-size: 1.25em; color: #006561; font-weight: bold; d
 section#recipe-tags ul, section#recipe-tags ul li { display: inline; }
 section#recipe-tags ul li a { background-color: #009B95; border: 0.125em solid #006561; color: #FEFAFD; padding: 0.125em; }
 section#recipe-tags ul li a:hover, section#recipe-tags ul li a:active, section#recipe-tags ul li a:focus { color: #A1F0EE; }
-img#recipe-img { width: 100%; height: auto; }
+img#recipe-img { width: 25em; height: auto; float: right; border: 0.125em solid #006561; margin-left: 0.25em;}
