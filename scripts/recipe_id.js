@@ -24,7 +24,7 @@ $(document).ready(function(){
   $("#comment_button").click(function(){
        alert($("#recipeid").html())
       $.ajax({
-        url: base_url + "index.php/comment/add/"+userid+"/"+recipeid+"/"+$("#postcomment").val(),
+        url: base_url + "index.php/comment/add/"+userid+"/"+recipeid+"/"+encodeURI($("#postcomment").val()),
         context:document.body,
         success:function(){
           alert("WUTTORS");

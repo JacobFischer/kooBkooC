@@ -261,84 +261,68 @@ class Search extends CI_Controller {
 //END RECIPE SEARCH
 //--------------------------------------------------------------------------------------------------------
 //BEGIN REVERSE SEARCH
-	
-	// ------------------------------------------------------------------------
-	//  This function is for taking ingredients and returning the corresponding
-	//  recipes.
-	// ------------------------------------------------------------------------
 
-  public function get()
-  {
-      $q = $this->input->get('ingredient', TRUE);
-  }
-  
-  public function reverse()
-  {
-	// create data object mapped to json
-    $data = array("json" => array("recipe" => array() ) );
-	
-	if (isset($_GET["ingredients"]))
-	{
-		$ingredients = $_GET["ingredients"];
-	}
-	else
-	{
-		$this->load->view('search_json', $data);
-		return;
-	}
-    
-    $query = array();
-    // Build query
-	
-	/*$ingredientString = "";
-	foreach($ingredients as $ingredient)
-	{
-		$ingredientString += 
-	}*/
-	
-	$query = $this->db->query("SELECT re.ID, re.SubmitterUsersID, re.Name, re.Directions, re.Servings, re.ImageURL, re.Description, us.DisplayName, SUM(vo.Direction) AS VoteSum 
-	                  FROM Recipes re 
-					  INNER JOIN RecipesIngredients ri ON re.ID = ri.RecipesID 
-					  INNER JOIN Votes vo ON re.ID = vo.RecipesID 
-					  INNER JOIN Users us ON re.SubmitterUsersID = us.ID 
-					  WHERE ri.IngredientsID IN 
-						(SELECT ID 
-						 FROM Ingredients 
-						 WHERE Name IN ('Cheese')) 
-					  GROUP BY vo.RecipesID ORDER BY VoteSum DESC;
-					  ");
-	
-	/*$this->db->select('*');
-    $this->db->from('Recipes');
-    $this->db->join('RecipesIngredients','Recipes.ID = RecipesIngredients.RecipesID');
-	$this->db->join('Votes','Recipes.ID = Votes.RecipesID');
-	$this->db->group_by('Recipes.ID','asc'); */
-	
-	
-    /*
+    // ------------------------------------------------------------------------
+    //  This function is for taking ingredients and returning the corresponding
+    //  recipes.
+    // ------------------------------------------------------------------------
+
+    public function get()
     {
-	  //$this->db->where_in("RecipesIngredients.IngredientsID",$ingredient);
-      //$this->db->select('*');
-      //$this->db->from('Recipes');
-      //$this->db->join('RecipesIngredients','Recipes.ID = RecipesIngredients.RecipesID');
-      //
-      //$this->db->like("IngredientsID", $ingredient);
-      //
-      // Execute query
-    }*/
-    //$query = $this->db->get();
-	
-    // Iterate through each result in the query and build the cookware to return
-    $i = 0;
-    foreach($query->result() as $recipe)
-    {
-        $data['json']['recipe'][$i] = $recipe;
-        $i++;
+        $q = $this->input->get('ingredient', TRUE);
     }
     
-    // return the recipes to the "views/search_json.php" view so it can build valid JSON from the data
-    $this->load->view('search_json', $data);
-  }
+    public function reverse()
+    {
+        // create data object mapped to json
+        $data = array("json" => array("recipe" => array() ) );
+        
+        if (isset($_GET["ingredients"])) {
+            $ingredients = $_GET["ingredients"];
+            $ingredient_string = "";
+        }
+        else {
+            $this->load->view('search_json', $data);
+            return;
+        }
+        
+        // Build ingredient string
+        foreach($ingredients as $i) {
+            $ingredient_string .= $this->db->escape($this->tag_escape($i));
+            $ingredient_string .= ", ";
+	      }
+        
+        $ingredient_string = "(" . substr($ingredient_string, 0, -2) . ")";
+        
+        for($i = sizeof($ingredients); $i > 0; $i--) {
+            // Execute search query
+            $query = $this->db->query("
+              SELECT re.ID, re.SubmitterUsersID, re.Name, re.Directions,
+                  re.Servings, re.ImageURL, re.Description, us.DisplayName,
+                  SUM(vo.Direction) AS VoteSum
+              FROM Recipes re
+                INNER JOIN RecipesIngredients ri ON re.ID = ri.RecipesID
+                INNER JOIN Votes vo ON re.ID = vo.RecipesID
+                INNER JOIN Users us ON re.SubmitterUsersID = us.ID
+              WHERE ri.IngredientsID IN (
+                SELECT ID
+                FROM Ingredients
+                WHERE LOWER(Name) IN {$ingredient_string}
+              )
+              GROUP BY vo.RecipesID
+                HAVING COUNT(DISTINCT ri.IngredientsID) = {$i}
+              ORDER BY VoteSum DESC;
+            ");
+            
+            // Iterate through the query and build the result
+            foreach($query->result() as $recipe) {
+                $data['json']['recipe'][] = $recipe;
+            }
+        }
+        
+        // return the result array
+        $this->load->view('search_json', $data);
+    }
 
 //END REVERSE SEARCH
 //--------------------------------------------------------------------------------------------------------

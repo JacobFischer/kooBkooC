@@ -8,24 +8,22 @@ class Ingredients extends CI_Controller //display ingredients by id
 		 $query  = $this->db->query("SELECT ID, COUNT(IngredientsID) as freq , Name FROM RecipesIngredients JOIN Ingredients on Ingredients.ID = RecipesIngredients.IngredientsID GROUP BY IngredientsID DESC");
 
 		 $total = 0;
-               // $max_font_size = 600;
 
-                foreach($query->result() as $i)
-                {
-                        $total = $total + $i->freq;
-                }
+     foreach($query->result() as $i)
+    {
+      $total = $total + $i->freq;
+    }
 		
 		$max_font_size = $total * 10;
 		if($query->num_rows() == 0)
-                {
-                        $this->template->load('error', array('title' => 'No tags found' , "message" => "did not work"));//load error view
-
-                }
-                else
-                {
-                        $this->template->load('ingredients_cloud_view' , array("ingredient" => $query  , "total" => $total, "max_font" => $max_font_size ));
-                }
-        }
+    {
+      $this->template->load('error', array('title' => 'No tags found' , "message" => "did not work"));//load error view
+    }
+    else
+    {
+      $this->template->load('ingredients_cloud_view' , array("ingredient" => $query  , "total" => $total, "max_font" => $max_font_size ));
+    }
+  }
 
 
   public function id($id)
@@ -42,7 +40,10 @@ class Ingredients extends CI_Controller //display ingredients by id
     }
     else
     {
-      $this->template->load('ingredients_id',array("ingredient" => $query));	//load view of the ingredient and pas in params
+      $this->db->flush_cache(); 
+      $usingQuery = $this->db->query("SELECT * FROM RecipesIngredients JOIN Recipes on RecipesIngredients.RecipesID = Recipes.ID WHERE RecipesIngredients.IngredientsID = \"$id\" ");
+      
+      $this->template->load( 'ingredients_id',array("ingredient" => $query->row(0), "recipes" => $usingQuery ->result() )); //load view of the ingredient and pas in params
     }             
   }
 
@@ -84,17 +85,46 @@ class Ingredients extends CI_Controller //display ingredients by id
     $query = $this->db->query("SELECT * FROM Ingredients WHERE Name = '$name'");
     if($query->num_rows()>0)
     {
-      $this->template->load('error',array('title'=>'Tag already exists', "message"=>"The tag is already in the database"));
+      $this->template->load('error',array('title'=>'ingredient already exists', "message"=>"The ingredient is already in the database"));
       return;
     }
+    
     if(!($this->db->insert("Ingredients", $data)) )
     {
-      $this->template->load('error', array('title' => 'Could not add tag.' , "message" => "Error in creating tag."));
+      $this->template->load('error', array('title' => 'Could not add ingredient.' , "message" => "Error in creating ingredient."));
       return;
     }
     else
     {
-      $this->template->load('ingredient_success',array("name" =>$name));
+      $query = $this->db->query("SELECT * FROM Ingredients WHERE Name = '$name'");
+      if( $query->num_rows() != 1 )
+      {
+        $this->template->load('error', array('title' => 'Could not find added ingredient.' , "message" => "Error in creating ingredient."));
+        return;
+      }
+      
+      $ingredientID = $query->row(0)->ID;
+
+      $config['upload_path'] = '../../cs397_uploads/ingredients/';
+      $config['allowed_types'] = 'jpg';
+      $config['max_size'] = '1000';
+      $config['max_width'] = '2048';
+      $config['max_height'] = '1024';
+      $config['file_name']  = $ingredientID . ".jpg";
+      $this->load->library('upload', $config);
+      
+      // Get the Image they uploaded
+      if ( ! $this->upload->do_upload())
+      {
+        $this->template->load('error' , array('title' => 'Image Upload Error' , "message" => "There was an error uploading your image: <br/>" . $this->upload->display_errors()));
+        return;
+      }
+      else
+      {
+        //print $this->upload->data();
+      }
+      
+      $this->template->load('ingredient_success', array("name" =>$name));
     }
   }
 }
