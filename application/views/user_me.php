@@ -1,9 +1,12 @@
 <h1>Display Name: <?=$DisplayName?></h1>
 <h3>ID: <?=$ID?></h3>
-
+<a href="<?=base_url() . "index.php/recipe/add"?>">Submit A Recipe</a> |
+<a href="<?=base_url() . "index.php/ingredients/add"?>">Add an Ingredient!</a> | 
+<a href = "<?=base_url()."index.php/tags/add"?>">Add your own Tag!</a>
+<br />
 <br />
 
-<h2>Recipes - <a href="<?=base_url() . "index.php/recipe/add"?>">Submit A Recipe</a></h2>
+<h2>Recipes</h2>
 <ul>
 <?php
   if( !count( $recipes ) )

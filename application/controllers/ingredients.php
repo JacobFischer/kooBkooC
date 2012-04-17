@@ -15,10 +15,11 @@ class Ingredients extends CI_Controller //display ingredients by id
     }
 		
 		$max_font_size = $total * 10;
-		if($query->num_rows() == 0)
-    {
-      $this->template->load('error', array('title' => 'No tags found' , "message" => "did not work"));//load error view
-    }
+		//$max_font_size = 700;		
+	if($query->num_rows() == 0)
+    	{
+      		$this->template->load('error', array('title' => 'No tags found' , "message" => "did not work"));//load error view
+    	}
     else
     {
       $this->template->load('ingredients_cloud_view' , array("ingredient" => $query  , "total" => $total, "max_font" => $max_font_size ));
@@ -127,6 +128,7 @@ class Ingredients extends CI_Controller //display ingredients by id
       $this->template->load('ingredient_success', array("name" =>$name));
     }
   }
+  
 }
 
  
