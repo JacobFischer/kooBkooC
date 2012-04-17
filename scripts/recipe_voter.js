@@ -4,21 +4,22 @@ function recipe_ajax_vote( dir, id ) {
     context:document.body,
     success:function(data){
       var obj = jQuery.parseJSON(data);
-      if(obj.success){
+      if(obj.success) {
         // remove all the classes from the button and total
-        $("button#recipe-up-vote").removeClass();
-        $("span#recipe-total").removeClass();
-        $("button#recipe-down-vote").removeClass();
+        $("#recipe-voter-" + obj.recipeID + " button.recipe-up-vote").removeClass("voted-up");
+        $("#recipe-voter-" + obj.recipeID + " span.recipe-total").removeClass("voted-up");
+        $("#recipe-voter-" + obj.recipeID + " span.recipe-total").removeClass("voted-down");
+        $("#recipe-voter-" + obj.recipeID + " button.recipe-down-vote").removeClass("voted-down");
         
         if(obj.direction == "up") {
-          $("button#recipe-up-vote").addClass( "voted-up" );
-          $("span#recipe-total").addClass( "voted-up" );
-          $("span#recipe-total").html( obj.total );
+          $("#recipe-voter-" + obj.recipeID + " button.recipe-up-vote").addClass( "voted-up" );
+          $("#recipe-voter-" + obj.recipeID + " span.recipe-total").addClass( "voted-up" );
+          $("#recipe-voter-" + obj.recipeID + " span.recipe-total").html( obj.total );
         }
         else if(obj.direction == "down") {
-          $("button#recipe-down-vote").addClass( "voted-down" );
-          $("span#recipe-total").addClass( "voted-down" );
-          $("span#recipe-total").html( obj.total );
+          $("#recipe-voter-" + obj.recipeID + " button.recipe-down-vote").addClass( "voted-down" );
+          $("#recipe-voter-" + obj.recipeID + " span.recipe-total").addClass( "voted-down" );
+          $("#recipe-voter-" + obj.recipeID + " span.recipe-total").html( obj.total );
         }
       }
       else{

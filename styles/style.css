@@ -45,13 +45,13 @@ div#template-main { background: #FEFAFD; padding: 0.5em 1em; border: 0.125em sol
 /* Recipe
 *********************************************************/
 div#recipe-top { min-height: 4em; }
-div#recipe-voter { float: left; margin-right: 1em; background-color: #009B95; border: 0.125em solid #006561; color: #FEFAFD; padding: 0.125em;  }
-button#recipe-up-vote, button#recipe-down-vote, span#recipe-total { display: block; text-align: center; }
+div.recipe-voter { float: left; margin-right: 1em; background-color: #009B95; border: 0.125em solid #006561; color: #FEFAFD; padding: 0.125em;  }
+button.recipe-up-vote, button.recipe-down-vote, span.recipe-total { display: block; text-align: center; }
 div#recipe-body { width: 100%; float: left; }
 div#recipe-submitter { font-style:italic; font-size: 0.75em; margin-bottom: 0.5em; }
-button#recipe-up-vote, button#recipe-down-vote { border: 0; background: none; cursor: pointer; }
-button#recipe-up-vote:hover, button#recipe-up-vote:active, button#recipe-up-vote:focus { color: #A1F0EE; }
-button#recipe-down-vote:hover, button#recipe-down-vote:active, button#recipe-down-vote:focus { color: #FF3500; }
+button.recipe-up-vote, button.recipe-down-vote { border: 0; background: none; cursor: pointer; }
+button.recipe-up-vote:hover, button.recipe-up-vote:active, button.recipe-up-vote:focus { color: #A1F0EE; }
+button.recipe-down-vote:hover, button.recipe-down-vote:active, button.recipe-down-vote:focus { color: #FF3500; }
 .voted-up { color: #A1F0EE; }
 .voted-down { color: #FF3500; }
 div#recipe-comments h2 { margin: 1em 0 0 0; }
