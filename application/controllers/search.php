@@ -37,10 +37,17 @@ class Search extends CI_Controller {
     
     public function tag_escape($target)
     {
-      return strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $target));
+      return trim(preg_replace('/[^a-zA-Z0-9 ]/', '', $target));
     }
     
- // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
+    
+    public function id_escape($target)
+    {
+      return preg_replace('/[^0-9]/', '', $target);
+    }
+    
+// ------------------------------------------------------------------------
     
     public function index()
     {
@@ -288,7 +295,7 @@ class Search extends CI_Controller {
         
         // Build ingredient string
         foreach($ingredients as $i) {
-            $ingredient_string .= $this->db->escape($this->tag_escape($i));
+            $ingredient_string .= $this->db->escape_str($this->id_escape($i));
             $ingredient_string .= ", ";
 	      }
         
@@ -304,11 +311,7 @@ class Search extends CI_Controller {
                 INNER JOIN RecipesIngredients ri ON re.ID = ri.RecipesID
                 INNER JOIN Votes vo ON re.ID = vo.RecipesID
                 INNER JOIN Users us ON re.SubmitterUsersID = us.ID
-              WHERE ri.IngredientsID IN (
-                SELECT ID
-                FROM Ingredients
-                WHERE LOWER(Name) IN {$ingredient_string}
-              )
+              WHERE ri.IngredientsID IN {$ingredient_string}
               GROUP BY vo.RecipesID
                 HAVING COUNT(DISTINCT ri.IngredientsID) = {$i}
               ORDER BY VoteSum DESC;

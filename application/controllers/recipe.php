@@ -5,7 +5,11 @@ class Recipe extends CI_Controller
 
   public function index()
   {
-    $query = $this->db->query("SELECT RecipesID AS ID, SUM(Direction) AS Direction, Name, Description FROM Votes JOIN Recipes on Votes.RecipesID = Recipes.ID GROUP BY RecipesID ORDER BY SUM(Direction) DESC LIMIT 5" ); 
+    // Load JS files in the template
+    $this->template->load_js('recipe_voter.js');
+    $this->template->load_js('ingredients_index.js');
+    
+    $query = $this->db->query("SELECT RecipesID AS ID, SUM(Direction) AS Direction, Name, Description FROM Votes JOIN Recipes on Votes.RecipesID = Recipes.ID GROUP BY RecipesID ORDER BY SUM(Direction) DESC" ); 
     
     if($query->num_rows() == 0)
     {
@@ -203,6 +207,8 @@ class Recipe extends CI_Controller
   
   public function id($id)
   {
+    // Load JS files in the template
+    $this->template->load_js("recipe_voter.js");
     $this->template->load_js("recipe_id.js");
     
     // Build the SQL-ish query using CodeIgniters's Active Record to get the Cookware with the id passed in

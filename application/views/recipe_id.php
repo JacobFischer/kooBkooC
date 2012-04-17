@@ -1,12 +1,12 @@
 <div id="recipe-id" style="display: none;"><?=$recipe->ID?></div>
 <div id="recipe-top">
-  <div id="recipe-voter">
-    <button id="recipe-up-vote" class="<?= $users_vote["Direction"] == 1 ? "voted-up" : ""?>">&#9650;</button>
-    <span id="recipe-total" class="<?= $users_vote["Direction"] == 1 ? "voted-up" : ($users_vote["Direction"] == -1 ? "voted-down" : "") ?>"><?=$vote_count->Direction?></span>
-    <button id="recipe-down-vote"  class="<?= $users_vote["Direction"] == -1 ? "voted-down" : ""?>">&#9660;</button>
+  <div class="recipe-voter" id="recipe-voter-<?=$recipe->ID?>">
+    <button class="recipe-up-vote <?= $users_vote["Direction"] == 1 ? "voted-up" : ""?>">&#9650;</button>
+    <span class="recipe-total <?= $users_vote["Direction"] == 1 ? "voted-up" : ($users_vote["Direction"] == -1 ? "voted-down" : "") ?>"><?=$vote_count->Direction?></span>
+    <button class="recipe-down-vote <?= $users_vote["Direction"] == -1 ? "voted-down" : ""?>">&#9660;</button>
   </div>
   <h1><?=$recipe->Name?></h1>
-  <div id="recipe-submitter">Submitted by: <a href="<?=site_url('user', 'id', $submitter->ID)?>"><?=$submitter->DisplayName?></a></div>
+  <div id="recipe-submitter">Submitted by: <a href="<?=site_url(array('user', 'id', $submitter->ID))?>"><?=$submitter->DisplayName?></a></div>
   <div id="recipe-description">
     <?=$recipe->Description?>
   </div>
