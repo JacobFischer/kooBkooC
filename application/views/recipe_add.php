@@ -11,20 +11,27 @@
   </select><br/>
   <? endfor; ?><br/>
   Servings: <input type="text" name="servings" /><br/><br/>
+
+
+  
   Select Ingredients:<br/>
-  <? for ($i = 0; $i < 10; $i++):?>
-    <select name="ingredients[]" />
-      <option value=""></option>
+  <select id="ingredient-input" />
+    <option value=""></option>
     <? foreach( $ingredients as $ingredient):?>
-      <option value="<?=$ingredient->ID?>"><?=$ingredient->Name?></option>
+      <option value="<?=$ingredient->ID?>" name="<?=$ingredient->Name?>" > <?=$ingredient->Name?></option>
     <?php endforeach;?><br/>
-    </select>
-    <input type="text" name="ingredientAmount[]" maxlength="6" value="0"/><br/>
-  <? endfor; ?>
+  </select>
+  <input type="text" id="ingredient-amount" maxlength="6" value="0"/>
+  <span id="add-ingredient-button">Add to Recipe</span>   
+  <br/><br/>
+  
+  Recipe Ingredients:
+  <ul id="added-ingredients"></ul>
+  
   <br/>
 	<h2>Image of your recipe (must be a JPG)</h2>
 	<input type="file" name="userfile" size="20" />
-  <div id="ingredient-list">
+  <div id="ingredient-list"><br/>
 	<h2>Provide a Description of your Recipe</h2>
   <textarea name="recipe-description"></textarea><br/>
   <h2>Provide Directions for Preparing your Recipe</h2>

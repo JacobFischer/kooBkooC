@@ -25,6 +25,7 @@ class Recipe extends CI_Controller
       $this->template->load('error' , array('title' => 'Please Login or Sign Up!' , "message" => "You must be logged in to submit a recipe!"));
       return;
     }
+    $this->template->load_js("recipe_add.js");
     //Load all of the variables that should have been passed from the form
     $name = $this->input->post("recipeName");
     $description = $this->input->post("recipe-description");
