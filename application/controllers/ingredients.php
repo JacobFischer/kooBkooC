@@ -5,9 +5,9 @@ class Ingredients extends CI_Controller //display ingredients by id
 
 	public function index()
 	{
-		 $query  = $this->db->query("SELECT ID, COUNT(IngredientsID) as freq , Name FROM RecipesIngredients JOIN Ingredients on Ingredients.ID = RecipesIngredients.IngredientsID GROUP BY IngredientsID DESC");
+    $query  = $this->db->query("SELECT ID, COUNT(IngredientsID) as freq , Name FROM RecipesIngredients JOIN Ingredients on Ingredients.ID = RecipesIngredients.IngredientsID GROUP BY IngredientsID DESC");
 
-		 $total = 0;
+    $total = 0;
 
      foreach($query->result() as $i)
     {
