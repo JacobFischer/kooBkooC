@@ -40,7 +40,10 @@ class Ingredients extends CI_Controller //display ingredients by id
     }
     else
     {
-      $this->template->load('ingredients_id',array("ingredient" => $query));	//load view of the ingredient and pas in params
+      $this->db->flush_cache(); 
+      $usingQuery = $this->db->query("SELECT * FROM RecipesIngredients JOIN Recipes on RecipesIngredients.RecipesID = Recipes.ID WHERE RecipesIngredients.IngredientsID = \"$id\" ");
+      
+      $this->template->load( 'ingredients_id',array("ingredient" => $query->row(0), "recipes" => $usingQuery ->result() )); //load view of the ingredient and pas in params
     }             
   }
 
