@@ -30,7 +30,7 @@
 <?php
   foreach( $favorites as $recipe )
   {
-    print "<li> Recipe: $recipe->Description </li>";
+    print "<li> Recipe: $recipe->Name </li>";
   }
 ?>
 </ul>
@@ -76,7 +76,7 @@
 <?php
   foreach( $stalking as $stalk )
   {
-    print "<vim> $stalk->DisplayName </li>";
+    print "<li> $stalk->DisplayName </li>";
   }
 ?>
 </ul>

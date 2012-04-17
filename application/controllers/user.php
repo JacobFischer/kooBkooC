@@ -273,7 +273,10 @@ class User extends CI_Controller {
       $query = $this->db->get();
       if($query->num_rows == 1)
       {
-        $this->template->load( 'user_me.php' );
+        $id = $query->row(0)->ID;
+        $displayName = $query->row(0)->DisplayName;
+        
+        $this->template->load( 'user_me.php', array('ID' => $id, 'DisplayName' => $displayName, 'recipes' => $this->getRecipes($id), 'stalkers' => $this->getStalkers($id), 'favorites' => $this->getFavorites($id), 'allergies' => $this->getAllergies($id), 'stalking' => $this->getStalking($id) ) );
         
         return;
       }
