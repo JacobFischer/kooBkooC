@@ -38,6 +38,64 @@ class User extends CI_Controller {
     
     $this->template->load('user_profile', $data);
   }
+
+  public function getRecipes($id)
+  {
+    // Retrieve this user's submitted recipes
+    $this->db->flush_cache();
+    $this->db->select('*');
+    $this->db->from('Recipes');
+    $this->db->join('Users', 'Recipes.SubmitterUsersID = Users.ID' );
+    $this->db->where('SubmitterUsersID', $id );
+    $query = $this->db->get();
+    return $query->result();
+  }
+
+  public function getFavorites($id)
+  {
+    // Retrieve this user's favorites
+    $this->db->select('*');
+    $this->db->from('Recipes');
+    $this->db->join('Favorites', 'Recipes.ID = Favorites.RecipesID' );
+    $this->db->join('Users', 'Favorites.UsersID = Users.ID' );
+    $this->db->where('Users.ID', $id );
+    $query = $this->db->get();
+    return $query->result();
+  }
+
+  public function getAllergies($id)
+  {
+    // Retrieve this user's allergies
+    $this->db->select('*');
+    $this->db->from('Allergies');
+    $this->db->join('UsersAllergies', 'UsersAllergies.AllergiesID = Allergies.ID' );
+    $this->db->where('UsersAllergies.UsersID', $id );
+    $query = $this->db->get();
+    return $query->result();
+  }
+
+  public function getStalkers($id)
+  {
+    // Retrieve this user's stalkers
+    $this->db->select('*');
+    $this->db->from('Users');
+    $this->db->join('Followings', 'Users.ID = Followings.StalkerUsersID' );
+    $this->db->where('Followings.StalkingUsersID', $id);
+    $query = $this->db->get();
+    return $query->result();
+  }
+
+  public function getStalking($id)
+  {
+    // Retrieve who this user's stalking
+    $this->db->select('*');
+    $this->db->from('Users');
+    $this->db->join('Followings', 'Users.ID = Followings.StalkingUsersID' );
+    $this->db->where('Followings.StalkerUsersID', $id);
+    $query = $this->db->get();
+    return $query->result();
+
+  }
   
   public function id( $id )
   { 
@@ -51,52 +109,12 @@ class User extends CI_Controller {
     {
       $user_info = $query->row(0);
 
-      // Retrieve this user's submitted recipes
-      $this->db->flush_cache();
-      $this->db->select('*');
-      $this->db->from('Recipes');
-      $this->db->join('Users', 'Recipes.SubmitterUsersID = Users.ID' );
-      $this->db->where('SubmitterUsersID', $id );
-      $query = $this->db->get();
-      $recipes = $query->result();
-
-      // Retrieve this user's favorites
-      $this->db->flush_cache();
-      $this->db->select('*');
-      $this->db->from('Recipes');
-      $this->db->join('Favorites', 'Recipes.ID = Favorites.RecipesID' );
-      $this->db->join('Users', 'Favorites.UsersID = Users.ID' );
-      $this->db->where('Users.ID', $id );
-      $query = $this->db->get();
-      $favorites = $query->result();
-
-      // Retrieve this user's allergies
-      $this->db->flush_cache();
-      $this->db->select('*');
-      $this->db->from('Allergies');
-      $this->db->join('UsersAllergies', 'UsersAllergies.AllergiesID = Allergies.ID' );
-      $this->db->where('UsersAllergies.UsersID', $id );
-      $query = $this->db->get();
-      $allergies = $query->result();
-
-      // Retrieve this user's stalkers
-      $this->db->flush_cache();
-      $this->db->select('*');
-      $this->db->from('Users');
-      $this->db->join('Followings', 'Users.ID = Followings.StalkerUsersID' );
-      $this->db->where('Followings.StalkingUsersID', $id);
-      $query = $this->db->get();
-      $stalkers = $query->result();
-
-      // Retrieve who this user's stalking
-      $this->db->flush_cache();
-      $this->db->select('*');
-      $this->db->from('Users');
-      $this->db->join('Followings', 'Users.ID = Followings.StalkingUsersID' );
-      $this->db->where('Followings.StalkerUsersID', $id);
-      $query = $this->db->get();
-      $stalking = $query->result();
-    
+      $recipes = $this->getRecipes($id);
+      $favorites = $this->getFavorites($id);
+      $allergies = $this->getAllergies($id);
+      $stalkers = $this->getStalkers($id);
+      $stalking = $this->getStalking($id);
+  
       $this->template->load('user_id', array('info' => $user_info, 'recipes' => $recipes, 'favorites' => $favorites, 'allergies' => $allergies, 'stalkers' => $stalkers, 'stalking' => $stalking ) );
     }
     else
