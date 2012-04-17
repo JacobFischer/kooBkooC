@@ -37,14 +37,14 @@ class Search extends CI_Controller {
     
     public function tag_escape($target)
     {
-      return strtolower(preg_replace('/[^a-zA-Z0-9 ]/', '', $target));
+      return trim(preg_replace('/[^a-zA-Z0-9 ]/', '', $target));
     }
     
-     // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     public function id_escape($target)
     {
-      return strtolower(preg_replace('/[^0-9]/', '', $target));
+      return preg_replace('/[^0-9]/', '', $target);
     }
     
 // ------------------------------------------------------------------------
