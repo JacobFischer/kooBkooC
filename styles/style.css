@@ -84,3 +84,4 @@ section.recipe-short a div span { float: left; clear: left;}
 section#ingredient-body { width: 100%; float: left; }
 img#ingredient-img { width: 25em; height: auto; float: right; border: 0.125em solid #006561; margin-left: 0.25em;}
 ul#ingredient-recipes { width: 100%; }
+div.ingredient-cloud { background: url(Cooking_secrets.jpg) no-repeat center center fixed; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover; }
