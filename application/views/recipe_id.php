@@ -6,7 +6,7 @@
     <button id="recipe-down-vote"  class="<?= $users_vote["Direction"] == -1 ? "voted-down" : ""?>">&#9660;</button>
   </div>
   <h1><?=$recipe->Name?></h1>
-  <div id="recipe-submitter">Submitted by: <a href="<?=site_url('user', 'id', $submitter->ID)?>"><?=$submitter->DisplayName?></a></div>
+  <div id="recipe-submitter">Submitted by: <a href="<?=site_url(array('user', 'id', $submitter->ID))?>"><?=$submitter->DisplayName?></a></div>
   <div id="recipe-description">
     <?=$recipe->Description?>
   </div>

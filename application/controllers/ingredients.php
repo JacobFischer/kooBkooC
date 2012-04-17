@@ -127,6 +127,7 @@ class Ingredients extends CI_Controller //display ingredients by id
       $this->template->load('ingredient_success', array("name" =>$name));
     }
   }
+  
 }
 
  

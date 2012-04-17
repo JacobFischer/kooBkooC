@@ -13,7 +13,7 @@
 <?php
   foreach( $recipes as $recipe )
   {
-    print "<li> Recipe: $recipe->Description </li>";
+    print "<li> Recipe: $recipe->Name </li>";
   }
 ?>
 </ul>
@@ -28,7 +28,7 @@
 <?php
   foreach( $favorites as $recipe )
   {
-    print "<li> Recipe: $recipe->Description </li>";
+    print "<li> Recipe: $recipe->Name </li>";
   }
 ?>
 </ul>
