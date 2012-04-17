@@ -85,17 +85,46 @@ class Ingredients extends CI_Controller //display ingredients by id
     $query = $this->db->query("SELECT * FROM Ingredients WHERE Name = '$name'");
     if($query->num_rows()>0)
     {
-      $this->template->load('error',array('title'=>'Tag already exists', "message"=>"The tag is already in the database"));
+      $this->template->load('error',array('title'=>'ingredient already exists', "message"=>"The ingredient is already in the database"));
       return;
     }
+    
     if(!($this->db->insert("Ingredients", $data)) )
     {
-      $this->template->load('error', array('title' => 'Could not add tag.' , "message" => "Error in creating tag."));
+      $this->template->load('error', array('title' => 'Could not add ingredient.' , "message" => "Error in creating ingredient."));
       return;
     }
     else
     {
-      $this->template->load('ingredient_success',array("name" =>$name));
+      $query = $this->db->query("SELECT * FROM Ingredients WHERE Name = '$name'");
+      if( $query->num_rows() != 1 )
+      {
+        $this->template->load('error', array('title' => 'Could not find added ingredient.' , "message" => "Error in creating ingredient."));
+        return;
+      }
+      
+      $ingredientID = $query->row(0)->ID;
+
+      $config['upload_path'] = '../../cs397_uploads/ingredients/';
+      $config['allowed_types'] = 'jpg';
+      $config['max_size'] = '1000';
+      $config['max_width'] = '2048';
+      $config['max_height'] = '1024';
+      $config['file_name']  = $ingredientID . ".jpg";
+      $this->load->library('upload', $config);
+      
+      // Get the Image they uploaded
+      if ( ! $this->upload->do_upload())
+      {
+        $this->template->load('error' , array('title' => 'Image Upload Error' , "message" => "There was an error uploading your image: <br/>" . $this->upload->display_errors()));
+        return;
+      }
+      else
+      {
+        //print $this->upload->data();
+      }
+      
+      $this->template->load('ingredient_success', array("name" =>$name));
     }
   }
 }

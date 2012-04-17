@@ -151,13 +151,13 @@ class Recipe extends CI_Controller
       $this->load->library('upload', $config);
       
       // Get the Image they uploaded
-      if ( ! $this->upload->do_upload())
+      if ( ! $this->upload->do_upload() )
       {
         $this->template->load('error' , array('title' => 'Image Upload Error' , "message" => "There was an error uploading your image: <br/>" . $this->upload->display_errors()));
       }
       else
       {
-        print $this->upload->data();
+        //print $this->upload->data();
       }
       
       //Constructing array for the recipe tag  
