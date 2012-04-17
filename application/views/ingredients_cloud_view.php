@@ -2,7 +2,7 @@
 
 <?foreach($ingredient->result() as $i):?>
 <?$j = $i->ID?>
-<a href="<?=site_url( array( 'ingredients', 'id', $j ) )?>" style="font-size:<?=($i->freq * $max_font)/$total?>pt;"><?=$i->Name?></a>
+<a href="<?=base_url() . "index.php/ingredients/id/$j"?>" style="font-size:<?=($i->freq * $max_font)/$total?>pt;"><?=$i->Name?></a>
 <? endforeach; ?>
 
 <br/><br/>
