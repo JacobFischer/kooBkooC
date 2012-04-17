@@ -5,9 +5,9 @@ class Ingredients extends CI_Controller //display ingredients by id
 
 	public function index()
 	{
-		 $query  = $this->db->query("SELECT ID, COUNT(IngredientsID) as freq , Name FROM RecipesIngredients JOIN Ingredients on Ingredients.ID = RecipesIngredients.IngredientsID GROUP BY IngredientsID DESC");
+    $query  = $this->db->query("SELECT ID, COUNT(IngredientsID) as freq , Name FROM RecipesIngredients JOIN Ingredients on Ingredients.ID = RecipesIngredients.IngredientsID GROUP BY IngredientsID DESC");
 
-		 $total = 0;
+    $total = 0;
 
      foreach($query->result() as $i)
     {
@@ -15,10 +15,11 @@ class Ingredients extends CI_Controller //display ingredients by id
     }
 		
 		$max_font_size = $total * 10;
-		if($query->num_rows() == 0)
-    {
-      $this->template->load('error', array('title' => 'No tags found' , "message" => "did not work"));//load error view
-    }
+		//$max_font_size = 700;		
+	if($query->num_rows() == 0)
+    	{
+      		$this->template->load('error', array('title' => 'No tags found' , "message" => "did not work"));//load error view
+    	}
     else
     {
       $this->template->load('ingredients_cloud_view' , array("ingredient" => $query  , "total" => $total, "max_font" => $max_font_size ));

@@ -1,6 +1,8 @@
 <h1>User: <?=$info->DisplayName?></h1>
 <ul>
-  <li>Email: <?=$info->Email?>
+<?php
+/*  <li>Email: <?=$info->Email ?> */
+?>
 </ul>
 
 <?php
@@ -74,10 +76,8 @@
 <?php
   foreach( $stalking as $stalk )
   {
-    print "<vim> $stalk->DisplayName </li>";
+    print "<li> $stalk->DisplayName </li>";
   }
 ?>
 </ul>
-
-
 
