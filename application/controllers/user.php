@@ -96,6 +96,18 @@ class User extends CI_Controller {
     return $query->result();
 
   }
+
+  public function getComments($id)
+  {
+    $this->db->select('*');
+    $this->db->from('Comments');
+    $this->db->join('Followings', 'Users.ID = Followings.StalkingUsersID' );
+    $this->db->where('SubmitterUsersID', $id);
+    $query = $this->db->get();
+    return $query->result();
+
+
+  }
   
   public function id( $id )
   { 
