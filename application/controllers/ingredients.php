@@ -5,6 +5,8 @@ class Ingredients extends CI_Controller //display ingredients by id
 
 	public function index()
 	{
+    $this->template->load_js("jquery.masonry.min.js");
+    $this->template->load_js("ingredients_cloud.js");
     $query  = $this->db->query("SELECT ID, COUNT(IngredientsID) as freq , Name FROM RecipesIngredients JOIN Ingredients on Ingredients.ID = RecipesIngredients.IngredientsID GROUP BY IngredientsID DESC");
 
     $total = 0;
@@ -22,7 +24,7 @@ class Ingredients extends CI_Controller //display ingredients by id
     	}
     else
     {
-      $this->template->load('ingredients_cloud_view' , array("ingredient" => $query  , "total" => $total, "max_font" => $max_font_size ));
+      $this->template->load('ingredients_cloud_view' , array("ingredients" => $query->result()  , "total" => $total, "max_font" => $max_font_size ));
     }
   }
 

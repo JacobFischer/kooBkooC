@@ -1,9 +1,9 @@
-<h1>Recipe Tags</h1>
-<h2>Select a Tag to show recipes that are of that type!</h2>
-<?foreach($tag->result() as $i):?>
-<?$j = $i->ID?>
-<a href="<?=base_url() . "index.php/tags/recipes/$j"?>" style="font-size:<?=($i->freq * $max_font)/$total?>pt;"><?=$i->Name?></a>
-<? endforeach; ?>
+<h1>Tags</h1>
+<section id="tag-cloud">
+<?php foreach($tags as $tag):?>
+  <a href="<?=site_url( array( 'tags', 'recipes', $tag->ID ) )?>" style="font-size:<?=($tag->freq * $max_font)/$total?>pt;" class="tag-cloud-box"><?=$tag->Name?></a>
+<?php endforeach; ?>
+</section>
 
 <br/><br/>
 Got your own type to describe recipes?

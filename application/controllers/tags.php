@@ -3,6 +3,8 @@
 class Tags extends CI_Controller {
 	public function index()
 	{
+    $this->template->load_js("jquery.masonry.min.js");
+    $this->template->load_js("tags_cloud.js");
 		$query	= $this->db->query("SELECT ID, COUNT(TagsID) as freq , Name FROM RecipesTags JOIN Tags on Tags.ID = RecipesTags.TagsID GROUP BY TagsID DESC");   	
 
 		$total = 0;
@@ -19,7 +21,7 @@ class Tags extends CI_Controller {
 		}
 		else
 		{
-			$this->template->load('tag_view' , array("tag" => $query  , "total" => $total, "max_font" => $max_font_size ));
+			$this->template->load('tag_view' , array("tags" => $query->result()  , "total" => $total, "max_font" => $max_font_size ));
 		}
 	}
 
