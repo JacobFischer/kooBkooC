@@ -264,7 +264,7 @@ class Search extends CI_Controller {
 			$data['json']['recipe'][$i] = $recipe;
             $i++;
         }
-    	$this->db->flush_cache();
+    	/*$this->db->flush_cache();
 		$this->db->select('*');
  	    $this->db->from('Recipes');
 	    $this->db->like('Description',$text);
@@ -281,10 +281,10 @@ class Search extends CI_Controller {
           {
 			$j=$i+1;
 			if($runtest==TRUE)
-				$this->unit->run((stripos($this->tag_escape($recipe->Description), $text))===FALSE, FALSE, "Recipe Description Match% (Result ${j})");
+				$this->unit->run((stripos($this->tag_escape($recipe->Description), $text))!==FALSE, TRUE, "Recipe Description Match% (Result ${j})");
 			$data['json']['recipe'][$i] = $result;
             $i++;
-          }
+          }*/
         // return the recipes to the "views/search_json.php" view so it can build valid JSON from the data
 	if($runtest==TRUE)
 	{
