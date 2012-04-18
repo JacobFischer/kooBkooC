@@ -416,9 +416,15 @@ class Search extends CI_Controller {
 
 //END TAG SEARCH
 //--------------------------------------------------------------------------------------------------------
+//BEGIN USER SEARCH
+    
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //Search for the user containing user entered text.
+    ///////////////////////////////////////////////////////////////////////////////////////
 
     // The basic implimentation of a JSON search function for user
     //   ex URL: http://home.jacobfischer.me/USERNAME/cs397/index.php/search/user/
+
     public function user($target = "")
     {
         // Create result array and empty sub-array
@@ -445,3 +451,5 @@ class Search extends CI_Controller {
 
 /* End of file search.php */
 /* Location: ./application/controllers/search.php */
+
+//END USER SEARCH
