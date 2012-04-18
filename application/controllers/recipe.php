@@ -30,14 +30,44 @@ class Recipe extends CI_Controller
       return;
     }
     $this->template->load_js("recipe_add.js");
-    //Load all of the variables that should have been passed from the form
     $name = $this->input->post("recipeName");
     $description = $this->input->post("recipe-description");
     $directions = $this->input->post("recipe-directions");
     $ingredients = $this->input->post("ingredients");
     $tags = $this->input->post("tags");
     $servings = $this->input->post("servings");
-    $ingredientAmounts = $this->input->post("ingredientAmount");
+    $ingredientAmounts = $this->input->post("ingredientAmounts");
+    //Load all of the variables that should have been passed from the form
+    if(strlen($name) < 3)
+    {
+      $this->template->load('error' , array('title' => 'Invalid Name!' , "message" => "Your recipe's name must be longer than that!"));
+      return;
+    }
+    if(strlen($directions) < 30)
+    {
+      $this->template->load('error' , array('title' => 'Insufficient Directions!' , "message" => "Your recipe must contain more descriptive directions!"));
+      return;
+    }
+    if(strlen($description) < 10)
+    {
+      $this->template->load('error' , array('title' => 'Insufficient Description!' , "message" => "You must enter more words because we said so!"));
+      return;
+    }
+    if(empty($ingredients))
+    {
+      $this->template->load('error' , array('title' => 'No Ingredients!' , "message" => "A recipe requires ingredients!"));
+      return;
+    }
+    if(empty($tags))
+    {
+      $this->template->load('error' , array('title' => 'No Tag!' , "message" => "A recipe requires at least one tag!"));
+      return;
+    }
+    if(empty($ingredientAmounts))
+    {
+      $this->template->load('error' , array('title' => 'How did you get here?!' , "message" => "You shouldn't even be able to reach this page!"));
+      return;
+    }
     
     //Removes the 0 value ingredients form the list
     $index = 0;
