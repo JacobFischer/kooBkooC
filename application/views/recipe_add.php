@@ -1,27 +1,36 @@
+<script type="text/javascript">
+  var unitLookup = new Array();
+<?php foreach($ingredients as $ingredient):?>
+  unitLookup["<?=$ingredient->ID?>"] = "<?=$ingredient->BaseUnitOfMeasure?>";
+<?php endforeach;?>
+</script>
+
 <h1>Add Recipe</h1> <br/>
 <form action="<?=site_url(array('recipe', 'submit'))?>" method="post" accept-charset="utf-8" enctype="multipart/form-data">
   Recipe Name: <input type="text" name="recipeName" /><br/><br/>
-  Recipe Tags:<br/><br/>
-  <? for ($i = 0; $i < 3; $i++):?>   
-  <select name="tags[]">     
-      <option value=""></option>
-    <? foreach($tags as $tag):?>
-      <option value="<?=$tag->ID?>"><?=$tag->Name?></option>
+  Select Tags:<br/><br/>  
+  <select id="tags-input">     
+    <option value="" name=""></option>
+    <?foreach($tags as $tag):?>
+      <option value="<?=$tag->ID?>" name="<?=$tag->Name?>" ><?=$tag->Name?></option>
     <?php endforeach;?>
-  </select><br/>
-  <? endfor; ?><br/>
+  </select>
+  <span id="add-tag-button">Add to Recipe</span><br/><br/>   
+
+  Recipe Tags:
+  <ul id="added-tags"></ul><br/>
+
   Servings: <input type="text" name="servings" /><br/><br/>
-
-
-  
+ 
   Select Ingredients:<br/>
   <select id="ingredient-input" />
-    <option value=""></option>
+    <option value="" name=""></option>
     <? foreach( $ingredients as $ingredient):?>
       <option value="<?=$ingredient->ID?>" name="<?=$ingredient->Name?>" > <?=$ingredient->Name?></option>
     <?php endforeach;?><br/>
   </select>
   <input type="text" id="ingredient-amount" maxlength="6" value="0"/>
+  <div id="measure-div"><div>
   <span id="add-ingredient-button">Add to Recipe</span>   
   <br/><br/>
   
