@@ -1,3 +1,4 @@
+<!--Michael Wilson -->
 <h1><?=$tag->Name?> : <?=$tag->Description?></h1>
 <h2>Recipes Tagged &quot;<?=$tag->Name?>&quot;</h2>
 <ul>

@@ -1,3 +1,4 @@
+<!--Michael Wilson and company -->
 <h1>Ingredients</h1>
 <div id="ingredients-cloud">
 <?php foreach($ingredients as $ingredient): ?>
