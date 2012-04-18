@@ -8,8 +8,47 @@ class Recipe extends CI_Controller
     // Load JS files in the template
     $this->template->load_js('recipe_voter.js');
     $this->template->load_js('ingredients_index.js');
-   //Query to find top rated recipes and return them in descending order 
+   //Query to find top rated recipes and return them in descending order
+    $userID = -1;
+    if($this->session->userdata('logged_in'))
+    {
+      $this->db->select('*');
+      $this->db->from('Users');
+      $this->db->where('Email', $this->session->userdata('email'));
+      $query = $this->db->get();
+      
+      if($query->num_rows() != 1)
+      {
+        $this->template->load('error' , array('title' => 'Error: Cookie Error' , "message" => "You are logged in, but we can not find you") );
+        return;
+      }
+      
+      $userID = $query->row(0)->ID;
+    }
+    
     $query = $this->db->query("SELECT RecipesID AS ID, SUM(Direction) AS Direction, Name, Description FROM Votes JOIN Recipes on Votes.RecipesID = Recipes.ID GROUP BY RecipesID ORDER BY SUM(Direction) DESC" ); 
+    $recipes = $query->result();
+    
+    if( $userID != -1 )
+    {
+      foreach($recipes as $recipe)
+      {
+        $this->db->select('*');
+        $this->db->from('Votes');
+        $this->db->where('UsersID', $userID );
+        $this->db->where('RecipesID', $recipe->ID );
+        $query = $this->db->get();
+        
+        if($query->num_rows() == 1)
+        {
+          $recipe->UsersVote = $query->row(0)->Direction;
+        }
+        else
+        {
+          $recipe->UsersVote = "0";
+        }
+      }
+    }
     
     if($query->num_rows() == 0)//error case
     {
@@ -18,7 +57,7 @@ class Recipe extends CI_Controller
 
     else //load recipes page view
     {
-      $this->template->load('recipes_page' , array("recipes" => $query->result() ) );
+      $this->template->load('recipes_page' , array("recipes" => $recipes ) );
     }
   }
   
