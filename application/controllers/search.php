@@ -112,11 +112,7 @@ class Search extends CI_Controller {
     // ------------------------------------------------------------------------
     public function ingredients($target = "", $page = 1, $runtest=FALSE)
     {
-	if($runtest=="true")
-	{
-		$runtest=TRUE;
-		$numRows=0;
-	}
+	$numRows=0;
 	$this->load->library('unit_test');
         // Check invalid page
         if($page < 1) {
@@ -226,6 +222,7 @@ class Search extends CI_Controller {
     public function recipes($text = "default", $page=1, $runtest=FALSE)
     {
 	$this->load->library('unit_test');
+	$numRows=0;
 	
 	if($page < 1)
        {
@@ -248,7 +245,10 @@ class Search extends CI_Controller {
         // Execute query
         $query = $this->db->get();
 		if($runtest==TRUE)
+		{
+			$numRows+=$query->num_rows();
 			$this->unit->run(($query->num_rows()>0), TRUE, 'Recipe Name Search generates results');
+		}
         // Iterate through each result in the query and build the cookware to return
         $i = 0;
         foreach($query->result() as $recipe)
@@ -272,21 +272,28 @@ class Search extends CI_Controller {
 	    $this->db->limit($limit, $offset);
 	    $query = $this->db->get();
 		if($runtest==TRUE)
+		{
+			$numRows+=$query->num_rows();
 			$this->unit->run(($query->num_rows()>0), TRUE, 'Recipe Description Search generates results');
+		}
 	    $same = 0;
 	    foreach($query->result() as $result)
-        {
+          {
 			$j=$i+1;
 			if($runtest==TRUE)
 				$this->unit->run((stripos($this->tag_escape($recipe->Description), $text))===FALSE, FALSE, "Recipe Description Match% (Result ${j})");
 			$data['json']['recipe'][$i] = $result;
             $i++;
-        }
+          }
         // return the recipes to the "views/search_json.php" view so it can build valid JSON from the data
-        $this->load->view('search_json', array_slice($data, 0, $limit,
+	if($runtest==TRUE)
+	{
+		$this->unit->run($numRows, $i, "All queried results tested and stored as JSON (${i} out of ${numRows})");
+		echo $this->unit->report();
+	}
+	else
+		$this->load->view('search_json', array_slice($data, 0, $limit,
           TRUE));
-		if($runtest==TRUE)
-			echo $this->unit->report();
 
     }
 
@@ -361,6 +368,7 @@ class Search extends CI_Controller {
     ///////////////////////////////////////////////////////////////////////////////////////
     public function tags($searchVal = "", $page = 1, $runtest=FALSE)
     {
+	$numRows=0;
 	$this->load->library('unit_test');
       if($page<1){$page=1;} //Validate Page Number
       $returnVal=array( "json" => array( "tags" => array() ) );
@@ -375,8 +383,12 @@ class Search extends CI_Controller {
         $this->db->order_by("Name");
         $this->db->limit($delimiter, $offset);
         $initialQuery=$this->db->get("Tags");
-		if($runtest==TRUE)
-			$this->unit->run(($initialQuery->num_rows()>0), TRUE, 'Tag Query 1 (Match%) generates results');
+	if($runtest==TRUE)
+	{
+		$numRows+=$initialQuery->num_rows();
+		$this->unit->run(($numRows>0), TRUE, 'Tag Query 1 (Match%) generates results');
+	}
+		
         $this->db->flush_cache();
         $this->db->select("ID, Name, Description");
         $this->db->like("Name", $searchVal, "both");
@@ -384,8 +396,11 @@ class Search extends CI_Controller {
         $this->db->order_by("Name");
         $this->db->limit($delimiter, $offset);
         $secondaryQuery = $this->db->get("Tags");
-		if($runtest==TRUE)
-			$this->unit->run(($secondaryQuery->num_rows()>0), TRUE, 'Tag Query 2 (%Match%) generates results');
+	 if($runtest==TRUE)
+	 {
+		$this->unit->run(($secondaryQuery->num_rows()>0), TRUE, 'Tag Query 2 (%Match%) generates results');
+		$numRows+=$secondaryQuery->num_rows();
+	 }
         ///////////////////////////////////////////////////////
 		$i=1;
         foreach($initialQuery->result() as $result)
@@ -421,9 +436,14 @@ class Search extends CI_Controller {
         }
       }
       ///////////////////////////////////////////////////////// 
-      $this->load->view( 'search_json', array_slice($returnVal, 0, $delimiter, TRUE) );
-	  if($runtest==TRUE)
+	if($runtest==TRUE)
+	{
+		$i--;
+		$this->unit->run($numRows, $i, "All queried results tested and stored as JSON (${i} out of ${numRows})");
 		echo $this->unit->report();
+	}
+	else
+      		$this->load->view( 'search_json', array_slice($returnVal, 0, $delimiter, TRUE) );
     }
     ///////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////
