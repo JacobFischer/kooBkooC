@@ -2,7 +2,6 @@
 <ol>
 <?foreach($recipes as $recipe):?>
   <li><?=$this->load->view('recipes/short', array('recipe' => $recipe ) )?></li>
-  <?=var_dump( $recipe )?>
 <? endforeach; ?>
 </ol><br/>
 
