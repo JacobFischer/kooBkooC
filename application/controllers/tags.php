@@ -1,50 +1,52 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Tags extends CI_Controller {
+	//Programmer: Michael Wilson
+	//function index
 	public function index()
 	{
-    $this->template->load_js("jquery.masonry.min.js");
-    $this->template->load_js("tags_cloud.js");
-		$query	= $this->db->query("SELECT ID, COUNT(TagsID) as freq , Name FROM RecipesTags JOIN Tags on Tags.ID = RecipesTags.TagsID GROUP BY TagsID DESC");   	
+    		$this->template->load_js("jquery.masonry.min.js");
+    		$this->template->load_js("tags_cloud.js");
+		//SQL query to find tags, count up how many recipes use each one, and return an array of objects composed of TagName, TagID a,a dn the numbrt of times it is used
+		$query	= $this->db->query("SELECT ID, COUNT(TagsID) as freq , Name FROM RecipesTags JOIN Tags on Tags.ID = RecipesTags.TagsID GROUP BY TagsID DESC");    	
 
-		$total = 0;
-		$max_font_size = 200;
+		$total = 0; // this will hold the total number of recipes 
+		$max_font_size = 200; //this will be the max value for the size of the tag images (will be sent to the tag_viw)
 
-		foreach($query->result() as $i)
+		foreach($query->result() as $i) //calculate the total number of time any tag appears in all recipes
 		{
 			$total = $total + $i->freq;
 		}
 	
-		if($query->num_rows() == 0)
+		if($query->num_rows() == 0) //error case
 		{
 			$this->template->load('error', array('title' => 'No tags found' , "message" => "did not work"));//load error view  
 		}
-		else
+		else //load the tag view and pass it query results
 		{
 			$this->template->load('tag_view' , array("tags" => $query->result()  , "total" => $total, "max_font" => $max_font_size ));
 		}
 	}
-
+	//Michael Wilson   function : Recipes 
 	public function recipes($id)
 	{
-
-	  $query = $this->db->query("SELECT * FROM RecipesTags JOIN Recipes on RecipesTags.RecipesID = Recipes.ID WHERE RecipesTags.TagsID = \"$id\" ");
-	
-	  $this->db->select('*');
+		$query = $this->db->query("SELECT * FROM RecipesTags JOIN Recipes on RecipesTags.RecipesID = Recipes.ID WHERE RecipesTags.TagsID = \"$id\" ");
+		//query to return tag corresponding to tag id
+	  	$this->db->select('*');
     $this->db->from('Tags');
     $this->db->where('ID', $id);
 
-	  $tagQuery = $this->db->get();
+	  $tagQuery = $this->db->get(); //run the query
 
 
 		if($query->num_rows() == 0)
 		{
-      $this->template->load('error', array('title' => 'No recipes found' , "message" => "did not work"));//load error view
-    }
+      			$this->template->load('error', array('title' => 'No recipes found' , "message" => "did not work"));//load error view
+    		}
 		else
-    {
-      $this->template->load('recipe_list' , array("recipe" => $query, "tag" => $tagQuery->row(0) ));
-    }
+    		{
+      			$this->template->load('recipe_list' , array("recipe" => $query, "tag" => $tagQuery->row(0) ));
+    		}
 	}
 
 	public function add()

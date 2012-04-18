@@ -1,8 +1,13 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+//Programmer: Michael Wilson
+//Ingredients controller
+//This will handle all the views for ingredients
 class Ingredients extends CI_Controller //display ingredients by id
 {
 
+	//Programmers: Michael Wilson and Jacob Fischer
+	
 	public function index()
 	{
     $this->template->load_js("jquery.masonry.min.js");
@@ -28,7 +33,7 @@ class Ingredients extends CI_Controller //display ingredients by id
     }
   }
 
-
+//This will take a ingredient id and take you to thtat ingredients page
   public function id($id)
   {
     //create a query
@@ -50,16 +55,16 @@ class Ingredients extends CI_Controller //display ingredients by id
     }             
   }
 
-	//return ingredient view for a supplied recipeid
+	//recipes function: Takes in ingredient id and return the recipes that use the ingredient. 
 	public function recipes($id)
 	{
-		$query = $this->db->query("SELECT * FROM RecipesIngredients JOIN Recipes on RecipesIngredients.RecipesID = Recipes.ID WHERE RecipesIngredients.IngredientsID = \"$id\" ");
+		$query = $this->db->query("SELECT * FROM RecipesIngredients JOIN Recipes on RecipesIngredients.RecipesID = Recipes.ID WHERE RecipesIngredients.IngredientsID = \"$id\" "); //query that returns all recipes corresponding to the ingredient id passed into this function 
 	 
-		if($query->num_rows() < 1)
+		if($query->num_rows() < 1) // error case
 		{
 			$this->template->load('error', array('title' => 'No recipes found for this ingredient!', "message" => "The recipe with id  \"$id\" returned no ingredients") );//load error view
 		}
-		else
+		else //load view
 		{
 			$this->template->load('ingredientsview', array("ingredient" => $query) );  //load view to display results
 		}
