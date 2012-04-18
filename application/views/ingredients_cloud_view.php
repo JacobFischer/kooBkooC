@@ -18,7 +18,7 @@ $z = (($ingredient->freq * $max_font)/$total);
 <? endforeach; ?>
 </div>
 <br/><br/>
-See an ingredient not listed?
+Have an ingredient not listed?
 <h2>
 <a href="<?=base_url() . "index.php/ingredients/add"?>">Add an Ingredient!</a>
 </h2>

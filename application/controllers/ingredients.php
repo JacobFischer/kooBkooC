@@ -88,9 +88,15 @@ class Ingredients extends CI_Controller //display ingredients by id
     $name = $this->input->post("ingredient");
     $desc = $this->input->post("description");
     $measure = $this->input->post("measurement");
+    if(!($this->input->post("ingredient")&&$this->input->post("description")&&$this->input->post("measurement")))
+    {
+      $this->template->load('error',array('title'=>'Missing Info',"message"=>"Please fill out the entire form!"));
+      return;
+    }
     
     $data = array('Name' => $name,'BaseUnitOfMeasure'=>$measure,'Description' =>$desc);
     $query = $this->db->query("SELECT * FROM Ingredients WHERE Name = '$name'");
+    
     if($query->num_rows()>0)
     {
       $this->template->load('error',array('title'=>'ingredient already exists', "message"=>"The ingredient is already in the database"));
