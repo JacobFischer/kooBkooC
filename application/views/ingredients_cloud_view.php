@@ -14,7 +14,14 @@
 	} 
 ?>
 
-<a href="<?=base_url() . "index.php/ingredients/id/$j"?>" style="font-size:<?=($i->freq * $max_font)/$total?>pt;"><img src ="http://home.jacobfischer.me/cs397_uploads/ingredients/<?=$j?>.jpg" style="height: <?=$z * 4?>px; width: auto;"/></a>
+<a href="<?=base_url() . "index.php/ingredients/id/$j"?>" style="font-size:<?=($i->freq * $max_font)/$total?>pt;">
+
+
+<div style ="background: url('http://home.jacobfischer.me/cs397_uploads/ingredients/<?=$j?>.jpg'); height: <?=$z * 4?>px; width: <?=$z * 4?>px;" class = "ingredient-cloud">
+
+<?=$i->Name?>
+</div>
+</a>
 <? endforeach; ?>
 
 <br/><br/>
