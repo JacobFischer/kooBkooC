@@ -243,7 +243,7 @@ class Search extends CI_Controller {
           // Build query
         $this->db->select('*');
         $this->db->from('Recipes');
-        $this->db->like('Description',$text);
+        $this->db->like('Name',$text);
 		$this->db->limit($limit, $offset);
         // Execute query
         $query = $this->db->get();
@@ -267,8 +267,8 @@ class Search extends CI_Controller {
     	$this->db->flush_cache();
 		$this->db->select('*');
  	    $this->db->from('Recipes');
-	    $this->db->like('Directions',$text);
-		$this->db->not_like('Description',$text);
+	    $this->db->like('Description',$text);
+		$this->db->not_like('Name',$text);
 	    $this->db->limit($limit, $offset);
 	    $query = $this->db->get();
 		if($runtest==TRUE)
@@ -403,7 +403,7 @@ class Search extends CI_Controller {
         foreach($secondaryQuery->result() as $result)
         {
 		  if($runtest==TRUE)
-			$this->unit->run(stripos($this->tag_escape($row->Name), $searchVal), TRUE, "Query 2: Partial Tag %Match% (Result ${i})");
+			$this->unit->run(stripos($this->tag_escape($result->Name), $searchVal), TRUE, "Query 2: Partial Tag %Match% (Result ${i})");
           $returnVal["json"]["tags"][] = $result;
 		  $i++;
         }
