@@ -93,7 +93,10 @@ class Ingredients extends CI_Controller //display ingredients by id
       $this->template->load('error',array('title'=>'Missing Info',"message"=>"Please fill out the entire form!"));
       return;
     }
-    
+
+    $name = trim($name);
+    $desc = trim($desc);
+    $measure = trim($measure);
     $data = array('Name' => $name,'BaseUnitOfMeasure'=>$measure,'Description' =>$desc);
     $query = $this->db->query("SELECT * FROM Ingredients WHERE Name = '$name'");
     
