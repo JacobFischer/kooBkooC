@@ -119,6 +119,10 @@ class Ingredients extends CI_Controller //display ingredients by id
       // Get the Image they uploaded
       if ( ! $this->upload->do_upload())
       {
+        // Delete the added ingredient as they didn't have an image
+        $this->db->where('ID', $ingredientID);
+        $this->db->delete('Ingredients'); 
+
         $this->template->load('error' , array('title' => 'Image Upload Error' , "message" => "There was an error uploading your image: <br/>" . $this->upload->display_errors()));
         return;
       }
