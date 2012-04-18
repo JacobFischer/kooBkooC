@@ -69,7 +69,8 @@ class Tags extends CI_Controller {
       $this->template->load('error',array('title'=>'Missing Info',"message"=>"Please fill out the entire form!"));
       return;
     }
-    
+    $name = trim($name);
+    $desc = trim($desc);
     $data = array('Name' => $name,'Description' =>$desc);
     $query = $this->db->query("SELECT * FROM Tags WHERE Name = '$name'");
     		
