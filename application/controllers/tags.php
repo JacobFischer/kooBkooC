@@ -64,6 +64,13 @@ class Tags extends CI_Controller {
   {
     $name = $this->input->post("tag_name");
     $desc = $this->input->post("description");
+    if(!($this->input->post("tag_name")&&$this->input->post("description")))
+    {
+      $this->template->load('error',array('title'=>'Missing Info',"message"=>"Please fill out the entire form!"));
+      return;
+    }
+    $name = trim($name);
+    $desc = trim($desc);
     $data = array('Name' => $name,'Description' =>$desc);
     $query = $this->db->query("SELECT * FROM Tags WHERE Name = '$name'");
     		
