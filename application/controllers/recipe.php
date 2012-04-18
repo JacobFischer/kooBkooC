@@ -2,21 +2,21 @@
 
 class Recipe extends CI_Controller
 {
-
+	//programmer: Michael Wilson and Company  //function: index.   This will show top rated recipes
   public function index()
   {
     // Load JS files in the template
     $this->template->load_js('recipe_voter.js');
     $this->template->load_js('ingredients_index.js');
-    
+   //Query to find top rated recipes and return them in descending order 
     $query = $this->db->query("SELECT RecipesID AS ID, SUM(Direction) AS Direction, Name, Description FROM Votes JOIN Recipes on Votes.RecipesID = Recipes.ID GROUP BY RecipesID ORDER BY SUM(Direction) DESC" ); 
     
-    if($query->num_rows() == 0)
+    if($query->num_rows() == 0)//error case
     {
       $this->template->load('error' , array('title' => 'No recipes found!' , "message" => "Sorry, no recipes were found :( ") );
     }
 
-    else
+    else //load recipes page view
     {
       $this->template->load('recipes_page' , array("recipes" => $query->result() ) );
     }

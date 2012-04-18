@@ -6,7 +6,7 @@
   <div id="ingredient-base">Base Unit: <?=$ingredient->BaseUnitOfMeasure?></div>
 </section>
 <section id="ingredient-recipes">
-  <h2>Recipies using <?=$ingredient->Name?></h2>
+  <h2>Recipes using <?=$ingredient->Name?></h2>
   <ul>
   <?php foreach($recipes as $recipe): ?>
     <li><a href = "<?=site_url( array('recipe', 'id', $recipe->ID) )?>"/><?echo $recipe->Name ?></a></li>

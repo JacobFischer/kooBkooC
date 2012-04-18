@@ -1,3 +1,4 @@
+<!--Michael Wilson -->
 <h1>Tags</h1>
 <section id="tag-cloud">
 <?php foreach($tags as $tag):?>
