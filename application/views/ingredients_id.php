@@ -1,17 +1,16 @@
-<h1>Ingredients</h1>
-
-<a href="<?=base_url() . "index.php/ingredients/add"?>">Add an Ingredient!</a>
-<ul>
-   <?foreach ($ingredient->result() as $i):?>
-   <br/>
-   <li>Ingredient: <?=$i->Name?></li>
-    <li>ID: <?=$i->ID?></li>
-    <li>Description: <?=$i->Description?></li>
-    <li>Base Unit of Measure:<?=$i->BaseUnitOfMeasure?></li>
-    <li>ImageURL: <?=$i->ImageURL?></li>
-    <br/>
-    <?endforeach;?>
-   
-     
-</ul>
+<section id="ingredient-body">
+  <img src="<?=/*base_url() . 'uploads/ingredients/'*/ 'http://home.jacobfischer.me/cs397_uploads/ingredients/' . $ingredient->ID . '.jpg'?>" id="ingredient-img" />
+  <h1><?=$ingredient->Name?></h1>
+  <?=$ingredient->Description?>
+  <hr/>
+  <div id="ingredient-base">Base Unit: <?=$ingredient->BaseUnitOfMeasure?></div>
+</section>
+<section id="ingredient-recipes">
+  <h2>Recipies using <?=$ingredient->Name?></h2>
+  <ul>
+  <?php foreach($recipes as $recipe): ?>
+    <li><a href = "<?=site_url( array('recipe', 'id', $recipe->ID) )?>"/><?echo $recipe->Name ?></a></li>
+  <?php endforeach; ?>
+  </ul>
+</section>
 

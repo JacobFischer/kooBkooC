@@ -5,17 +5,21 @@ class Recipe extends CI_Controller
 
   public function index()
   {
-	$query = $this->db->query("SELECT RecipesID, SUM(Direction), Name FROM Votes JOIN Recipes on Votes.RecipesID = Recipes.ID GROUP BY RecipesID ORDER BY SUM(Direction) DESC LIMIT 5" ); 
+    // Load JS files in the template
+    $this->template->load_js('recipe_voter.js');
+    $this->template->load_js('ingredients_index.js');
+    
+    $query = $this->db->query("SELECT RecipesID AS ID, SUM(Direction) AS Direction, Name, Description FROM Votes JOIN Recipes on Votes.RecipesID = Recipes.ID GROUP BY RecipesID ORDER BY SUM(Direction) DESC" ); 
+    
+    if($query->num_rows() == 0)
+    {
+      $this->template->load('error' , array('title' => 'No recipes found!' , "message" => "Sorry, no recipes were found :( ") );
+    }
 
-	if($query->num_rows() == 0)
-	{
-		$this->template->load('error' , array('title' => 'No recipes found!' , "message" => "Sorry, no recipes were found :( ") );
-    	}
-
-	else
-    	{
-		$this->template->load('recipes_page' , array("recipes" => $query));
-	}
+    else
+    {
+      $this->template->load('recipes_page' , array("recipes" => $query->result() ) );
+    }
   }
   
   public function submit()
@@ -25,6 +29,7 @@ class Recipe extends CI_Controller
       $this->template->load('error' , array('title' => 'Please Login or Sign Up!' , "message" => "You must be logged in to submit a recipe!"));
       return;
     }
+    $this->template->load_js("recipe_add.js");
     //Load all of the variables that should have been passed from the form
     $name = $this->input->post("recipeName");
     $description = $this->input->post("recipe-description");
@@ -117,8 +122,15 @@ class Recipe extends CI_Controller
     $this->db->where('Email', $this->session->userdata('email'));
     $query = $this->db->get();
     
+    //Finding the submitter's user ID
+    $this->db->select('*');
+    $this->db->from('Users');
+    $this->db->where('Email', $this->session->userdata('email'));
+    $userQuery = $this->db->get();
+    $userID = $userQuery->row(0)->ID;
+    
     //Add all of the retreived information to an array to be passed when the recipes is added
-    $recipeData = array('SubmitterUsersID' => $this->session->userdata('email'), 'Name' => $name,'Directions' => $directions, 
+    $recipeData = array('SubmitterUsersID' => $userID, 'Name' => $name,'Directions' => $directions, 
       'Servings' => $servings, 'ImageURL' => 'NULL', 'Description' => $description);   
      
     //Inserting the information to the database
@@ -135,6 +147,24 @@ class Recipe extends CI_Controller
       $newRecipe = $this->db->get();
       $recipeID = $newRecipe->row(0)->ID;
 
+      $config['upload_path'] = '../../cs397_uploads/recipes/';
+      $config['allowed_types'] = 'jpg';
+      $config['max_size'] = '1000';
+      $config['max_width'] = '2048';
+      $config['max_height'] = '1024';
+      $config['file_name']  = $recipeID . ".jpg";
+      $this->load->library('upload', $config);
+      
+      // Get the Image they uploaded
+      if ( ! $this->upload->do_upload() )
+      {
+        $this->template->load('error' , array('title' => 'Image Upload Error' , "message" => "There was an error uploading your image: <br/>" . $this->upload->display_errors()));
+      }
+      else
+      {
+        //print $this->upload->data();
+      }
+      
       //Constructing array for the recipe tag  
       foreach($tags as $tag)
       {      
@@ -161,12 +191,7 @@ class Recipe extends CI_Controller
         $index += 1;
       }
       
-      //Finding the submitter's user ID
-      $this->db->select('*');
-      $this->db->from('Users');
-      $this->db->where('Email', $this->session->userdata('email'));
-      $userQuery = $this->db->get();
-      $userID = $userQuery->row(0)->ID;
+      
       
       //Upvoting your recipe
       $voteData = array('UsersID' => $userID, 'RecipesID' => $recipeID, 'Direction' => 1); 
@@ -182,6 +207,8 @@ class Recipe extends CI_Controller
   
   public function id($id)
   {
+    // Load JS files in the template
+    $this->template->load_js("recipe_voter.js");
     $this->template->load_js("recipe_id.js");
     
     // Build the SQL-ish query using CodeIgniters's Active Record to get the Cookware with the id passed in
@@ -191,6 +218,12 @@ class Recipe extends CI_Controller
     $recipequery = $this->db->get();
     
     $recipeInfo = $recipequery->row(0);
+    
+    $this->db->select('*');
+    $this->db->from('Users');
+    $this->db->where('ID', $recipeInfo->SubmitterUsersID);
+    $submitterInfo = $this->db->get()->row(0);
+    
     $recipeInfo->Directions = $this->textile->TextileThis( $recipeInfo->Directions );
 
     $this->db->select('*');
@@ -258,6 +291,7 @@ class Recipe extends CI_Controller
     else
     {      
       $this->template->load('recipe_id', array("recipe" => $recipeInfo ,
+                                               "submitter" => $submitterInfo,
                                                "vote_count" => $votequery->row(0),
                                                "comments" => $comments,
                                                "tags" => $tagquery->result() ,
@@ -282,66 +316,6 @@ class Recipe extends CI_Controller
     $this->template->load( 'recipe_add', array("tags" => $tagquery->result(),
                                         "ingredients" => $ingredientsquery->result()));
   }
-  
-  
-  
-  /*
-  public function add($name, $tag, $ingredients)
-  {
-    $r = array( "json" => array() );
-    $r["json"]["success"] = false;
-    
-    $this->db->select('*');
-    $this->db->from('Recipes');
-    $this->db->where('ID', $recipeID);
-    $query = $this->db->get();
-    
-    if($query->num_rows() != 1)
-    {
-      $r["json"]["reason"] = "The recipe you voted could not be found.";
-      $this->load->view('json', $r);
-      return;
-    }
-    
-    if(!$this->session->userdata('logged_in') || !$this->session->userdata('email'))
-    {
-      $r["json"]["reason"] = "You must be logged in to comment.";
-      $this->load->view('json', $r);
-      return;
-    }
-
-    $this->db->select('*');
-    $this->db->from('Users');
-    $this->db->where('Email', $this->session->userdata('email'));
-    $query = $this->db->get();
-    
-    if($query->num_rows() != 1)
-    {
-      $r["json"]["reason"] = "There is an error in your current session, try clearing your cookies for kooBkooC.net";
-      $this->load->view('json', $r);
-      return;
-    }
-    
-    $contents = urldecode($contents);
-    $data = array('UsersID'=> $query->row(0)->ID, 'RecipesID' => $recipeID, 'Text' => $contents, 'Time' => date( 'Y-m-d H:i:s') );
-    
-    if(!($this->db->insert("Comments", $data)) )
-    {
-      $r["json"]["reason"] = "There was an error ading your comment to our database.";
-      $this->load->view('json', $r);
-      return;
-    }
-    else
-    {
-      $comment->DisplayName = $query->row(0)->DisplayName;
-      $comment->Time = date( 'Y-m-d H:i:s');
-      $comment->Text = $contents;
-      $r["json"]["success"] = true;
-      $r["json"]["newHTML"] = base64_encode($this->load->view('recipe_comment', array('comment' => $comment, "hide" => true ), true ));
-      $this->load->view('json', $r);
-      return;
-    }
-  }*/
 }
 
 /* End of file recipe.php */
