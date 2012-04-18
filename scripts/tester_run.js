@@ -1,7 +1,6 @@
-var currentDiv;
 $(document).ready(function() {
   $('div.run-tester').each( function() {
-    currentDiv = $(this);
+    var currentDiv = $(this);
     $.ajax({
       url: $(this).html(),
       success: function(data) {
