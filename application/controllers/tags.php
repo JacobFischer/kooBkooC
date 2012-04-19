@@ -54,9 +54,9 @@ class Tags extends CI_Controller {
     $query = $this->db->query("SELECT Votes.RecipesID AS ID, SUM(Direction) AS Direction, Name, Description FROM Votes JOIN Recipes on Votes.RecipesID = Recipes.ID JOIN RecipesTags on RecipesTags.RecipesID = Recipes.ID WHERE RecipesTags.TagsID = \"$id\" GROUP BY Recipes.ID ORDER BY SUM(Direction) DESC" ); 
     $recipes = $query->result();
     
-    if( $userID != -1 )
+    foreach($recipes as $recipe)
     {
-      foreach($recipes as $recipe)
+      if( $userID != -1 )
       {
         $this->db->select('*');
         $this->db->from('Votes');
@@ -72,6 +72,10 @@ class Tags extends CI_Controller {
         {
           $recipe->UsersVote = "0";
         }
+      }
+      else
+      {
+        $recipe->UsersVote = "0";
       }
     }
     // OLD OLD OLD OLD
