@@ -1,10 +1,17 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+//Programmer: Michael Wilson
+//Ingredients controller
+//This will handle all the views for ingredients
 class Ingredients extends CI_Controller //display ingredients by id
 {
 
+	//Programmers: Michael Wilson and Jacob Fischer
+	
 	public function index()
 	{
+    $this->template->load_js("jquery.masonry.min.js");
+    $this->template->load_js("ingredients_cloud.js");
     $query  = $this->db->query("SELECT ID, COUNT(IngredientsID) as freq , Name FROM RecipesIngredients JOIN Ingredients on Ingredients.ID = RecipesIngredients.IngredientsID GROUP BY IngredientsID DESC");
 
     $total = 0;
@@ -22,11 +29,11 @@ class Ingredients extends CI_Controller //display ingredients by id
     	}
     else
     {
-      $this->template->load('ingredients_cloud_view' , array("ingredient" => $query  , "total" => $total, "max_font" => $max_font_size ));
+      $this->template->load('ingredients_cloud_view' , array("ingredients" => $query->result()  , "total" => $total, "max_font" => $max_font_size ));
     }
   }
 
-
+//This will take a ingredient id and take you to thtat ingredients page
   public function id($id)
   {
     //create a query
@@ -48,16 +55,16 @@ class Ingredients extends CI_Controller //display ingredients by id
     }             
   }
 
-	//return ingredient view for a supplied recipeid
+	//recipes function: Takes in ingredient id and return the recipes that use the ingredient. 
 	public function recipes($id)
 	{
-		$query = $this->db->query("SELECT * FROM RecipesIngredients JOIN Recipes on RecipesIngredients.RecipesID = Recipes.ID WHERE RecipesIngredients.IngredientsID = \"$id\" ");
+		$query = $this->db->query("SELECT * FROM RecipesIngredients JOIN Recipes on RecipesIngredients.RecipesID = Recipes.ID WHERE RecipesIngredients.IngredientsID = \"$id\" "); //query that returns all recipes corresponding to the ingredient id passed into this function 
 	 
-		if($query->num_rows() < 1)
+		if($query->num_rows() < 1) // error case
 		{
 			$this->template->load('error', array('title' => 'No recipes found for this ingredient!', "message" => "The recipe with id  \"$id\" returned no ingredients") );//load error view
 		}
-		else
+		else //load view
 		{
 			$this->template->load('ingredientsview', array("ingredient" => $query) );  //load view to display results
 		}
@@ -72,6 +79,7 @@ class Ingredients extends CI_Controller //display ingredients by id
       $this->template->load('error', array('title' => 'Not logged in.' , "message" => "You must be logged in to add an ingredient."));
       return;
     }
+    $this->template->load_js("ingredients_add.js");
     $this->template->load_js("submit_guess.js");
     $this->template->load('add_ingredient' , array("recipe" => 0, "tag" => 0 ));
   }
@@ -81,9 +89,18 @@ class Ingredients extends CI_Controller //display ingredients by id
     $name = $this->input->post("ingredient");
     $desc = $this->input->post("description");
     $measure = $this->input->post("measurement");
-    
+    if(!($this->input->post("ingredient")&&$this->input->post("description")&&$this->input->post("measurement")))
+    {
+      $this->template->load('error',array('title'=>'Missing Info',"message"=>"Please fill out the entire form!"));
+      return;
+    }
+
+    $name = trim($name);
+    $desc = trim($desc);
+    $measure = trim($measure);
     $data = array('Name' => $name,'BaseUnitOfMeasure'=>$measure,'Description' =>$desc);
     $query = $this->db->query("SELECT * FROM Ingredients WHERE Name = '$name'");
+    
     if($query->num_rows()>0)
     {
       $this->template->load('error',array('title'=>'ingredient already exists', "message"=>"The ingredient is already in the database"));
@@ -117,6 +134,10 @@ class Ingredients extends CI_Controller //display ingredients by id
       // Get the Image they uploaded
       if ( ! $this->upload->do_upload())
       {
+        // Delete the added ingredient as they didn't have an image
+        $this->db->where('ID', $ingredientID);
+        $this->db->delete('Ingredients'); 
+
         $this->template->load('error' , array('title' => 'Image Upload Error' , "message" => "There was an error uploading your image: <br/>" . $this->upload->display_errors()));
         return;
       }

@@ -96,18 +96,6 @@ class User extends CI_Controller {
     return $query->result();
 
   }
-
-  public function getComments($id)
-  {
-    $this->db->select('*');
-    $this->db->from('Comments');
-    $this->db->join('Followings', 'Users.ID = Followings.StalkingUsersID' );
-    $this->db->where('SubmitterUsersID', $id);
-    $query = $this->db->get();
-    return $query->result();
-
-
-  }
   
   public function id( $id )
   { 
@@ -273,6 +261,19 @@ class User extends CI_Controller {
     
   }
 
+  public function getComments($id)
+  {
+    $this->db->select('*');
+    $this->db->from('Comments');
+    $this->db->join('Recipes', 'Comments.RecipesID = Recipes.ID');
+    $this->db->join('Users', 'Recipes.SubmitterUsersID = Users.ID');
+    $this->db->where('Comments.UsersID', $id);
+    $query = $this->db->get();
+
+    return $query->result();
+
+  }
+
   public function me()
   {
     if($this->session->userdata('logged_in'))
@@ -288,7 +289,7 @@ class User extends CI_Controller {
         $id = $query->row(0)->ID;
         $displayName = $query->row(0)->DisplayName;
         
-        $this->template->load( 'user_me.php', array('ID' => $id, 'DisplayName' => $displayName, 'recipes' => $this->getRecipes($id), 'stalkers' => $this->getStalkers($id), 'favorites' => $this->getFavorites($id), 'allergies' => $this->getAllergies($id), 'stalking' => $this->getStalking($id) ) );
+        $this->template->load( 'user_me.php', array('ID' => $id, 'DisplayName' => $displayName, 'recipes' => $this->getRecipes($id), 'stalkers' => $this->getStalkers($id), 'favorites' => $this->getFavorites($id), 'allergies' => $this->getAllergies($id), 'stalking' => $this->getStalking($id), 'comments' => $this->getComments($id) ) );
         
         return;
       }
@@ -356,7 +357,6 @@ class User extends CI_Controller {
   
   public function password_change()
   {
-
     if($this->session->userdata('logged_in'))
     {
       $email = $this->session->userdata('email');
@@ -408,3 +408,5 @@ class User extends CI_Controller {
   }
 
 }
+
+?>

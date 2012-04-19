@@ -2,23 +2,66 @@
 
 class Recipe extends CI_Controller
 {
-
+	//programmer: Michael Wilson and Company  //function: index.   This will show top rated recipes
   public function index()
   {
     // Load JS files in the template
     $this->template->load_js('recipe_voter.js');
     $this->template->load_js('ingredients_index.js');
+   //Query to find top rated recipes and return them in descending order
+    $userID = -1;
+    if($this->session->userdata('logged_in'))
+    {
+      $this->db->select('*');
+      $this->db->from('Users');
+      $this->db->where('Email', $this->session->userdata('email'));
+      $query = $this->db->get();
+      
+      if($query->num_rows() != 1)
+      {
+        $this->template->load('error' , array('title' => 'Error: Cookie Error' , "message" => "You are logged in, but we can not find you") );
+        return;
+      }
+      
+      $userID = $query->row(0)->ID;
+    }
     
     $query = $this->db->query("SELECT RecipesID AS ID, SUM(Direction) AS Direction, Name, Description FROM Votes JOIN Recipes on Votes.RecipesID = Recipes.ID GROUP BY RecipesID ORDER BY SUM(Direction) DESC" ); 
+    $recipes = $query->result();
     
-    if($query->num_rows() == 0)
+    foreach($recipes as $recipe)
+    {
+      if( $userID != -1 )
+      {
+        $this->db->select('*');
+        $this->db->from('Votes');
+        $this->db->where('UsersID', $userID );
+        $this->db->where('RecipesID', $recipe->ID );
+        $query = $this->db->get();
+        
+        if($query->num_rows() == 1)
+        {
+          $recipe->UsersVote = $query->row(0)->Direction;
+        }
+        else
+        {
+          $recipe->UsersVote = "0";
+        }
+      }
+      else
+      {
+        $recipe->UsersVote = "0";
+      }
+    }
+    
+    if($query->num_rows() == 0)//error case
     {
       $this->template->load('error' , array('title' => 'No recipes found!' , "message" => "Sorry, no recipes were found :( ") );
     }
 
-    else
+    else //load recipes page view
     {
-      $this->template->load('recipes_page' , array("recipes" => $query->result() ) );
+      $this->template->load('recipes_page' , array("recipes" => $recipes ) );
     }
   }
   
@@ -29,14 +72,45 @@ class Recipe extends CI_Controller
       $this->template->load('error' , array('title' => 'Please Login or Sign Up!' , "message" => "You must be logged in to submit a recipe!"));
       return;
     }
-    //Load all of the variables that should have been passed from the form
+    $this->template->load_js("recipe_add.js");
     $name = $this->input->post("recipeName");
     $description = $this->input->post("recipe-description");
     $directions = $this->input->post("recipe-directions");
     $ingredients = $this->input->post("ingredients");
     $tags = $this->input->post("tags");
     $servings = $this->input->post("servings");
-    $ingredientAmounts = $this->input->post("ingredientAmount");
+    $ingredientAmounts = $this->input->post("ingredientAmounts");
+    //Load all of the variables that should have been passed from the form
+    if(strlen($name) < 3)
+    {
+      $this->template->load('error' , array('title' => 'Invalid Name!' , "message" => "Your recipe's name must be longer than that!"));
+      return;
+    }
+    if(strlen($directions) < 30)
+    {
+      $this->template->load('error' , array('title' => 'Insufficient Directions!' , "message" => "Your recipe must contain more descriptive directions!"));
+      return;
+    }
+    if(strlen($description) < 10)
+    {
+      $this->template->load('error' , array('title' => 'Insufficient Description!' , "message" => "You must enter more words because we said so!"));
+      return;
+    }
+    if(empty($ingredients))
+    {
+      $this->template->load('error' , array('title' => 'No Ingredients!' , "message" => "A recipe requires ingredients!"));
+      return;
+    }
+    if(empty($tags))
+    {
+      $this->template->load('error' , array('title' => 'No Tag!' , "message" => "A recipe requires at least one tag!"));
+      return;
+    }
+    if(empty($ingredientAmounts))
+    {
+      $this->template->load('error' , array('title' => 'How did you get here?!' , "message" => "You shouldn't even be able to reach this page!"));
+      return;
+    }
     
     //Removes the 0 value ingredients form the list
     $index = 0;

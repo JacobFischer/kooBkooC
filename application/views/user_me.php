@@ -42,6 +42,24 @@
 
 <br />
 
+<h2>Comments</h2>
+
+<ul>
+<?php
+  if( !count( $comments ) )
+  {
+    print "<li> NO COMMENTS </li>";
+  }
+  foreach( $comments as $comment )
+  {
+    print "<a href=\"" . site_url(array('recipe', 'id', $comment->RecipesID)) . "\">" . $comment->Name . "</a> by <a href=\"" . site_url(array('user', 'id', $comment->ID)) . "\">" . $comment->DisplayName . "</a> <br />";
+    print $comment->Text;
+  }
+?>
+</ul>
+
+<br />
+
 <h2>Allergies</h2>
 
 <ul>

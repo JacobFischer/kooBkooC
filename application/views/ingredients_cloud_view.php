@@ -1,24 +1,25 @@
+<!--Michael Wilson and company -->
 <h1>Ingredients</h1>
-
-<?foreach($ingredient->result() as $i):?>
-<?$j = $i->ID;?>
-<?$z = (($i->freq * $max_font)/$total);
-	if($z > 400)
+<div id="ingredients-cloud">
+<?php foreach($ingredients as $ingredient): ?>
+<?
+$z = (($ingredient->freq * $max_font)/$total);
+	if($z > 300)
 	{
-	$z = 400;
+	$z = 300;
 	}
 	
-	if($z < 10 )
+	if($z < 20 )
 	{
-		$z = 10;
+		$z = 20;
 	} 
 ?>
 
-<a href="<?=base_url() . "index.php/ingredients/id/$j"?>" style="font-size:<?=($i->freq * $max_font)/$total?>pt;"><img src ="http://home.jacobfischer.me/cs397_uploads/ingredients/<?=$j?>.jpg" style="height: <?=$z * 4?>px; width: auto;"/></a>
+<a class="ingredient-cloud-item" title="<?=$ingredient->Name?>" href="<?=site_url( array('ingredients', 'id', $ingredient->ID ) )?>"><img src ="http://home.jacobfischer.me/cs397_uploads/ingredients/<?=$ingredient->ID?>.jpg" style="height: <?=$z * 4?>px; width: auto;" /></a>
 <? endforeach; ?>
-
+</div>
 <br/><br/>
-Do you have an ingredient not listed?
+Have an ingredient not listed?
 <h2>
 <a href="<?=base_url() . "index.php/ingredients/add"?>">Add an Ingredient!</a>
 </h2>

@@ -1,7 +1,7 @@
 <h1>Top Voted Recipes! </h1>
 <ol>
 <?foreach($recipes as $recipe):?>
-<li><?=$this->load->view('recipes/short', array('recipe' => $recipe ) )?></li>
+  <li><?=$this->load->view('recipes/short', array('recipe' => $recipe ) )?></li>
 <? endforeach; ?>
 </ol><br/>
 
