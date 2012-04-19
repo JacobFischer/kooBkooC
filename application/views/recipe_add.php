@@ -30,7 +30,7 @@
     <?php endforeach;?><br/>
   </select>
   <input type="text" id="ingredient-amount" maxlength="6" value="0"/>
-  <div id="measure-div"><div>
+  <span id="measure-span"></span>
   <span id="add-ingredient-button">Add to Recipe</span>   
   <br/><br/>
   
