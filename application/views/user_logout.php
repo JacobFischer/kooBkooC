@@ -1,2 +1,2 @@
-
-<h1>YOU LOGGED OUT DUH!</h1>
+<h1>You have been logged out!</h1>
+<p>We will miss you.</p>

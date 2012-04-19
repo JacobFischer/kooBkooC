@@ -144,9 +144,9 @@ class User extends CI_Controller {
 	    return;
 	  }
 
-    if( strlen( $password ) < 4 )
+    if( strlen( $password ) < 8 )
     {
-      $this->template->load('error', array('title' => 'User Registration Failed', "message" => "Please make your password at least 4 characters!") );
+      $this->template->load('error', array('title' => 'User Registration Failed', "message" => "Please make your password at least eight characters!") );
       return;
     }
 
@@ -200,6 +200,7 @@ class User extends CI_Controller {
     $this->session->sess_destroy();
 
     $this->template->load( 'user_logout.php' );
+    redirect('', '', 301); // send them to the home page
   }
 
   public function login()
@@ -224,6 +225,7 @@ class User extends CI_Controller {
         $this->session->set_userdata($userData);
 
         $this->template->load('login_successful', array() );
+        redirect('', '', 301);
         return;
       }
       else
@@ -236,6 +238,7 @@ class User extends CI_Controller {
     else
     {
       $this->template->load('error', array('title' => 'User Login Failed', "message" => "A user with that email does not exist!") );
+      return;
     }
 
   }
@@ -386,6 +389,10 @@ class User extends CI_Controller {
           $this->template->load('error', array('title' => 'Passwords Do Not Match', "message" => "Match your passwords before wasting my time!") );
           return;
         }
+		else if(strlen($password1) < 8) {
+          $this->template->load('error', array('title' => 'Password Too Short', "message" => "Your password must be eight or more characters in length!") );
+          return;
+		}
 
         $data = array(
           'DisplayName' => $query->row(0)->DisplayName,
