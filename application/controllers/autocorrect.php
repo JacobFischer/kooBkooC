@@ -22,7 +22,8 @@ class AutoCorrect extends CI_Controller {
     
     protected function tag_escape($target)
     {
-        return strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $target));
+        return strtolower(preg_replace('/[^a-zA-Z0-9]/', '',
+		    urldecode($target)));
     }
     
     // ------------------------------------------------------------------------
