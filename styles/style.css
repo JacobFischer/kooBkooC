@@ -41,9 +41,7 @@ div#template-title, header#template-top, div#template-main { margin: 0 auto; wid
 nav#website-links, nav#website-links ul, nav#website-links ul li { display: inline; }
 nav#website-links ul li a { color: #FEFAFD; margin: 0 0.75em; }
 
-div#template-main { background: #FEFAFD; padding: 0.5em 1em; border: 0.125em solid #006561; }
-
-hr.float-fix { width: 54em; border-color: #FEFAFD; }
+div#template-main { background: url(soft-white-background.jpg); padding: 0.5em 1em; border: 0.125em solid #006561; }
 
 /* Recipe
 *********************************************************/
