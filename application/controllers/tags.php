@@ -30,9 +30,54 @@ class Tags extends CI_Controller {
 	//Michael Wilson   function : Recipes 
 	public function recipes($id)
 	{
-		$query = $this->db->query("SELECT * FROM RecipesTags JOIN Recipes on RecipesTags.RecipesID = Recipes.ID WHERE RecipesTags.TagsID = \"$id\" ");
+    // Load JS files in the template
+    $this->template->load_js('recipe_voter.js');
+    $this->template->load_js('ingredients_index.js');
+   //Query to find top rated recipes and return them in descending order
+    $userID = -1;
+    if($this->session->userdata('logged_in'))
+    {
+      $this->db->select('*');
+      $this->db->from('Users');
+      $this->db->where('Email', $this->session->userdata('email'));
+      $query = $this->db->get();
+      
+      if($query->num_rows() != 1)
+      {
+        $this->template->load('error' , array('title' => 'Error: Cookie Error' , "message" => "You are logged in, but we can not find you") );
+        return;
+      }
+      
+      $userID = $query->row(0)->ID;
+    }
+    
+    $query = $this->db->query("SELECT Votes.RecipesID AS ID, SUM(Direction) AS Direction, Name, Description FROM Votes JOIN Recipes on Votes.RecipesID = Recipes.ID JOIN RecipesTags on RecipesTags.RecipesID = Recipes.ID WHERE RecipesTags.TagsID = \"$id\" GROUP BY Recipes.ID ORDER BY SUM(Direction) DESC" ); 
+    $recipes = $query->result();
+    
+    if( $userID != -1 )
+    {
+      foreach($recipes as $recipe)
+      {
+        $this->db->select('*');
+        $this->db->from('Votes');
+        $this->db->where('UsersID', $userID );
+        $this->db->where('RecipesID', $recipe->ID );
+        $query = $this->db->get();
+        
+        if($query->num_rows() == 1)
+        {
+          $recipe->UsersVote = $query->row(0)->Direction;
+        }
+        else
+        {
+          $recipe->UsersVote = "0";
+        }
+      }
+    }
+    // OLD OLD OLD OLD
+		//$query = $this->db->query("SELECT * FROM RecipesTags JOIN Recipes on RecipesTags.RecipesID = Recipes.ID WHERE RecipesTags.TagsID = \"$id\" ");
 		//query to return tag corresponding to tag id
-	  	$this->db->select('*');
+	  $this->db->select('*');
     $this->db->from('Tags');
     $this->db->where('ID', $id);
 
@@ -45,7 +90,7 @@ class Tags extends CI_Controller {
     		}
 		else
     		{
-      			$this->template->load('recipe_list' , array("recipe" => $query, "tag" => $tagQuery->row(0) ));
+      			$this->template->load('tags/recipes' , array("recipes" => $recipes, "tag" => $tagQuery->row(0) ));
     		}
 	}
 
