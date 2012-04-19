@@ -144,9 +144,9 @@ class User extends CI_Controller {
 	    return;
 	  }
 
-    if( strlen( $password ) < 4 )
+    if( strlen( $password ) < 8 )
     {
-      $this->template->load('error', array('title' => 'User Registration Failed', "message" => "Please make your password at least 4 characters!") );
+      $this->template->load('error', array('title' => 'User Registration Failed', "message" => "Please make your password at least eight characters!") );
       return;
     }
 
