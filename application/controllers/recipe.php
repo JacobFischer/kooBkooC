@@ -384,6 +384,7 @@ class Recipe extends CI_Controller
     $tagquery= $this->db->query("SELECT * FROM Tags");
     $ingredientsquery=$this->db->query("SELECT * FROM Ingredients");       
     $this->template->load_js("recipe_add.js");
+    $this->template->load_js("submit_guess.js");
     $this->template->load( 'recipe_add', array("tags" => $tagquery->result(),
                                         "ingredients" => $ingredientsquery->result()));
   }
