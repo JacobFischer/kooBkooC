@@ -112,6 +112,8 @@ class Search extends CI_Controller {
     // ------------------------------------------------------------------------
     public function ingredients($target = "", $page = 1, $runtest=FALSE)
     {
+	$numRows=0;
+	$numRows2=0;
 	$this->load->library('unit_test');
         // Check invalid page
         if($page < 1) {
@@ -139,8 +141,10 @@ class Search extends CI_Controller {
 			
 			// Run test suite
 			if($runtest==TRUE)
-				$this->unit->run(($query1->num_rows()>0), TRUE, 'Ingredient '
-				  .'Query 1 (Match%) generates results');
+			{
+				$numRows+=$query1->num_rows();
+				//$this->unit->run(($numRows>0), TRUE, 'Ingredient Query 1 (Match%) generates results');
+			}
             
             // Clear query cache
             $this->db->flush_cache();
@@ -155,38 +159,42 @@ class Search extends CI_Controller {
             
             // Execute statement
             $query2 = $this->db->get("Ingredients");
+			if($runtest==TRUE)
+			{
+				$numRows2+=$query2->num_rows();
+				$this->unit->run(($numRows2>0), TRUE, "Ingredient Query Successful","Query1 (Match%) generated ${numRows} result(s) | Query2 (%Match%) generated ${numRows2} result(s)");
+				$numRows+=$numRows2;
+			}
+            // Append query records to result sub-array
 			
 			// Run test suite
-			if($runtest==TRUE) {
-				$this->unit->run(($query2->num_rows()>0), TRUE, 'Ingredient '
-				  .'Query 2 (%Match%) generates results');
-            }
 			
 			// Append query records to result sub-array
 			$i=1;
 			
             foreach($query1->result() as $row) {
-				if($runtest==TRUE) {
-					$this->unit->run($this->tag_escape($row->Name), $target,
-					  "Query 1: Exact Ingredients Match% (Result ${i})");
-					$this->unit->run((stripos($this->tag_escape($row->Name),
-					  $target))===FALSE, FALSE, "Query 1: Partial Ingredients "
-					  ."Match% (Result ${i})");
+				if($runtest==TRUE)
+				{
+					$rowName = strtolower($row->Name);
+					$target = strtolower($target);
+					if($rowName==$target)
+						$this->unit->run($rowName, $target, "Query 1: Exact Ingredients Match% (Result ${i})","Verifies that (${rowName}) exactly matches (${target})");
+					else
+						$this->unit->run((stripos($rowName, $target))===FALSE, FALSE, "Query 1: Partial Ingredients Match% (Result ${i})","Verifies that result (${rowName}) partially matches target (${target})");
+					$i++;
 				}
 				
                 $result["json"]["ingredients"][] = $row;
-				$i++;
             }
             
             foreach($query2->result() as $row) {
-				if($runtest==TRUE) {
-					$this->unit->run(stripos($this->tag_escape($row->Name),
-					  $target), TRUE, "Query 2: Partial Ingredients %Match% "
-					  ."(Result ${i})");
-			    }
-				
+				if($runtest==TRUE)
+				{
+					$rowName = strtolower($row->Name);
+					$this->unit->run(stripos($this->tag_escape($row->Name), $target), TRUE, "Query 2: Partial Ingredients %Match% (Result ${i})","Verifies that result (${rowName}) partially matches target (${target})");
+					$i++;
+				}
 				$result["json"]["ingredients"][] = $row;
-				$i++;
             }
         }
         else {
@@ -206,12 +214,17 @@ class Search extends CI_Controller {
         }
         
         // Load result records into view for retrieval
-        $this->load->view('search_json', array_slice($result, 0, $limit,
-          TRUE));
+        
+	if($runtest==TRUE)
+	{
+		$i--;
+		$this->unit->run($numRows, $i, "All queried results tested and stored as JSON (${i} out of ${numRows})","Verifies that all results have been tested and stored as JSON");
+		echo $this->unit->report();
+	}
+	else
+		$this->load->view('search_json', array_slice($result, 0, $limit, 
+			TRUE));
 		
-        if($runtest==TRUE) {
-            echo $this->unit->report();
-        }
     }
     
 // END INGREDIENTS SEARCH  
