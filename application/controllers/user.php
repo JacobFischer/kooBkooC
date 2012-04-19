@@ -389,6 +389,10 @@ class User extends CI_Controller {
           $this->template->load('error', array('title' => 'Passwords Do Not Match', "message" => "Match your passwords before wasting my time!") );
           return;
         }
+		else if(strlen($password1) < 8) {
+          $this->template->load('error', array('title' => 'Password Too Short', "message" => "Your password must be eight or more characters in length!") );
+          return;
+		}
 
         $data = array(
           'DisplayName' => $query->row(0)->DisplayName,
