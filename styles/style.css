@@ -15,7 +15,7 @@
 html { background: url(Cooking_secrets.jpg) no-repeat center center fixed; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover; }
 body { overflow-y: scroll; font-family: 'Bitter', sans-serif; }
 h1 { font-family: 'Felipa', cursive; font-size: 2.5em; color: #009B95; margin-bottom: 0.25em; }
-input { border: 0.125em solid #009B95; background: #FEFAFD; padding: 0.125em; }
+input { border: 0.125em solid #009B95; background: #FEFAFD; padding: 0.125em; display: block; }
 button { background-color: #009B95; border: 0.125em solid #006561; color: #FEFAFD; padding: 0.125em; }
 h2 { font-size: 1.75em; font-family: 'Felipa', cursive; color: #009B95; }
 a { color: #009B95; }
@@ -25,6 +25,7 @@ em { font-style:italic; }
 strong { font-weight: bold; }
 hr { border: none; height: 0.125em; background: #006561; }
 h2 a:hover, h2 a:focus, h2 a:active, a:hover h2, a:active h2, a:focus h2 { color: #006561; }
+label { display: block; }
 
 /* Template Specific
 *********************************************************/
@@ -40,7 +41,7 @@ div#template-title, header#template-top, div#template-main { margin: 0 auto; wid
 nav#website-links, nav#website-links ul, nav#website-links ul li { display: inline; }
 nav#website-links ul li a { color: #FEFAFD; margin: 0 0.75em; }
 
-div#template-main { background: #FEFAFD; padding: 0.5em 1em; border: 0.125em solid #006561; }
+div#template-main { background: url(soft-white-background.jpg); padding: 0.5em 1em; border: 0.125em solid #006561; }
 
 /* Recipe
 *********************************************************/
@@ -87,3 +88,8 @@ ul#ingredient-recipes { width: 100%; }
 .tooltip { display:none; background: #006561; font-size: 1.5em;  padding: 1em; color: #FEFAFD;}
 a.ingredient-cloud-item { border: 0.125em solid #009B95; margin: 0.25em; }
 a.ingredient-cloud-item:hover, a.ingredient-cloud-item:focus, a.ingredient-cloud-item:active { border: 0.375em solid #006561; margin: 0; z-index: 77777; }
+div#suggested-ingredients { float: right; width: 27em; margin-left: 1em }
+section#guessed-ingredients { border-left: 0.125em solid #1D7471; }
+section#guessed-ingredients ul li { list-style-type: none; font-size: 1.33em; margin: 0.5em 0 0.5em 1em; }
+form#ingredients-add { float: left; width: 27em; }
+div#ingredients-add-wrapper { float: left; }

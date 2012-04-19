@@ -79,6 +79,7 @@ class Ingredients extends CI_Controller //display ingredients by id
       $this->template->load('error', array('title' => 'Not logged in.' , "message" => "You must be logged in to add an ingredient."));
       return;
     }
+    $this->template->load_js("ingredients_add.js");
     $this->template->load_js("submit_guess.js");
     $this->template->load('add_ingredient' , array("recipe" => 0, "tag" => 0 ));
   }

@@ -1,4 +1,4 @@
-$(document).ready(function(){
+/*$(document).ready(function(){
   $("#guesser").click(function() {
     $.ajax
     (
@@ -36,4 +36,14 @@ $(document).ready(function(){
       }
     );
   });
-});
+});*/
+
+function ajaxGuess( controller, q, parser ) {
+  $.ajax ({
+    url: base_url + "index.php/search/" + controller + "/" + q,
+    context: document.body,
+    success: function(data) {
+      parser( jQuery.parseJSON(data) );
+    }
+  });
+}

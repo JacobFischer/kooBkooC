@@ -6,8 +6,8 @@ class Search extends CI_Controller {
      * Basic Info:
      *
      * Controlls are Maped to the following URL
-     *    http://home.jacobfischer.me/USERNAME/cs397/index.php/search/FUNCTION/searchTerm/page#/runtest
-     *	http://home.jacobfischer.me/byocum/cs397/index.php/search/ingredients/1/true
+     *    http://home.jacobfischer.me/USERNAME/cs397/index.php/search/FUNCTION/page#/runtest
+     *
      * @see http://codeigniter.com/user_guide/general/urls.html
      */
     
@@ -37,7 +37,7 @@ class Search extends CI_Controller {
     
     public function tag_escape($target)
     {
-      return trim(preg_replace('/[^a-zA-Z0-9 ]/', '', $target));
+      return trim(preg_replace('/[^a-zA-Z0-9 ]/', '', urldecode($target)));
     }
     
     // ------------------------------------------------------------------------
@@ -127,7 +127,7 @@ class Search extends CI_Controller {
         $limit = $this->SEARCH_TAG_PAGE_OFFSET;
         $offset = ($page - 1) * $this->SEARCH_TAG_PAGE_OFFSET;
         $target = $this->tag_escape($target);
-        
+		
         if(strlen($target)) {
             // Prepare statement (select where target at beginning)
             $this->db->select("ID, Name, BaseUnitOfMeasure, Description, "
@@ -138,12 +138,13 @@ class Search extends CI_Controller {
             
             // Execute statement
             $query1 = $this->db->get("Ingredients");
+			
+			// Run test suite
 			if($runtest==TRUE)
 			{
 				$numRows+=$query1->num_rows();
 				//$this->unit->run(($numRows>0), TRUE, 'Ingredient Query 1 (Match%) generates results');
 			}
-				
             
             // Clear query cache
             $this->db->flush_cache();
@@ -165,7 +166,12 @@ class Search extends CI_Controller {
 				$numRows+=$numRows2;
 			}
             // Append query records to result sub-array
+			
+			// Run test suite
+			
+			// Append query records to result sub-array
 			$i=1;
+			
             foreach($query1->result() as $row) {
 				if($runtest==TRUE)
 				{
@@ -177,8 +183,8 @@ class Search extends CI_Controller {
 						$this->unit->run((stripos($rowName, $target))===FALSE, FALSE, "Query 1: Partial Ingredients Match% (Result ${i})","Verifies that result (${rowName}) partially matches target (${target})");
 					$i++;
 				}
-                $result["json"]["ingredients"][] = $row;
 				
+                $result["json"]["ingredients"][] = $row;
             }
             
             foreach($query2->result() as $row) {
@@ -216,8 +222,9 @@ class Search extends CI_Controller {
 		echo $this->unit->report();
 	}
 	else
-		$this->load->view('search_json', array_slice($result, 0, $limit,
-          TRUE));
+		$this->load->view('search_json', array_slice($result, 0, $limit, 
+			TRUE));
+		
     }
     
 // END INGREDIENTS SEARCH  
@@ -227,7 +234,6 @@ class Search extends CI_Controller {
     public function recipes($text = "default", $page=1, $runtest=FALSE)
     {
 	$this->load->library('unit_test');
-	$numRows=0;
 	
 	if($page < 1)
        {
@@ -245,15 +251,12 @@ class Search extends CI_Controller {
           // Build query
         $this->db->select('*');
         $this->db->from('Recipes');
-        $this->db->like('Name',$text);
+        $this->db->like('Description',$text);
 		$this->db->limit($limit, $offset);
         // Execute query
         $query = $this->db->get();
 		if($runtest==TRUE)
-		{
-			$numRows+=$query->num_rows();
 			$this->unit->run(($query->num_rows()>0), TRUE, 'Recipe Name Search generates results');
-		}
         // Iterate through each result in the query and build the cookware to return
         $i = 0;
         foreach($query->result() as $recipe)
@@ -261,44 +264,35 @@ class Search extends CI_Controller {
 			$j=$i+1;
 			if($runtest==TRUE)
 			{
-				if($this->tag_escape($recipe->Name)==$text)
-					$this->unit->run($this->tag_escape($recipe->Name), $text, "Exact Recipe Name Match (Result {$j})");
-				else
-					$this->unit->run((stripos($this->tag_escape($recipe->Name), $text))===FALSE, FALSE, "Partial Recipe Name Match% (Result {$j})");
+				$this->unit->run($this->tag_escape($recipe->Name), $text, "Exact Recipe Name Match (Result {$j})");
+				$this->unit->run((stripos($this->tag_escape($recipe->Name), $text))===FALSE, FALSE, "Partial Recipe Name Match% (Result {$j})");
             }
 			$data['json']['recipe'][$i] = $recipe;
             $i++;
         }
-    	/*$this->db->flush_cache();
+    	$this->db->flush_cache();
 		$this->db->select('*');
  	    $this->db->from('Recipes');
-	    $this->db->like('Description',$text);
-		$this->db->not_like('Name',$text);
+	    $this->db->like('Directions',$text);
+		$this->db->not_like('Description',$text);
 	    $this->db->limit($limit, $offset);
 	    $query = $this->db->get();
 		if($runtest==TRUE)
-		{
-			$numRows+=$query->num_rows();
 			$this->unit->run(($query->num_rows()>0), TRUE, 'Recipe Description Search generates results');
-		}
 	    $same = 0;
 	    foreach($query->result() as $result)
-          {
+        {
 			$j=$i+1;
 			if($runtest==TRUE)
-				$this->unit->run((stripos($this->tag_escape($recipe->Description), $text))!==FALSE, TRUE, "Recipe Description Match% (Result ${j})");
+				$this->unit->run((stripos($this->tag_escape($recipe->Description), $text))===FALSE, FALSE, "Recipe Description Match% (Result ${j})");
 			$data['json']['recipe'][$i] = $result;
             $i++;
-          }*/
+        }
         // return the recipes to the "views/search_json.php" view so it can build valid JSON from the data
-	if($runtest==TRUE)
-	{
-		$this->unit->run($numRows, $i, "All queried results tested and stored as JSON (${i} out of ${numRows})");
-		echo $this->unit->report();
-	}
-	else
-		$this->load->view('search_json', array_slice($data, 0, $limit,
+        $this->load->view('search_json', array_slice($data, 0, $limit,
           TRUE));
+		if($runtest==TRUE)
+			echo $this->unit->report();
 
     }
 
@@ -373,7 +367,6 @@ class Search extends CI_Controller {
     ///////////////////////////////////////////////////////////////////////////////////////
     public function tags($searchVal = "", $page = 1, $runtest=FALSE)
     {
-	$numRows=0;
 	$this->load->library('unit_test');
       if($page<1){$page=1;} //Validate Page Number
       $returnVal=array( "json" => array( "tags" => array() ) );
@@ -388,12 +381,8 @@ class Search extends CI_Controller {
         $this->db->order_by("Name");
         $this->db->limit($delimiter, $offset);
         $initialQuery=$this->db->get("Tags");
-	if($runtest==TRUE)
-	{
-		$numRows+=$initialQuery->num_rows();
-		$this->unit->run(($numRows>0), TRUE, 'Tag Query 1 (Match%) generates results');
-	}
-		
+		if($runtest==TRUE)
+			$this->unit->run(($initialQuery->num_rows()>0), TRUE, 'Tag Query 1 (Match%) generates results');
         $this->db->flush_cache();
         $this->db->select("ID, Name, Description");
         $this->db->like("Name", $searchVal, "both");
@@ -401,21 +390,16 @@ class Search extends CI_Controller {
         $this->db->order_by("Name");
         $this->db->limit($delimiter, $offset);
         $secondaryQuery = $this->db->get("Tags");
-	 if($runtest==TRUE)
-	 {
-		$this->unit->run(($secondaryQuery->num_rows()>0), TRUE, 'Tag Query 2 (%Match%) generates results');
-		$numRows+=$secondaryQuery->num_rows();
-	 }
+		if($runtest==TRUE)
+			$this->unit->run(($secondaryQuery->num_rows()>0), TRUE, 'Tag Query 2 (%Match%) generates results');
         ///////////////////////////////////////////////////////
 		$i=1;
         foreach($initialQuery->result() as $result)
         {
 		  if($runtest==TRUE)
 		  {
-			if($this->tag_escape($result->Name)==$searchVal)
-				$this->unit->run($this->tag_escape($result->Name), $searchVal, "Query 1: Exact Tag Match% (Result ${i})");
-			else
-				$this->unit->run((stripos($this->tag_escape($result->Name), $searchVal))===FALSE, FALSE, "Query 1: Partial Ingredients Match% (Result ${i})");
+			$this->unit->run($this->tag_escape($result->Name), $searchVal, "Query 1: Exact Tag Match% (Result ${i})");
+			$this->unit->run((stripos($this->tag_escape($result->Name), $searchVal))===FALSE, FALSE, "Query 1: Partial Ingredients Match% (Result ${i})");
           }
 		  $returnVal["json"]["tags"][] = $result;
 		  $i++;
@@ -423,7 +407,7 @@ class Search extends CI_Controller {
         foreach($secondaryQuery->result() as $result)
         {
 		  if($runtest==TRUE)
-			$this->unit->run(stripos($this->tag_escape($result->Name), $searchVal), TRUE, "Query 2: Partial Tag %Match% (Result ${i})");
+			$this->unit->run(stripos($this->tag_escape($row->Name), $searchVal), TRUE, "Query 2: Partial Tag %Match% (Result ${i})");
           $returnVal["json"]["tags"][] = $result;
 		  $i++;
         }
@@ -441,29 +425,18 @@ class Search extends CI_Controller {
         }
       }
       ///////////////////////////////////////////////////////// 
-	if($runtest==TRUE)
-	{
-		$i--;
-		$this->unit->run($numRows, $i, "All queried results tested and stored as JSON (${i} out of ${numRows})");
+      $this->load->view( 'search_json', array_slice($returnVal, 0, $delimiter, TRUE) );
+	  if($runtest==TRUE)
 		echo $this->unit->report();
-	}
-	else
-      		$this->load->view( 'search_json', array_slice($returnVal, 0, $delimiter, TRUE) );
     }
     ///////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////
 
 //END TAG SEARCH
 //--------------------------------------------------------------------------------------------------------
-//BEGIN USER SEARCH
-    
-    ///////////////////////////////////////////////////////////////////////////////////////
-    //Search for the user containing user entered text.
-    ///////////////////////////////////////////////////////////////////////////////////////
 
     // The basic implimentation of a JSON search function for user
     //   ex URL: http://home.jacobfischer.me/USERNAME/cs397/index.php/search/user/
-
     public function user($target = "")
     {
         // Create result array and empty sub-array
@@ -490,5 +463,3 @@ class Search extends CI_Controller {
 
 /* End of file search.php */
 /* Location: ./application/controllers/search.php */
-
-//END USER SEARCH
