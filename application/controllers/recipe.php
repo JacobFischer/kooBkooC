@@ -29,6 +29,12 @@ class Recipe extends CI_Controller
     $query = $this->db->query("SELECT RecipesID AS ID, SUM(Direction) AS Direction, Name, Description FROM Votes JOIN Recipes on Votes.RecipesID = Recipes.ID GROUP BY RecipesID ORDER BY SUM(Direction) DESC" ); 
     $recipes = $query->result();
     
+    if($query->num_rows() == 0) //error case
+    {
+      $this->template->load('error' , array('title' => 'No recipes found!' , "message" => "Sorry, no recipes were found :( ") );
+      return;
+    }
+    
     foreach($recipes as $recipe)
     {
       if( $userID != -1 )
@@ -53,16 +59,8 @@ class Recipe extends CI_Controller
         $recipe->UsersVote = "0";
       }
     }
-    
-    if($query->num_rows() == 0)//error case
-    {
-      $this->template->load('error' , array('title' => 'No recipes found!' , "message" => "Sorry, no recipes were found :( ") );
-    }
 
-    else //load recipes page view
-    {
-      $this->template->load('recipes_page' , array("recipes" => $recipes ) );
-    }
+    $this->template->load('recipes_page' , array("recipes" => $recipes ) );
   }
   
   public function submit()
