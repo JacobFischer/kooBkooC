@@ -42,7 +42,6 @@ function responseIngredientParser( obj ) {
         });
         if($("#ingredient-amount").val() == '0')
         {
-          alert("Must insert an amount for inredient greater than 0");
           $approved = false;
         }
         //Actually adding the new list item with all of the ingredient information
@@ -144,6 +143,8 @@ $(document).ready(function(){
   var typingTimer;                //timer identifier
   var doneTypingInterval = 333;  //time in ms, 1 second for example
 
+  
+  //Trigger events for keyup and keydown for three boxes
   //on keyup, start the countdown
   $("#recipe-name").keyup(function(){
     typingTimer = setTimeout(doneRecipeTyping, doneTypingInterval);
@@ -172,19 +173,16 @@ $(document).ready(function(){
     clearTimeout(typingTimer);
   });
 
-  //user is "finished typing," do something
+  //Functions for when the user is done typing in the input box.
   function doneRecipeTyping () {
-    //do something
     ajaxGuess( "recipes", $("#recipe-name").val(), responseRecipeParser );
   }
   
   function doneIngredientTyping () {
-    //do something
     ajaxGuess( "ingredients", $("#ingredient-input").val(), responseIngredientParser );
   }
   
   function doneTagTyping () {
-    //do something
     ajaxGuess( "tags", $("#tags-input").val(), responseTagParser );
   }
 });
