@@ -107,6 +107,7 @@ class Tags extends CI_Controller {
       $this->template->load('error', array('title' => 'Not logged in.' , "message" => "You must be logged in to add a tag."));
       return;
     }
+    $this->template->load_js("tags_add.js");
     $this->template->load_js("submit_guess.js");
     $this->template->load('add_tag' , array("recipe" => 0, "tag" => 0 ));
   }
