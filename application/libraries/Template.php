@@ -4,7 +4,7 @@ class Template {
     var $template_data = array();
     var $scripts = array();
     var $styles = array();
-    var $location = "hi";
+    var $location = "";
     var $title = "";
     
     function set($name, $value)
