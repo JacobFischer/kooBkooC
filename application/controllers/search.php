@@ -161,7 +161,7 @@ class Search extends CI_Controller {
 			if($runtest==TRUE)
 			{
 				$numRows2+=$query2->num_rows();
-				$this->unit->run(($numRows2>0), TRUE, "Ingredient Query Successful","Query1 (Match%) generated ${numRows} result(s) | Query2 (%Match%) generated ${numRows2} result(s)");
+				$this->unit->run(($numRows2+$numRows>0), TRUE, "Ingredient Query Successful","Query1 (Match%) generated ${numRows} result(s) | Query2 (%Match%) generated ${numRows2} result(s)");
 				$numRows+=$numRows2;
 			}
             // Append query records to result sub-array
@@ -257,7 +257,7 @@ class Search extends CI_Controller {
 		if($runtest==TRUE)
 		{
 			$numRows += $query->num_rows();
-			$this->unit->run(($query->num_rows()>0), TRUE, "Recipe Query Successfull","Query generated ${numRows} result(s)");
+			$this->unit->run(($numRows>0), TRUE, "Recipe Query Successfull","Query generated ${numRows} result(s)");
 		}
 		$i = 0;
 		$text = strtolower($text);
