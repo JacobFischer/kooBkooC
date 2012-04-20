@@ -40,16 +40,24 @@
 <div id="recipe-comments">
   <h2>Comments</h2>
   <ul id="recipie-comments-tree">
-<?php foreach( $comments as $comment ): ?>
-    <?=$this->load->view('recipe_comment', array('comment' => $comment ) )?>
-<?php endforeach; ?>
+<?php
+$count = 0; 
+foreach( $comments as $comment ) { ?>
+    <?=$this->load->view('recipe_comment', array('comment' => $comment, 'extra' => $count%7 ) )?>
+<?php
+$count++; 
+} ?>
 <?= count($comments) == 0 ? "      <p>No Comments...</p>" : "" ?>
   </ul>
 </div>
 <section id="recipe-new-comment">
   <h2>Add Your Comment</h2>
+<?php if($logged_in): ?>
   <div id="recipe-new-comment-info">kooBkooC uses <a href="http://www.textism.com/tools/textile/">Textile formatting</a> on submissions.</div>
   <textarea id="new-comment-body"></textarea>
   <button id="add-comment">Post Comment</button>
+<?php else: ?>
+  <p><em>Sorry, you aren't logged in, so you can't comment.</em></p>
+<?php endif; ?>
 </section>
 

@@ -1,24 +1,30 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Template {
-		var $template_data = array();
+    var $template_data = array();
     var $scripts = array();
     var $styles = array();
-		
-		function set($name, $value)
-		{
-			$this->template_data[$name] = $value;
-		}
-	
-		function load($view = '' , $view_data = array(), $return = FALSE)
-		{     
+    var $location = "hi";
+    var $title = "";
+    
+    function set($name, $value)
+    {
+      $this->template_data[$name] = $value;
+    }
+  
+    function load($view = '' , $view_data = array(), $return = FALSE)
+    {     
       $this->set('scripts', $this->scripts); 
-      $this->set('styles', $this->styles);       
-			$this->CI =& get_instance();
-			$this->set('contents', $this->CI->load->view($view, $view_data, TRUE));			
-      $this->CI->load->library('session');
-
+      $this->set('styles', $this->styles); 
+      $this->set('title', $this->title);
+      $this->set('location', $this->location);
+      $this->CI =& get_instance();
       $this->set('logged_in', $this->CI->session->userdata('logged_in'));
+      
+      // Automatically tell each view if we are logged in or not.
+      $view_data["logged_in"] = $this->CI->session->userdata('logged_in');
+      $this->set('contents', $this->CI->load->view($view, $view_data, TRUE));      
+      $this->CI->load->library('session');
       if($this->CI->session->userdata('logged_in'))
       {
         $email = $this->CI->session->userdata('email');
@@ -37,8 +43,8 @@ class Template {
         }
       }
 
-			return $this->CI->load->view("template_default", $this->template_data, $return);
-		}
+      return $this->CI->load->view("template_default", $this->template_data, $return);
+    }
     
     function load_js($script)
     {
@@ -48,6 +54,16 @@ class Template {
     function load_css($style)
     {
       $this->styles[] = $style;
+    }
+    
+    function set_location($loc)
+    {
+      $this->location = $loc;
+    }
+    
+    function set_title($t)
+    {
+      $this->title = $t;
     }
 }
 

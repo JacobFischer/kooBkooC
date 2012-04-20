@@ -10,6 +10,9 @@ class Ingredients extends CI_Controller //display ingredients by id
 	
 	public function index()
 	{
+    $this->template->set_location("Ingredients");
+    $this->template->set_title("Top");
+    
     $this->template->load_js("jquery.masonry.min.js");
     $this->template->load_js("ingredients_cloud.js");
     $query  = $this->db->query("SELECT ID, COUNT(IngredientsID) as freq , Name FROM RecipesIngredients JOIN Ingredients on Ingredients.ID = RecipesIngredients.IngredientsID GROUP BY IngredientsID DESC");
@@ -36,6 +39,8 @@ class Ingredients extends CI_Controller //display ingredients by id
 //This will take a ingredient id and take you to thtat ingredients page
   public function id($id)
   {
+    $this->template->set_location("Ingredients");
+    $this->template->set_title("ID Error");
     //create a query
     $this->db->select('*');
     $this->db->from('Ingredients');
@@ -51,6 +56,7 @@ class Ingredients extends CI_Controller //display ingredients by id
       $this->db->flush_cache(); 
       $usingQuery = $this->db->query("SELECT * FROM RecipesIngredients JOIN Recipes on RecipesIngredients.RecipesID = Recipes.ID WHERE RecipesIngredients.IngredientsID = \"$id\" ");
       
+      $this->template->set_title( $query->row(0)->Name );
       $this->template->load( 'ingredients_id',array("ingredient" => $query->row(0), "recipes" => $usingQuery ->result() )); //load view of the ingredient and pas in params
     }             
   }
@@ -74,6 +80,9 @@ class Ingredients extends CI_Controller //display ingredients by id
   
   public function add()
   {
+    $this->template->set_location("Ingredients");
+    $this->template->set_title("Add");
+    
     if(!$this->session->userdata('logged_in') || !$this->session->userdata('email'))
     {
       $this->template->load('error', array('title' => 'Not logged in.' , "message" => "You must be logged in to add an ingredient."));

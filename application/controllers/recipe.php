@@ -8,6 +8,10 @@ class Recipe extends CI_Controller
     // Load JS files in the template
     $this->template->load_js('recipe_voter.js');
     $this->template->load_js('ingredients_index.js');
+    
+    $this->template->set_location("Recipes");
+    $this->template->set_title("Top");
+    
    //Query to find top rated recipes and return them in descending order
     $userID = -1;
     if($this->session->userdata('logged_in'))
@@ -281,6 +285,8 @@ class Recipe extends CI_Controller
     // Load JS files in the template
     $this->template->load_js("recipe_voter.js");
     $this->template->load_js("recipe_id.js");
+    $this->template->set_location("Recipes");
+    $this->template->set_title("Error");
     
     // Build the SQL-ish query using CodeIgniters's Active Record to get the Cookware with the id passed in
     $this->db->select('*');
@@ -288,7 +294,14 @@ class Recipe extends CI_Controller
     $this->db->where('ID', $id);
     $recipequery = $this->db->get();
     
+    if( $recipequery->num_rows() != 1 )
+    {
+      $this->template->load('error', array('title' => 'Recipe Not Found!', "message" => "The Recipe with id \"$id\" could not be found!") );
+      return;
+    }
+    
     $recipeInfo = $recipequery->row(0);
+    $this->template->set_title( $recipeInfo->Name );
     
     $this->db->select('*');
     $this->db->from('Users');
@@ -375,6 +388,9 @@ class Recipe extends CI_Controller
   
   public function add()
   {
+    $this->template->set_location("Recipes");
+    $this->template->set_title("Add");
+    
     if(!$this->session->userdata('logged_in') || !$this->session->userdata('email'))
     {
       $this->template->load('error' , array('title' => 'Please Login or Sign Up!' , "message" => "You must be logged in to submit a recipe!"));

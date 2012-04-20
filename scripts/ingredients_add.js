@@ -19,7 +19,7 @@ function responseParser( obj ) {
 
 $(document).ready(function() {
   var typingTimer;                //timer identifier
-  var doneTypingInterval = 1000;  //time in ms, 1 second for example
+  var doneTypingInterval = 333;  //time in ms, 1 second for example
 
   //on keyup, start the countdown
   $("#ingredients-name").keyup(function(){

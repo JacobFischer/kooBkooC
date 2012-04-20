@@ -10,7 +10,7 @@
     <input name="description" type="text" id="ingredients-description"/>
     <br/>
     
-    <label for="ingredients-base-unit">Base unit if measurement</label>
+    <label for="ingredients-base-unit">Base unit of measurement</label>
     <input name="measurement" type="text" id="ingredients-base-unit"/>
     <br/>
     
@@ -21,7 +21,7 @@
     <input name="submit_button" type="submit" value="Submit Ingredient!"/>
   </form>
   <div id="suggested-ingredients">
-    <h2>Similar Ingredients</h2>
+    <h2>Is your Ingredient already added?</h2>
     <section id="guessed-ingredients">
     </section>
   </div>

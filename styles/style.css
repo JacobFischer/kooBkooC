@@ -15,7 +15,7 @@ html { background: url(Cooking_secrets.jpg) no-repeat center center fixed; -webk
 body { overflow-y: scroll; font-family: 'Bitter', sans-serif; }
 h1 { font-family: 'Felipa', cursive; font-size: 2.5em; color: #009B95; margin-bottom: 0.25em; }
 input { border: 0.125em solid #009B95; background: #FEFAFD; padding: 0.125em; display: block; }
-button { background-color: #009B95; border: 0.125em solid #006561; color: #FEFAFD; padding: 0.125em; }
+button, input[type="submit"] { background-color: #009B95; border: 0.125em solid #006561; color: #FEFAFD; padding: 0.125em; background: url(green-marble.png); }
 h2 { font-size: 1.75em; font-family: 'Felipa', cursive; color: #009B95; }
 a { color: #009B95; }
 a:hover, a:focus, a:active { color: #006561; }
@@ -26,26 +26,30 @@ hr { border: none; height: 0.125em; background: #006561; }
 h2 a:hover, h2 a:focus, h2 a:active, a:hover h2, a:active h2, a:focus h2 { color: #006561; }
 label { display: block; }
 
+
 /* Template Specific
 *********************************************************/
-a#website-title { font-family: 'Felipa', cursive; font-size: 3.75em; color: #1D7471;  font-weight: bold; display: inline; }
-a#website-title span.cap { color: #006561; }
+a#website-title { font-family: 'Felipa', cursive; font-size: 3.75em; color: #33CDC7;  font-weight: bold; display: inline; }
+a#website-title span.cap { color: #009B95; }
 
-div#profile-top { float: right; /* yuck */ background-color: #009B95; border: 0.125em #006561 solid; border-top: none; padding: 0.125em; }
+div#profile-top { float: right; /* yuck */ background-color: #009B95; border: 0.125em #006561 solid; border-top: none; padding: 0.125em; background: url(green-marble.png); }
 div#profile-top a { color: #FEFAFD; font-weight: bold; }
 
-div#wrapper-top { background-color: #009B95; margin: 0 0 1.5em 0; border: 0.125em #006561 solid; border-left: none; border-right: none; }
+div#wrapper-top { background-color: #009B95; margin: 0 0 1.5em 0; border: 0.125em #006561 solid; border-left: none; border-right: none; background: url(green-marble.png); padding: 0.5em 0; }
 div#template-title, header#template-top, div#template-main { margin: 0 auto; width: 56em; }
 
 nav#website-links, nav#website-links ul, nav#website-links ul li { display: inline; }
-nav#website-links ul li a { color: #FEFAFD; margin: 0 0.75em; }
+nav#website-links ul li a { color: #FEFAFD; margin: 0 0.75em; font-size: 1.333em; padding: 0.3em 0.25em; }
+nav#website-links ul li.current-location a { background: #006561; }
+nav#website-links ul li a:hover, nav#website-links ul li a:focus, nav#website-links ul li a:active { text-decoration: underline; }
+nav#website-links ul li:first-child a { margin: 0 0.75em 0 0; }
 
 div#template-main { background: url(soft-white-background.jpg); padding: 0.5em 1em; border: 0.125em solid #006561; }
 
 /* Recipe
 *********************************************************/
 div#recipe-top { min-height: 4em; }
-div.recipe-voter { float: left; margin-right: 1em; background-color: #009B95; border: 0.125em solid #006561; color: #FEFAFD; padding: 0.125em; text-align: center; }
+div.recipe-voter { float: left; margin-right: 1em; background-color: #009B95; border: 0.125em solid #006561; color: #FEFAFD; padding: 0.125em; text-align: center; background: url(green-marble.png); }
 button.recipe-up-vote, button.recipe-down-vote, span.recipe-total { display: block; text-align: center; margin: 0 auto; }
 div#recipe-body { width: 100%; float: left; }
 div#recipe-submitter { font-style:italic; font-size: 0.75em; margin-bottom: 0.5em; }
@@ -57,18 +61,24 @@ button.recipe-down-vote:hover, button.recipe-down-vote:active, button.recipe-dow
 div#recipe-comments h2 { margin: 1em 0 0 0; }
 li.recipe-comment { margin: 1.75em 0.25em 0 0; }
 li.recipe-comment:first-child { margin-top: 0.5em; }
-li.recipe-comment header { background: #009B95; color: #FEFAFD; font-weight: bold; padding: 0.5em; margin: 0 0 0.5em 0;}
+li.recipe-comment header { background: #009B95; color: #FEFAFD; font-weight: bold; padding: 0.5em; margin: 0 0 0.5em 0; background: url(green-marble.png); border: 0.125em solid #006561; }
+li.recipe-comment-1 header { background-position: 15em -0.5em; }
+li.recipe-comment-2 header { background-position: -6em -0.25em; }
+li.recipe-comment-3 header { background-position: 33em -0.33em; }
+li.recipe-comment-4 header { background-position: 7em 0em; }
+li.recipe-comment-5 header { background-position: -20em -0.33em; }
+li.recipe-comment-6 header { background-position: 11.5em -0.5em; }
 li.recipe-comment header a { color: #FEFAFD; }
 li.recipe-comment header a:hover, li.recipe-comment header a:active, li.recipe-comment header a:focus { color: #A1F0EE; }
-li.recipe-comment header time { color: #A1F0EE; font-weight: normal; float: right; }
+li.recipe-comment header time { font-weight: normal; float: right; }
 section#recipe-new-comment h2 { margin: 2em 0 0.25em 0; }
-div#recipe-new-comment-info { background: #009B95; color: #FEFAFD; display: block; margin: 0; padding: 0.25em 0.75em; }
+div#recipe-new-comment-info { background: #009B95; color: #FEFAFD; display: block; margin: 0; padding: 0.25em 0.75em; background: url(green-marble.png); }
 div#recipe-new-comment-info a { color: #A1F0EE; }
 div#recipe-new-comment-info a:hover, div#recipe-new-comment-info a:active, div#recipe-new-comment-info a:focus { text-decoration: underline; }
 section#recipe-tags { margin: 1em 0 1em 0; }
 section#recipe-tags h2 { font-size: 1.25em; color: #006561; font-weight: bold; display: inline; margin: 0 0.25em 0 0; }
 section#recipe-tags ul, section#recipe-tags ul li { display: inline; }
-section#recipe-tags ul li a { background-color: #009B95; border: 0.125em solid #006561; color: #FEFAFD; padding: 0.125em; }
+section#recipe-tags ul li a { background-color: #009B95; border: 0.125em solid #006561; color: #FEFAFD; padding: 0.125em; background: url(green-marble.png); }
 section#recipe-tags ul li a:hover, section#recipe-tags ul li a:active, section#recipe-tags ul li a:focus { color: #A1F0EE; }
 img#recipe-img { width: 25em; height: auto; float: right; border: 0.125em solid #006561; margin-left: 0.25em;}
 

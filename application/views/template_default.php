@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>kooBkooC</title>
+        <title>kooBkooC<?=$location != "" ? ' &raquo; ' . $location : ""?><?=$title != "" ? ' &raquo; ' . $title : ""?></title>
         
         <script type="text/javascript">
           var base_url = "<?=base_url()?>";
@@ -45,25 +45,25 @@ if($logged_in)
             <header id="template-top">
                 <nav id="website-links">
                     <ul>
-                        <li>
+                        <li<?=$location == "Home" ? ' class="current-location"' : ""?>>
                             <a href="<?=base_url()?>">Home</a>
                         </li>
-                        <li>
+                        <li<?=$location == "Recipes" ? ' class="current-location"' : ""?>>
                             <a href="<?=site_url(array('recipe'))?>">Recipes</a>
                         </li>
-                        <li>
+                        <li<?=$location == "Ingredients" ? ' class="current-location"' : ""?>>
                             <a href="<?=site_url(array('ingredients'))?>">Ingredients</a>
                         </li>
-                        <li>
+                        <li<?=$location == "Tags" ? ' class="current-location"' : ""?>>
                             <a href="<?=site_url(array('tags'))?>">Tags</a>
                         </li>
-                        <li>
+                        <li<?=$location == "About Us" ? ' class="current-location"' : ""?>>
                             <a href="<?=site_url(array('aboutus'))?>">About Us</a>
                         </li>
-                        <li>
+                        <li<?=$location == "FAQ" ? ' class="current-location"' : ""?>>
                             <a href="<?=site_url(array('faqs'))?>">FAQ</a>
                         </li>
-                        <li>
+                        <li<?=$location == "Contact Us" ? ' class="current-location"' : ""?>>
                             <a href="<?=site_url(array('contactus'))?>">Contact Us</a>
                         </li>
                     <ul>

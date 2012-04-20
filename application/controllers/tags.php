@@ -5,8 +5,11 @@ class Tags extends CI_Controller {
 	//function index
 	public function index()
 	{
-    		$this->template->load_js("jquery.masonry.min.js");
-    		$this->template->load_js("tags_cloud.js");
+    $this->template->set_location("Tags");
+    $this->template->set_title("Cloud");
+    
+    $this->template->load_js("jquery.masonry.min.js");
+    $this->template->load_js("tags_cloud.js");
 		//SQL query to find tags, count up how many recipes use each one, and return an array of objects composed of TagName, TagID a,a dn the numbrt of times it is used
 		$query	= $this->db->query("SELECT ID, COUNT(TagsID) as freq , Name FROM RecipesTags JOIN Tags on Tags.ID = RecipesTags.TagsID GROUP BY TagsID DESC");    	
 
@@ -30,6 +33,9 @@ class Tags extends CI_Controller {
 	//Michael Wilson   function : Recipes 
 	public function recipes($id)
 	{
+    $this->template->set_location("Tags");
+    $this->template->set_title("ID Error");
+    
     $this->db->select('*');
     $this->db->from('Tags');
     $this->db->where('ID', $id);
@@ -41,6 +47,8 @@ class Tags extends CI_Controller {
       $this->template->load('error' , array('title' => "Error: Tag $id not found!", "message" => "The tag with id $id could not be found.") );
       return; 
     }
+    
+    $this->template->set_title( $tagQuery->row(0)->Name );
     
     // Load JS files in the template
     $this->template->load_js('recipe_voter.js');
@@ -102,6 +110,9 @@ class Tags extends CI_Controller {
 
 	public function add()
   {	
+    $this->template->set_location("Tags");
+    $this->template->set_title("Add");
+    
     if(!$this->session->userdata('logged_in') || !$this->session->userdata('email'))
     {
       $this->template->load('error', array('title' => 'Not logged in.' , "message" => "You must be logged in to add a tag."));
