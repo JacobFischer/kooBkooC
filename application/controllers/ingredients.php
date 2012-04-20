@@ -6,10 +6,10 @@
 class Ingredients extends CI_Controller //display ingredients by id
 {
 
-	//Programmers: Michael Wilson and Jacob Fischer
-	
-	public function index()
-	{
+  //Programmers: Michael Wilson and Jacob Fischer
+  
+  public function index()
+  {
     $this->template->set_location("Ingredients");
     $this->template->set_title("Top");
     
@@ -23,13 +23,13 @@ class Ingredients extends CI_Controller //display ingredients by id
     {
       $total = $total + $i->freq;
     }
-		
-		$max_font_size = $total * 10;
-		//$max_font_size = 700;		
-	if($query->num_rows() == 0)
-    	{
-      		$this->template->load('error', array('title' => 'No tags found' , "message" => "did not work"));//load error view
-    	}
+    
+    $max_font_size = $total * 10;
+    //$max_font_size = 700;    
+  if($query->num_rows() == 0)
+      {
+          $this->template->load('error', array('title' => 'No tags found' , "message" => "did not work"));//load error view
+      }
     else
     {
       $this->template->load('ingredients_cloud_view' , array("ingredients" => $query->result()  , "total" => $total, "max_font" => $max_font_size ));
@@ -61,22 +61,20 @@ class Ingredients extends CI_Controller //display ingredients by id
     }             
   }
 
-	//recipes function: Takes in ingredient id and return the recipes that use the ingredient. 
-	public function recipes($id)
-	{
-		$query = $this->db->query("SELECT * FROM RecipesIngredients JOIN Recipes on RecipesIngredients.RecipesID = Recipes.ID WHERE RecipesIngredients.IngredientsID = \"$id\" "); //query that returns all recipes corresponding to the ingredient id passed into this function 
-	 
-		if($query->num_rows() < 1) // error case
-		{
-			$this->template->load('error', array('title' => 'No recipes found for this ingredient!', "message" => "The recipe with id  \"$id\" returned no ingredients") );//load error view
-		}
-		else //load view
-		{
-			$this->template->load('ingredientsview', array("ingredient" => $query) );  //load view to display results
-		}
-	
-
-	} 
+  //recipes function: Takes in ingredient id and return the recipes that use the ingredient. 
+  public function recipes($id)
+  {
+    $query = $this->db->query("SELECT * FROM RecipesIngredients JOIN Recipes on RecipesIngredients.RecipesID = Recipes.ID WHERE RecipesIngredients.IngredientsID = \"$id\" "); //query that returns all recipes corresponding to the ingredient id passed into this function 
+   
+    if($query->num_rows() < 1) // error case
+    {
+      $this->template->load('error', array('title' => 'No recipes found for this ingredient!', "message" => "The recipe with id  \"$id\" returned no ingredients") );//load error view
+    }
+    else //load view
+    {
+      $this->template->load('ingredientsview', array("ingredient" => $query) );  //load view to display results
+    }
+  } 
   
   public function add()
   {

@@ -190,12 +190,6 @@ class Recipe extends CI_Controller
       $this->template->load('error' , array('title' => 'Duplicate Tag!' , "message" => "You may not include the same tag more than once in a recipe "));
       return;
     }
-       
-    //Get the user's e-mail
-    $this->db->select('*');
-    $this->db->from('Users');
-    $this->db->where('Email', $this->session->userdata('email'));
-    $query = $this->db->get();
     
     //Finding the submitter's user ID
     $this->db->select('*');
@@ -214,70 +208,69 @@ class Recipe extends CI_Controller
       $this->template->load('error' , array('title' => 'Recipe Not Sumbitted!' , "message" => "One of the values you input are invalid!"));
       return;
     }
-    else
+    
+    $this->db->select('*');
+    $this->db->from('Recipes');
+    $this->db->where('Name', $name);
+    $newRecipe = $this->db->get();
+    $recipeID = $newRecipe->row(0)->ID;
+    
+    $config['upload_path'] = '../../cs397_uploads/recipes/';
+    $config['allowed_types'] = 'jpg';
+    $config['max_size'] = '1000';
+    $config['max_width'] = '2048';
+    $config['max_height'] = '1024';
+    $config['file_name']  = $recipeID . ".jpg";
+    $this->load->library('upload', $config);
+    
+    // Get the Image they uploaded
+    if ( ! $this->upload->do_upload() )
     {
-      $this->db->select('*');
-      $this->db->from('Recipes');
-      $this->db->where('Name', $name);
-      $newRecipe = $this->db->get();
-      $recipeID = $newRecipe->row(0)->ID;
-
-      $config['upload_path'] = '../../cs397_uploads/recipes/';
-      $config['allowed_types'] = 'jpg';
-      $config['max_size'] = '1000';
-      $config['max_width'] = '2048';
-      $config['max_height'] = '1024';
-      $config['file_name']  = $recipeID . ".jpg";
-      $this->load->library('upload', $config);
+      // Delete the added ingredient as they didn't have an image
+      $this->db->where('ID', $recipeID);
+      $this->db->delete('Recipes'); 
       
-      // Get the Image they uploaded
-      if ( ! $this->upload->do_upload() )
-      {
-        $this->template->load('error' , array('title' => 'Image Upload Error' , "message" => "There was an error uploading your image: <br/>" . $this->upload->display_errors()));
-      }
-      else
-      {
-        //print $this->upload->data();
-      }
-      
-      //Constructing array for the recipe tag  
-      foreach($tags as $tag)
-      {      
-        $tagData = array('RecipesID' => $recipeID ,'TagsID' => $tag);
-        if(!($this->db->insert("RecipesTags", $tagData)) )
-        {
-          $this->template->load('error' , array('title' => 'Tags Not Submitted!' , "message" => "UH OH! BAD THINGS HAPPENED"));
-          return;
-        }    
-      }      
-      //Adding all of the ingredients and their amounts to the database
-      $index = 0;
-      foreach($ingredients as $ingredient)
-      {
-        if ($ingredientAmounts[$index] > 0)
-        {
-          $ingredientData = array('RecipesID' => $recipeID, 'IngredientsID' => $ingredient, 'Amount' =>$ingredientAmounts[$index]); 
-          if(!($this->db->insert("RecipesIngredients", $ingredientData)) )
-          {
-            $this->template->load('error' , array('title' => 'Ingredient Not Submitted!' , "message" => "UH OH! BAD THINGS HAPPENED"));
-            return;
-          }
-        }
-        $index += 1;
-      }
-      
-      
-      
-      //Upvoting your recipe
-      $voteData = array('UsersID' => $userID, 'RecipesID' => $recipeID, 'Direction' => 1); 
-      if(!($this->db->insert("Votes", $voteData)) )
-      {
-        $this->template->load('error' , array('title' => 'Vote Not Submitted!' , "message" => "UH OH! BAD THINGS HAPPENED"));
-        return;
-      }
-      
-      redirect('recipe/id/'.$recipeID, 'location', 301);
+      $this->template->load('error' , array('title' => 'Image Upload Error' , "message" => "There was an error uploading your image: <br/>" . $this->upload->display_errors()));
+      return;
     }
+    
+    //Constructing array for the recipe tag  
+    foreach($tags as $tag)
+    {      
+      $tagData = array('RecipesID' => $recipeID ,'TagsID' => $tag);
+      if(!($this->db->insert("RecipesTags", $tagData)) )
+      {
+        $this->template->load('error' , array('title' => 'Tags Not Submitted!' , "message" => "There was an error adding your Recipe's tag to the database"));
+        return;
+      }    
+    }      
+    //Adding all of the ingredients and their amounts to the database
+    $index = 0;
+    foreach($ingredients as $ingredient)
+    {
+      if ($ingredientAmounts[$index] > 0)
+      {
+        $ingredientData = array('RecipesID' => $recipeID, 'IngredientsID' => $ingredient, 'Amount' =>$ingredientAmounts[$index]); 
+        if(!($this->db->insert("RecipesIngredients", $ingredientData)) )
+        {
+          $this->template->load('error' , array('title' => 'Ingredient Not Submitted!' , "message" => "There was an error adding your Recipe's ingredients to the database"));
+          return;
+        }
+      }
+      $index += 1;
+    }
+    
+    
+    
+    //Upvoting your recipe
+    $voteData = array('UsersID' => $userID, 'RecipesID' => $recipeID, 'Direction' => 1); 
+    if(!($this->db->insert("Votes", $voteData)) )
+    {
+      $this->template->load('error' , array('title' => 'Vote Not Submitted!' , "message" => "There was an error automatically upvoting your recipe."));
+      return;
+    }
+    
+    redirect('recipe/id/'.$recipeID, 'location', 301);
   }
   
   public function id($id)
