@@ -1,38 +1,38 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Tags extends CI_Controller {
-	//Programmer: Michael Wilson
-	//function index
-	public function index()
-	{
+  //Programmer: Michael Wilson
+  //function index
+  public function index()
+  {
     $this->template->set_location("Tags");
     $this->template->set_title("Cloud");
     
     $this->template->load_js("jquery.masonry.min.js");
     $this->template->load_js("tags_cloud.js");
-		//SQL query to find tags, count up how many recipes use each one, and return an array of objects composed of TagName, TagID a,a dn the numbrt of times it is used
-		$query	= $this->db->query("SELECT ID, COUNT(TagsID) as freq , Name FROM RecipesTags JOIN Tags on Tags.ID = RecipesTags.TagsID GROUP BY TagsID DESC");    	
+    //SQL query to find tags, count up how many recipes use each one, and return an array of objects composed of TagName, TagID a,a dn the numbrt of times it is used
+    $query  = $this->db->query("SELECT ID, COUNT(TagsID) as freq , Name FROM RecipesTags JOIN Tags on Tags.ID = RecipesTags.TagsID GROUP BY TagsID DESC");      
 
-		$total = 0; // this will hold the total number of recipes 
-		$max_font_size = 200; //this will be the max value for the size of the tag images (will be sent to the tag_viw)
+    $total = 0; // this will hold the total number of recipes 
+    $max_font_size = 200; //this will be the max value for the size of the tag images (will be sent to the tag_viw)
 
-		foreach($query->result() as $i) //calculate the total number of time any tag appears in all recipes
-		{
-			$total = $total + $i->freq;
-		}
-	
-		if($query->num_rows() == 0) //error case
-		{
-			$this->template->load('error', array('title' => 'No tags found' , "message" => "did not work"));//load error view  
-		}
-		else //load the tag view and pass it query results
-		{
-			$this->template->load('tag_view' , array("tags" => $query->result()  , "total" => $total, "max_font" => $max_font_size ));
-		}
-	}
-	//Michael Wilson   function : Recipes 
-	public function recipes($id)
-	{
+    foreach($query->result() as $i) //calculate the total number of time any tag appears in all recipes
+    {
+      $total = $total + $i->freq;
+    }
+  
+    if($query->num_rows() == 0) //error case
+    {
+      $this->template->load('error', array('title' => 'No tags found' , "message" => "did not work"));//load error view  
+    }
+    else //load the tag view and pass it query results
+    {
+      $this->template->load('tags/cloud' , array("tags" => $query->result()  , "total" => $total, "max_font" => $max_font_size ));
+    }
+  }
+  //Michael Wilson   function : Recipes 
+  public function recipes($id)
+  {
     $this->template->set_location("Tags");
     $this->template->set_title("ID Error");
     
@@ -106,10 +106,10 @@ class Tags extends CI_Controller {
     }
     
     $this->template->load('tags/recipes' , array("recipes" => $recipes, "tag" => $tagQuery->row(0) ));
-	}
+  }
 
-	public function add()
-  {	
+  public function add()
+  {  
     $this->template->set_location("Tags");
     $this->template->set_title("Add");
     
@@ -120,10 +120,10 @@ class Tags extends CI_Controller {
     }
     $this->template->load_js("tags_add.js");
     $this->template->load_js("submit_guess.js");
-    $this->template->load('add_tag' , array("recipe" => 0, "tag" => 0 ));
+    $this->template->load('tags/add' , array("recipe" => 0, "tag" => 0 ));
   }
   
-	public function submit()
+  public function submit()
   {
     $name = $this->input->post("tag_name");
     $desc = $this->input->post("description");
@@ -136,26 +136,26 @@ class Tags extends CI_Controller {
     $desc = trim($desc);
     $data = array('Name' => $name,'Description' =>$desc);
     $query = $this->db->query("SELECT * FROM Tags WHERE Name = '$name'");
-    		
-		if($query->num_rows()>0)
+        
+    if($query->num_rows()>0)
     {
-			$this->template->load('error',array('title'=>'Tag already exists', "message"=>"The tag is already in the database"));
-			return;
+      $this->template->load('error',array('title'=>'Tag already exists', "message"=>"The tag is already in the database"));
+      return;
     }
     
-		if(!($this->db->insert("Tags", $data)) )
+    if(!($this->db->insert("Tags", $data)) )
     {
       $this->template->load('error', array('title' => 'Could not add tag.' , "message" => "Error in creating tag."));
       return;
     }
-    		
-		else
+        
+    else
     {
-      $this->template->load('tag_success',array("name" =>$name));
-		}
-	}
+      $this->template->load('tags/success',array("name" =>$name));
+    }
+  }
 
 }
 
-		
-	
+    
+  

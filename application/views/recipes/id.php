@@ -28,6 +28,7 @@
     <h2>Directions</h2>
     <p><?=$recipe->Directions?></p>
   </section>
+<?php if( !empty( $tag ) ): ?>
   <section id="recipe-tags">
     <h2>Tags</h2>
     <ul>
@@ -36,6 +37,7 @@
 <?php endforeach;?>
     </ul>
   </section>
+<?php endif; ?>
 </div>
 <div id="recipe-comments">
   <h2>Comments</h2>

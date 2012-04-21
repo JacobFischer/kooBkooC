@@ -306,7 +306,8 @@ class User extends CI_Controller {
   {
     if($page == "reset")
     {
-      $this->password_reset($arg);
+      $this->load->library('recaptcha');
+      $this->template->load('user/password_reset', array('recaptcha'=>$this->recaptcha->get_html()) );
     }
     else if($page == "change")
     {
@@ -332,7 +333,7 @@ class User extends CI_Controller {
       return;
     }
     
-	  if (!$this->recaptcha->check_answer($this->input->ip_address(),$this->input->post('recaptcha_challenge_field'),$this->input->post("recaptcha_response_field"))) {
+    if (!$this->recaptcha->check_answer($this->input->ip_address(),$this->input->post('recaptcha_challenge_field'),$this->input->post("recaptcha_response_field"))) {
       $this->template->load('error', array('title' => 'You Failed At Typing', "message" => "ReRecaptcha Please") );
       return;
     }
@@ -355,7 +356,7 @@ class User extends CI_Controller {
     $this->db->where('ID', $user->ID);
     $this->db->update('Users', array( 'HashedPassword' => crypt( $newPassword ) ) );
     
-    $this->template->load('user_password_reset', array('email' => $user->Email ) );
+    $this->template->load('user/password_sent', array('email' => $user->Email ) );
   }
   
   public function password_change()
@@ -412,6 +413,15 @@ class User extends CI_Controller {
 
     $this->template->load('error', array('title' => 'You\'re not logged in.', "message" => "This would go a lot easier if you'd just log in!") );
 
+  }
+  
+  public function lookup()
+  {
+    $this->template->set_location("User");
+    $this->template->set_title("Lookup");
+    $this->template->load_js("submit_guess.js");
+    $this->template->load_js("user_lookup.js");
+    $this->template->load( 'user/lookup.php' );
   }
 
 }

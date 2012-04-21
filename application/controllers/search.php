@@ -463,7 +463,7 @@ class Search extends CI_Controller {
     public function user($target = "")
     {
         // Create result array and empty sub-array
-        $result = array("json" => array("searchUser" => array()));
+        $result = array("json" => array("users" => array()));
         
         // Prepare database query
         $this->db->select("ID, DisplayName, Email ");
@@ -476,7 +476,7 @@ class Search extends CI_Controller {
         
         // Append query records to result sub-array
         foreach($query->result() as $row) {
-          $result["json"]["Users"][] = $row;
+          $result["json"]["users"][] = $row;
         }
         
         // Load result records into view for retrieval

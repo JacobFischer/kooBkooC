@@ -7,10 +7,10 @@
 </section>
 <section id="ingredient-recipes">
   <h2>Recipes using <?=$ingredient->Name?></h2>
-  <ul>
+  <ol>
   <?php foreach($recipes as $recipe): ?>
-    <li><a href = "<?=site_url( array('recipe', 'id', $recipe->ID) )?>"/><?echo $recipe->Name ?></a></li>
+    <li><?=$this->load->view('recipes/short', array('recipe' => $recipe ) )?></li>
   <?php endforeach; ?>
-  </ul>
+  </ol>
 </section>
-
+&nbsp;

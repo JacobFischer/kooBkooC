@@ -32,7 +32,7 @@ class Ingredients extends CI_Controller //display ingredients by id
       }
     else
     {
-      $this->template->load('ingredients_cloud_view' , array("ingredients" => $query->result()  , "total" => $total, "max_font" => $max_font_size ));
+      $this->template->load('ingredients/cloud' , array("ingredients" => $query->result()  , "total" => $total, "max_font" => $max_font_size ));
     }
   }
 
@@ -54,10 +54,54 @@ class Ingredients extends CI_Controller //display ingredients by id
     else
     {
       $this->db->flush_cache(); 
-      $usingQuery = $this->db->query("SELECT * FROM RecipesIngredients JOIN Recipes on RecipesIngredients.RecipesID = Recipes.ID WHERE RecipesIngredients.IngredientsID = \"$id\" ");
+      //$usingQuery = $this->db->query("SELECT * FROM RecipesIngredients JOIN Recipes on RecipesIngredients.RecipesID = Recipes.ID WHERE RecipesIngredients.IngredientsID = \"$id\" ");
+      /////
+      $usingQuery = $this->db->query("SELECT Votes.RecipesID AS ID, SUM(Direction) AS Direction, Name, Description FROM Votes JOIN Recipes on Votes.RecipesID = Recipes.ID JOIN RecipesIngredients on RecipesIngredients.RecipesID = Recipes.ID WHERE RecipesIngredients.IngredientsID = \"$id\" GROUP BY Recipes.ID ORDER BY SUM(Direction) DESC" ); 
+      $recipes = $usingQuery->result();
       
+      if($query->num_rows() == 0)
+      {
+        $this->template->load('error', array('title' => 'No recipes found for Tag ' . $tagQuery->row(0)->Name , "message" => "Sorry, maybe you should create some recipes that use it?")); // load error view
+        return;
+      }
+      
+      $userID = -1;
+      if($this->session->userdata('logged_in'))
+      {
+        $this->db->select('*');
+        $this->db->from('Users');
+        $this->db->where('Email', $this->session->userdata('email'));
+        $query = $this->db->get();
+        
+        if($query->num_rows() != 1)
+        {
+          $this->template->load('error' , array('title' => 'Error: Cookie Error' , "message" => "You are logged in, but we can not find you") );
+          return;
+        }
+        
+        $userID = $query->row(0)->ID;
+      }
+      
+      foreach($recipes as $recipe)
+      {
+        $recipe->UsersVote = "0";
+        if( $userID != -1 )
+        {
+          $this->db->select('*');
+          $this->db->from('Votes');
+          $this->db->where('UsersID', $userID );
+          $this->db->where('RecipesID', $recipe->ID );
+          $query = $this->db->get();
+          
+          if($query->num_rows() == 1)
+          {
+            $recipe->UsersVote = $query->row(0)->Direction;
+          }
+        }
+      }
+      /////
       $this->template->set_title( $query->row(0)->Name );
-      $this->template->load( 'ingredients_id',array("ingredient" => $query->row(0), "recipes" => $usingQuery ->result() )); //load view of the ingredient and pas in params
+      $this->template->load( 'ingredients/id', array("ingredient" => $query->row(0), "recipes" => $recipes )); //load view of the ingredient and pas in params
     }             
   }
 
@@ -72,7 +116,7 @@ class Ingredients extends CI_Controller //display ingredients by id
     }
     else //load view
     {
-      $this->template->load('ingredientsview', array("ingredient" => $query) );  //load view to display results
+      $this->template->load('ingredients/recipes', array("ingredient" => $query) );  //load view to display results
     }
   } 
   
@@ -91,7 +135,7 @@ class Ingredients extends CI_Controller //display ingredients by id
     $this->template->load('add_ingredient' , array("recipe" => 0, "tag" => 0 ));
   }
   
-    public function submit()
+  public function submit()
   {
     $name = $this->input->post("ingredient");
     $desc = $this->input->post("description");
@@ -153,7 +197,7 @@ class Ingredients extends CI_Controller //display ingredients by id
         //print $this->upload->data();
       }
       
-      $this->template->load('ingredient_success', array("name" =>$name));
+      $this->template->load('ingredient/success', array("name" =>$name));
     }
   }
   

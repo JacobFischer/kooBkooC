@@ -64,7 +64,7 @@ class Recipe extends CI_Controller
       }
     }
 
-    $this->template->load('recipes_page' , array("recipes" => $recipes ) );
+    $this->template->load('recipes/index' , array("recipes" => $recipes ) );
   }
   
   public function submit()
@@ -270,7 +270,7 @@ class Recipe extends CI_Controller
       return;
     }
     
-    redirect('recipe/id/'.$recipeID, 'location', 301);
+    redirect('recipes/id/'.$recipeID, 'location', 301);
   }
   
   public function id($id)
@@ -367,7 +367,7 @@ class Recipe extends CI_Controller
     }
     else
     {      
-      $this->template->load('recipe_id', array("recipe" => $recipeInfo ,
+      $this->template->load('recipes/id', array("recipe" => $recipeInfo ,
                                                "submitter" => $submitterInfo,
                                                "vote_count" => $votequery->row(0),
                                                "comments" => $comments,
@@ -394,7 +394,7 @@ class Recipe extends CI_Controller
     $ingredientsquery=$this->db->query("SELECT * FROM Ingredients");       
     $this->template->load_js("recipe_add.js");
     $this->template->load_js("submit_guess.js");
-    $this->template->load( 'recipe_add', array("tags" => $tagquery->result(),
+    $this->template->load( 'recipes/add', array("tags" => $tagquery->result(),
                                         "ingredients" => $ingredientsquery->result()));
   }
 }

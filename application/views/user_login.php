@@ -1,15 +1,11 @@
-Login: <br />
+<h1>Login</h1>
 <form action="login" method="post">
-E-mail: <input type="text" name="email" /><br />
-Password: <input type="password" name="password" /><br />
-<input type="submit" />
-</form>
-<br/>
-Reset Your Password: <br/>
-<form action="password_reset" method="post">
-E-mail: <input type="text" name="email" /><br />
-<?= $recaptcha ?> 
-<input type="submit" />
+  <label for="login-email">E-mail</label>
+  <input id="login-email" type="text" name="email" />
+  <label for="login-password">Password</label>
+  <input id="login-password" type="password" name="password" />
+  <a href="<?=site_url( array( 'user', 'password', 'reset' ) )?>">Forgot your password?</a>
+  <input type="submit" value="Login"/>
 </form>
 
 
