@@ -27,18 +27,11 @@
         <div id="template-title">
             <a href="<?=base_url()?>" id="website-title">koo<span class="cap">B</span>koo<span class="cap">C</span></a>
             <div id="profile-top">
-<?php
-if($logged_in)
-{
-?>
-  <a href="<?=site_url(array('user', 'logout'))?>">Logout <strong><?=$username?></strong></a> - <a href="<?=site_url(array('user', 'me'))?>">Your Account!</a>
-<?php
-} else {
-?>
-  <a href="<?=site_url(array('user', 'user_login'))?>">Login</a> - <a href="<?=site_url(array('user', 'reg'))?>">Register</a>
-<?php
-}
-?>
+<?php if($logged_in): ?>
+              <a href="<?=site_url(array('user', 'me'))?>"><?=$username?></a><a href="<?=site_url(array('user', 'logout'))?>">Logout</a>
+<?php else: ?>
+              <a href="<?=site_url(array('user', 'user_login'))?>">Login</a><a href="<?=site_url(array('user', 'reg'))?>">Register</a>
+<?php endif; ?>
             </div>
         </div>
         <div id="wrapper-top">  

@@ -33,7 +33,7 @@ a#website-title { font-family: 'Felipa', cursive; font-size: 3.75em; color: #33C
 a#website-title span.cap { color: #009B95; }
 
 div#profile-top { float: right; /* yuck */ background-color: #009B95; border: 0.125em #006561 solid; border-top: none; padding: 0.125em; background: url(green-marble.png); }
-div#profile-top a { color: #FEFAFD; font-weight: bold; }
+div#profile-top a { color: #FEFAFD; padding: 0 0.25em; margin: 0 0.25em; }
 
 div#wrapper-top { background-color: #009B95; margin: 0 0 1.5em 0; border: 0.125em #006561 solid; border-left: none; border-right: none; background: url(green-marble.png); padding: 0.5em 0; }
 div#template-title, header#template-top, div#template-main { margin: 0 auto; width: 56em; }

@@ -49,60 +49,61 @@ class Ingredients extends CI_Controller //display ingredients by id
 
     if($query->num_rows() != 1)
     {
-      $this->template->load('error', array("Ingredient" => "Ingredient with ID of \"$id\"not found" ));//load error view  
+      $this->template->load('error', array("Ingredient" => "Ingredient with ID of \"$id\"not found" ));
+      return;      
     }
-    else
+    
+    $ingredient = $query->row(0);
+    
+    $this->db->flush_cache(); 
+    //$usingQuery = $this->db->query("SELECT * FROM RecipesIngredients JOIN Recipes on RecipesIngredients.RecipesID = Recipes.ID WHERE RecipesIngredients.IngredientsID = \"$id\" ");
+    /////
+    $usingQuery = $this->db->query("SELECT Votes.RecipesID AS ID, SUM(Direction) AS Direction, Name, Description FROM Votes JOIN Recipes on Votes.RecipesID = Recipes.ID JOIN RecipesIngredients on RecipesIngredients.RecipesID = Recipes.ID WHERE RecipesIngredients.IngredientsID = \"$id\" GROUP BY Recipes.ID ORDER BY SUM(Direction) DESC" ); 
+    $recipes = $usingQuery->result();
+    
+    if($query->num_rows() == 0)
     {
-      $this->db->flush_cache(); 
-      //$usingQuery = $this->db->query("SELECT * FROM RecipesIngredients JOIN Recipes on RecipesIngredients.RecipesID = Recipes.ID WHERE RecipesIngredients.IngredientsID = \"$id\" ");
-      /////
-      $usingQuery = $this->db->query("SELECT Votes.RecipesID AS ID, SUM(Direction) AS Direction, Name, Description FROM Votes JOIN Recipes on Votes.RecipesID = Recipes.ID JOIN RecipesIngredients on RecipesIngredients.RecipesID = Recipes.ID WHERE RecipesIngredients.IngredientsID = \"$id\" GROUP BY Recipes.ID ORDER BY SUM(Direction) DESC" ); 
-      $recipes = $usingQuery->result();
+      $this->template->load('error', array('title' => 'No recipes found for Tag ' . $tagQuery->row(0)->Name , "message" => "Sorry, maybe you should create some recipes that use it?")); // load error view
+      return;
+    }
+    
+    $userID = -1;
+    if($this->session->userdata('logged_in'))
+    {
+      $this->db->select('*');
+      $this->db->from('Users');
+      $this->db->where('Email', $this->session->userdata('email'));
+      $query = $this->db->get();
       
-      if($query->num_rows() == 0)
+      if($query->num_rows() != 1)
       {
-        $this->template->load('error', array('title' => 'No recipes found for Tag ' . $tagQuery->row(0)->Name , "message" => "Sorry, maybe you should create some recipes that use it?")); // load error view
+        $this->template->load('error' , array('title' => 'Error: Cookie Error' , "message" => "You are logged in, but we can not find you") );
         return;
       }
       
-      $userID = -1;
-      if($this->session->userdata('logged_in'))
+      $userID = $query->row(0)->ID;
+    }
+    
+    foreach($recipes as $recipe)
+    {
+      $recipe->UsersVote = "0";
+      if( $userID != -1 )
       {
         $this->db->select('*');
-        $this->db->from('Users');
-        $this->db->where('Email', $this->session->userdata('email'));
+        $this->db->from('Votes');
+        $this->db->where('UsersID', $userID );
+        $this->db->where('RecipesID', $recipe->ID );
         $query = $this->db->get();
         
-        if($query->num_rows() != 1)
+        if($query->num_rows() == 1)
         {
-          $this->template->load('error' , array('title' => 'Error: Cookie Error' , "message" => "You are logged in, but we can not find you") );
-          return;
-        }
-        
-        $userID = $query->row(0)->ID;
-      }
-      
-      foreach($recipes as $recipe)
-      {
-        $recipe->UsersVote = "0";
-        if( $userID != -1 )
-        {
-          $this->db->select('*');
-          $this->db->from('Votes');
-          $this->db->where('UsersID', $userID );
-          $this->db->where('RecipesID', $recipe->ID );
-          $query = $this->db->get();
-          
-          if($query->num_rows() == 1)
-          {
-            $recipe->UsersVote = $query->row(0)->Direction;
-          }
+          $recipe->UsersVote = $query->row(0)->Direction;
         }
       }
-      /////
-      $this->template->set_title( $query->row(0)->Name );
-      $this->template->load( 'ingredients/id', array("ingredient" => $query->row(0), "recipes" => $recipes )); //load view of the ingredient and pas in params
-    }             
+    }
+    /////
+    $this->template->set_title( $ingredient->Name );
+    $this->template->load( 'ingredients/id', array("ingredient" => $ingredient, "recipes" => $recipes )); //load view of the ingredient and pas in params           
   }
 
   //recipes function: Takes in ingredient id and return the recipes that use the ingredient. 

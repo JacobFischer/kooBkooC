@@ -8,5 +8,4 @@
   <? endforeach; ?>
   </ol>
 </section>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<p>Hi</p>
+&nbsp;

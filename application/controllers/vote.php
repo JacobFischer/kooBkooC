@@ -35,56 +35,50 @@ class Vote extends CI_Controller {
       $this->load->view('json', $jsonResponse);
       return;
     }
-    
-    if(!$this->session->userdata('logged_in') || !$this->session->userdata('email'))
+
+    $this->db->select('*');
+    $this->db->from('Users');
+    $this->db->where('Email', $this->session->userdata('email'));
+
+    $query = $this->db->get();
+
+    if(!$this->session->userdata('logged_in') || !$this->session->userdata('email') || $query->num_rows() != 1)
     {
       $jsonResponse["json"]["reason"] = "You must be logged in to vote.";
       $this->load->view('json', $jsonResponse);
       return;
     }
+    
+    $id = $query->row(0)->ID;
+    $data = array(
+      'UsersID' => $id,
+      'RecipesID' => $recipeID, 
+      'Direction' => $dir,
+    );
+    
+    $this->db->flush_cache();
+
+    $this->db->select('*');
+    $this->db->from('Votes');
+    $this->db->where('UsersID', $id);
+    $this->db->where('RecipesID', $recipeID);
+
+    $query = $this->db->get();
+    
+    if($query->num_rows() == 0)
+    {
+      $this->db->flush_cache();
+      $this->db->set($data);
+      $this->db->insert('Votes');
+    }
     else
     {
-      $this->db->select('*');
-      $this->db->from('Users');
-      $this->db->where('Email', $this->session->userdata('email'));
-
-      $query = $this->db->get();
-
-      if($query->num_rows() == 1)
-      {
-
-        $id = $query->row(0)->ID;
-        $data = array(
-          'UsersID' => $id,
-          'RecipesID' => $recipeID, 
-          'Direction' => $dir,
-        );
-        
-        $this->db->flush_cache();
-
-        $this->db->select('*');
-        $this->db->from('Votes');
-        $this->db->where('UsersID', $id);
-        $this->db->where('RecipesID', $recipeID);
-
-        $query = $this->db->get();
-        
-        if($query->num_rows() == 0)
-        {
-          $this->db->flush_cache();
-          $this->db->set($data);
-          $this->db->insert('Votes');
-        }
-        else
-        {
-          $this->db->flush_cache();
-          $this->db->where('UsersID', $id);
-          $this->db->where('RecipesID', $recipeID);
-          $this->db->update('Votes', $data);
-        }
-      }
+      $this->db->flush_cache();
+      $this->db->where('UsersID', $id);
+      $this->db->where('RecipesID', $recipeID);
+      $this->db->update('Votes', $data);
     }
-    
+
     // Get the total of votes for this recipe, as it has changed
     $this->db->select('*');
     $this->db->from('Votes');
