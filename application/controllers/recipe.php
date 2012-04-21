@@ -2,9 +2,30 @@
 
 class Recipe extends CI_Controller
 {
-	//programmer: Michael Wilson and Company  //function: index.   This will show top rated recipes
+  //programmer: Michael Wilson and Company  //function: index.   This will show top rated recipes
   public function index()
   {
+    $this->page(1);
+  }
+  
+  public function page($paging)
+  {
+    $limit = 5;
+    $offset = ($paging-1)*$limit;
+    $totalRecipes = (int)$this->db->query( "SELECT COUNT(*) AS TotalCount FROM Recipes" )->row(0)->TotalCount;
+    
+    if($paging <= 0 || (int)($totalRecipes/$limit)+1 < $paging )
+    {
+      $this->template->load('error' , array('title' => 'Error: Page out of range' , "message" => "There can't exits any recipes for the given page") );
+      return;
+    }
+    
+    $page = (object)array();
+    $page->Current = $paging;
+    $page->Start = $offset+1;
+    $page->Previous = $paging != 1;
+    $page->Next = $paging*$limit <= $totalRecipes;
+    
     // Load JS files in the template
     $this->template->load_js('recipe_voter.js');
     $this->template->load_js('ingredients_index.js');
@@ -30,7 +51,7 @@ class Recipe extends CI_Controller
       $userID = $query->row(0)->ID;
     }
     
-    $query = $this->db->query("SELECT RecipesID AS ID, SUM(Direction) AS Direction, Name, Description FROM Votes JOIN Recipes on Votes.RecipesID = Recipes.ID GROUP BY RecipesID ORDER BY SUM(Direction) DESC" ); 
+    $query = $this->db->query("SELECT RecipesID AS ID, SUM(Direction) AS Direction, Name, Description FROM Votes JOIN Recipes on Votes.RecipesID = Recipes.ID GROUP BY RecipesID ORDER BY SUM(Direction) DESC LIMIT $limit OFFSET $offset" ); 
     $recipes = $query->result();
     
     if($query->num_rows() == 0) //error case
@@ -64,7 +85,7 @@ class Recipe extends CI_Controller
       }
     }
 
-    $this->template->load('recipes/index' , array("recipes" => $recipes ) );
+    $this->template->load('recipes/index' , array("recipes" => $recipes, 'page' => $page ) );
   }
   
   public function submit()

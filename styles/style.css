@@ -81,6 +81,10 @@ section#recipe-tags ul, section#recipe-tags ul li { display: inline; }
 section#recipe-tags ul li a { background-color: #009B95; border: 0.125em solid #006561; color: #FEFAFD; padding: 0.125em; background: url(green-marble.png); }
 section#recipe-tags ul li a:hover, section#recipe-tags ul li a:active, section#recipe-tags ul li a:focus { color: #A1F0EE; }
 img#recipe-img { width: 25em; height: auto; float: right; border: 0.125em solid #006561; margin-left: 0.25em;}
+div#recipe-paging { width: 100%; border: 0.08333em solid #006561; display: block; background: #009B95 url(green-marble.png); color: #A1F0EE; padding: 0.25em 0; font-size: 1.5em; text-align: center; }
+div#recipe-paging nav { margin: 0 auto; }
+div#recipe-paging nav span.disabled-page { color: #A1F0EE; padding: 0 0.5em; }
+div#recipe-paging nav a { color: #FEFAFD; padding: 0 0.5em; }
 
 section.recipe-short { width: 100%; float: left; margin: 0.5em 0;}
 section.recipe-short a { width: 90%; float: left; }
@@ -102,3 +106,7 @@ section#guessed-ingredients, section#guessed-tags { border-left: 0.125em solid #
 section#guessed-ingredients ul li, section#guessed-tags ul li { list-style-type: none; font-size: 1.33em; margin: 0.5em 0 0.5em 1em; }
 form#ingredients-add, form#tags-add { float: left; width: 27em; }
 div#ingredients-add-wrapper, div#tags-add-wrapper { float: left; }
+
+/* Users
+*********************************************************/
+span.comment-on { padding-bottom: -1em; }

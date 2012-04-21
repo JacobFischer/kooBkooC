@@ -59,7 +59,7 @@
                         <li<?=$location == "Contact Us" ? ' class="current-location"' : ""?>>
                             <a href="<?=site_url(array('contactus'))?>">Contact Us</a>
                         </li>
-                    <ul>
+                    </ul>
                 </nav>
             </header>
         </div>

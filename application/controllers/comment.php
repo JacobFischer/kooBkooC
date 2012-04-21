@@ -59,7 +59,7 @@ class Comment extends CI_Controller
       $comment->Time = date( 'Y-m-d H:i:s');
       $comment->Text = $contents;
       $r["json"]["success"] = true;
-      $r["json"]["newHTML"] = base64_encode($this->load->view('recipe_comment', array('comment' => $comment, "hide" => true ), true ));
+      $r["json"]["newHTML"] = base64_encode($this->load->view('comment', array('comment' => $comment, "hide" => true ), true ));
       $this->load->view('json', $r);
       return;
     }

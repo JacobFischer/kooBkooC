@@ -6,7 +6,7 @@
     <button class="recipe-down-vote <?= $users_vote["Direction"] == -1 ? "voted-down" : ""?>">&#9660;</button>
   </div>
   <h1><?=$recipe->Name?></h1>
-  <div id="recipe-submitter">Submitted by: <a href="<?=site_url(array('user', 'id', $submitter->ID))?>"><?=$submitter->DisplayName?></a></div>
+  <div id="recipe-submitter">Submitted by: <a href="<?=site_url(array('user', 'profile', $submitter->ID))?>"><?=$submitter->DisplayName?></a></div>
   <div id="recipe-description">
     <?=$recipe->Description?>
   </div>
@@ -14,7 +14,7 @@
 <hr style="float: left; width: 100%;"/>
 <div id="recipe-body">
   <img src="<?=/*base_url() . 'uploads/recipes/'*/ 'http://home.jacobfischer.me/cs397_uploads/recipes/' . $recipe->ID . '.jpg'?>" id="recipe-img" />
-  
+  <div id="recipe-servings">Servings: <?=$recipe->Servings?></div>
   <section id="recipe-ingredients">
     <h2>You'll need</h2>
     <ul>
@@ -45,7 +45,7 @@
 <?php
 $count = 0; 
 foreach( $comments as $comment ) { ?>
-    <?=$this->load->view('recipe_comment', array('comment' => $comment, 'extra' => $count%7 ) )?>
+    <?=$this->load->view('comment', array('comment' => $comment, 'extra' => $count%7 ) )?>
 <?php
 $count++; 
 } ?>

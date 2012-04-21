@@ -13,42 +13,37 @@ function randomAlphaNum($length)
 
 class User extends CI_Controller {
 
-  public function profile()
-  {
-    $data = array();
-    
-    if( !$this->session->userdata('logged_in') )
-    {
-      $this->template->load('error', array('title' => 'Not Logged in', "message" => "You must loggin to view your profile") );
-      return;
-    }
-    
-    $this->db->select('*');
-    $this->db->from('Users');
-    $this->db->where('Email', $this->session->userdata('email') );
-    $query = $this->db->get();
-    
-    if($query->num_rows() != 1)
-    {
-      $this->template->load('error', array('title' => 'Error loading user profile', "message" => "There was an error loading the user information from the database.") );
-      return;
-    }
-    
-    $data['user'] = $query->row(0);
-    
-    $this->template->load('user_profile', $data);
-  }
-
   public function getRecipes($id)
   {
     // Retrieve this user's submitted recipes
-    $this->db->flush_cache();
+    /*$this->db->flush_cache();
     $this->db->select('*');
     $this->db->from('Recipes');
     $this->db->join('Users', 'Recipes.SubmitterUsersID = Users.ID' );
     $this->db->where('SubmitterUsersID', $id );
     $query = $this->db->get();
-    return $query->result();
+    return $query->result();*/
+    
+    $usingQuery = $this->db->query("SELECT Votes.RecipesID AS ID, SUM(Direction) AS Direction, Name, Description FROM Votes JOIN Recipes on Votes.RecipesID = Recipes.ID JOIN Users on Recipes.SubmitterUsersID = Users.ID WHERE Recipes.SubmitterUsersID = \"$id\" GROUP BY Recipes.ID ORDER BY SUM(Direction) DESC" ); 
+    $recipes = $usingQuery->result();
+
+    foreach($recipes as $recipe)
+    {
+      $recipe->UsersVote = "0";
+      
+      $this->db->select('*');
+      $this->db->from('Votes');
+      $this->db->where('UsersID', $id );
+      $this->db->where('RecipesID', $recipe->ID );
+      $query = $this->db->get();
+      
+      if($query->num_rows() == 1)
+      {
+        $recipe->UsersVote = $query->row(0)->Direction;
+      }
+    }
+    
+    return $recipes;
   }
 
   public function getFavorites($id)
@@ -98,7 +93,10 @@ class User extends CI_Controller {
   }
   
   public function id( $id )
-  { 
+  {
+    $this->template->set_location("Users");
+    $this->template->set_title("ID Error");
+    
     $this->db->select('*');
     $this->db->from('Users');
     $this->db->where('ID', $id );
@@ -114,8 +112,10 @@ class User extends CI_Controller {
       $allergies = $this->getAllergies($id);
       $stalkers = $this->getStalkers($id);
       $stalking = $this->getStalking($id);
-  
-      $this->template->load('user_id', array('info' => $user_info, 'recipes' => $recipes, 'favorites' => $favorites, 'allergies' => $allergies, 'stalkers' => $stalkers, 'stalking' => $stalking ) );
+      
+      $this->template->set_title( $user_info->DisplayName );
+      
+      $this->template->load('user/id', array('info' => $user_info, 'recipes' => $recipes, 'favorites' => $favorites, 'allergies' => $allergies, 'stalkers' => $stalkers, 'stalking' => $stalking ) );
     }
     else
     {
@@ -125,12 +125,18 @@ class User extends CI_Controller {
 
   public function reg()
   {
+    $this->template->set_location("Users");
+    $this->template->set_title("Register");
+    
     $this->load->library('recaptcha');
     $this->template->load( 'reg.php', array('recaptcha'=>$this->recaptcha->get_html()));
   }
 
   public function register()
   {
+    $this->template->set_location("Users");
+    $this->template->set_title("Register Complete");
+    
     $displayName = $this->input->post( "name" );
     // PLAINTEXT
     $password = $this->input->post( "password" );
@@ -139,10 +145,10 @@ class User extends CI_Controller {
 
     $this->load->library('recaptcha');
                 
-	  if (!$this->recaptcha->check_answer($this->input->ip_address(),$this->input->post('recaptcha_challenge_field'),$this->input->post("recaptcha_response_field"))) {
+    if (!$this->recaptcha->check_answer($this->input->ip_address(),$this->input->post('recaptcha_challenge_field'),$this->input->post("recaptcha_response_field"))) {
       $this->template->load('error', array('title' => 'You Failed At Typing', "message" => "ReRecaptcha Please") );
-	    return;
-	  }
+      return;
+    }
 
     if( strlen( $password ) < 8 )
     {
@@ -173,12 +179,15 @@ class User extends CI_Controller {
 
     $this->db->insert('Users', $data);
 
-    $this->template->load('register_successful', array( 'username' => $displayName));
+    $this->template->load('register/successful', array( 'username' => $displayName));
     
   }
 
   public function user_login()
   {
+    $this->template->set_location("Users");
+    $this->template->set_title("Login");
+    
     $this->load->library('session');
     $this->load->library('recaptcha');
     $logged_in = $this->session->userdata('logged_in');
@@ -188,7 +197,7 @@ class User extends CI_Controller {
     }
     else
     {
-      $this->template->load( 'user_login.php', array('recaptcha'=>$this->recaptcha->get_html()));
+      $this->template->load( 'user/login.php', array('recaptcha'=>$this->recaptcha->get_html()));
     }
   }
 
@@ -199,7 +208,7 @@ class User extends CI_Controller {
     $this->session->set_userdata('email', 0);
     $this->session->sess_destroy();
 
-    $this->template->load( 'user_logout.php' );
+    $this->template->load( 'user/logout.php' );
     redirect('', '', 301); // send them to the home page
   }
 
@@ -224,7 +233,7 @@ class User extends CI_Controller {
         $userData = array( 'email' => $email, 'logged_in' => TRUE );
         $this->session->set_userdata($userData);
 
-        $this->template->load('login_successful', array() );
+        $this->template->load('login/successful', array() );
         redirect('', '', 301);
         return;
       }
@@ -269,37 +278,59 @@ class User extends CI_Controller {
     $this->db->select('*');
     $this->db->from('Comments');
     $this->db->join('Recipes', 'Comments.RecipesID = Recipes.ID');
-    $this->db->join('Users', 'Recipes.SubmitterUsersID = Users.ID');
+    $this->db->join('Users', 'Comments.UsersID = Users.ID');
     $this->db->where('Comments.UsersID', $id);
     $query = $this->db->get();
-
+    
+    $comments = array();
+    foreach( $query->result() as $comment )
+    {
+      $comment->Text = $this->textile->TextileThis( $comment->Text );
+      $comments[] = $comment;
+    }
+    
     return $query->result();
-
   }
-
+  
   public function me()
   {
-    if($this->session->userdata('logged_in'))
-    {
-      $email = $this->session->userdata('email');
-      $this->db->select('*');
-      $this->db->from('Users');
-      $this->db->where('Email', $email);
+    $this->profile( -1, true );
+  }
+  
+  public function profile($id = -1, $me = false)
+  {
+    $this->template->set_location("Users");
+    $this->template->set_title("ID Error");
+    
+    $this->db->select('*');
+    $this->db->from('Users');
 
-      $query = $this->db->get();
-      if($query->num_rows == 1)
+    if( $me || $id == -1 )
+    {
+      if(!$this->session->userdata('logged_in'))
       {
-        $id = $query->row(0)->ID;
-        $displayName = $query->row(0)->DisplayName;
-        
-        $this->template->load( 'user_me.php', array('ID' => $id, 'DisplayName' => $displayName, 'recipes' => $this->getRecipes($id), 'stalkers' => $this->getStalkers($id), 'favorites' => $this->getFavorites($id), 'allergies' => $this->getAllergies($id), 'stalking' => $this->getStalking($id), 'comments' => $this->getComments($id) ) );
-        
+        $this->template->load('error', array('title' => 'You\'re not logged in.', "message" => "You need to be logged in to see your profile") );
         return;
       }
+      
+      $this->db->where('Email', $this->session->userdata('email'));
     }
-
-    $this->template->load('error', array('title' => 'You\'re not logged in.', "message" => "This would go a lot easier if you'd just log in!") );
-
+    else
+    {
+      $this->db->where('ID', $id);
+    }
+    
+    $query = $this->db->get();
+    
+    if($query->num_rows == 0)
+    {
+      $this->template->load('error', array('title' => 'Couldn\'t find user', "message" => "We couldn't find the user specified") );
+      return;
+    }
+    
+    $user = $query->row(0);
+    $this->template->set_title( $me ? "Me" : $user->DisplayName );
+    $this->template->load( 'user/profile.php', array('user' => $user, 'recipes' => $this->getRecipes($user->ID), 'comments' => $this->getComments($user->ID), 'me' => $me ) );
   }
   
   public function password($page, $arg = "")
@@ -390,10 +421,11 @@ class User extends CI_Controller {
           $this->template->load('error', array('title' => 'Passwords Do Not Match', "message" => "Match your passwords before wasting my time!") );
           return;
         }
-		else if(strlen($password1) < 8) {
+        else if(strlen($password1) < 8)
+        {
           $this->template->load('error', array('title' => 'Password Too Short', "message" => "Your password must be eight or more characters in length!") );
           return;
-		}
+        }
 
         $data = array(
           'DisplayName' => $query->row(0)->DisplayName,
@@ -407,7 +439,6 @@ class User extends CI_Controller {
         
         $this->template->load('error', array('title' => 'Password Changed', "message" => "Goodjob!!") );
         return;
-        
       }
     }
 
