@@ -18,7 +18,7 @@
     <input type="file" name="userfile" id="ingredients-image"/>
     <br/>
     
-    <input name="submit_button" type="submit" value="Submit Ingredient!"/>
+    <input name="submit_button" type="submit" value="Add my Ingredient"/>
   </form>
   <div id="suggested-ingredients">
     <h2>Is your Ingredient already added?</h2>

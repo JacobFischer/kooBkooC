@@ -51,7 +51,7 @@ function responseIngredientParser( obj ) {
             $ingId + '"/><input type="hidden" name="ingredientAmounts[]" value="' + $("#ingredient-amount").val() + 
             '"/><span class="ingredient-name">' + $ingName + '</span><span class="ingredient-id" style="display: none;">' + 
             $ingId + '</span>' + " - " + '<span">' + $("#ingredient-amount").val() + '</span><span>'+ " " + unitLookup[$ingId] + "(s) "+ 
-            '</span><span class="remove-ingredient-button" name="' + $ingName + '" >[X]</span></li>');
+            '</span><span class="remove-ingredient-button" name="' + $ingName + '" >&#9747;</span></li>');
           $('ul#added-ingredients li.ingredient span.remove-ingredient-button').on("click", function(){
             $item = $(this).attr("name");
             $('ul#added-ingredients').each(function(){
@@ -106,7 +106,7 @@ function responseTagParser( obj ) {
           //Constructs a list of tags to be passed when the form is submitted
           $("ul#added-tags").append('<li class="tag"><input type="hidden" name="tags[]" value="' + 
             $tagId + '"/><span class="tag-name">' + $tagName + '</span><span class="tag-id" style="display: none;">' + 
-            $tagId + '</span><span class="remove-tag-button" name="' + $tagName + '" >[X]</span></li>'); 
+            $tagId + '</span><span class="remove-tag-button" name="' + $tagName + '" >&#9747;</span></li>'); 
           $('ul#added-tags li.tag span.remove-tag-button').on("click", function(){
             $item = $(this).attr("name");
             $('ul#added-tags').each(function(){
