@@ -203,13 +203,17 @@ class User extends CI_Controller {
 
   public function logout()
   {
-    $this->load->library('session');
     $this->session->set_userdata('logged_in', 0);
     $this->session->set_userdata('email', 0);
     $this->session->sess_destroy();
 
-    $this->template->load( 'user/logout.php' );
-    redirect('', '', 301); // send them to the home page
+    //$this->template->load( 'user/logout.php' );
+    //redirect('', '', 301); // send them to the home page (doesn't work on firefox as firefox cache's the 301 redirect and doesn't actually query the server
+    
+    // This is basically the page->home() controller, stupid Firefox
+    $this->template->load_js("frontPageSearch.js");
+    $this->template->set_location("Home");
+    $this->template->load( 'page_home' );
   }
 
   public function login()
@@ -233,7 +237,7 @@ class User extends CI_Controller {
         $userData = array( 'email' => $email, 'logged_in' => TRUE );
         $this->session->set_userdata($userData);
 
-        $this->template->load('login/successful', array() );
+        //$this->template->load('user/login_successful', array() );
         redirect('', '', 301);
         return;
       }
@@ -297,7 +301,7 @@ class User extends CI_Controller {
     $this->profile( -1, true );
   }
   
-  public function profile($id = -1, $me = false)
+  public function profile($id = -1, $me = false, $message="")
   {
     $this->template->set_location("Users");
     $this->template->set_title("ID Error");
@@ -314,6 +318,8 @@ class User extends CI_Controller {
       }
       
       $this->db->where('Email', $this->session->userdata('email'));
+      
+      $this->template->load_js( 'user_profile.js' );
     }
     else
     {
@@ -328,9 +334,12 @@ class User extends CI_Controller {
       return;
     }
     
+    // Load JS files in the template
+    $this->template->load_js('recipe_voter.js');
+    
     $user = $query->row(0);
     $this->template->set_title( $me ? "Me" : $user->DisplayName );
-    $this->template->load( 'user/profile.php', array('user' => $user, 'recipes' => $this->getRecipes($user->ID), 'comments' => $this->getComments($user->ID), 'me' => $me ) );
+    $this->template->load( 'user/profile.php', array('user' => $user, 'recipes' => $this->getRecipes($user->ID), 'comments' => $this->getComments($user->ID), 'me' => $me, 'message' => $message ) );
   }
   
   public function password($page, $arg = "")
@@ -437,13 +446,50 @@ class User extends CI_Controller {
         $this->db->where('Email', $email);
         $this->db->update('Users', $data);
         
-        $this->template->load('error', array('title' => 'Password Changed', "message" => "Goodjob!!") );
+        $this->profile(-1, true, "Password changed successfully");
         return;
       }
     }
 
-    $this->template->load('error', array('title' => 'You\'re not logged in.', "message" => "This would go a lot easier if you'd just log in!") );
+    $this->template->load('error', array('title' => 'You\'re not logged in.', "message" => "You can't change your password if you are not logged in!") );
 
+  }
+  
+  public function name_change()
+  {
+    if( !$this->session->userdata('logged_in') )
+    {
+      $this->template->load('error', array('title' => 'You\'re not logged in.', "message" => "You can't change your Display Name if you are not logged in!") );
+      return;
+    }
+    
+    $email = $this->session->userdata('email');
+    $this->db->select('*');
+    $this->db->from('Users');
+    $this->db->where('Email', $email);
+
+    $query = $this->db->get();
+    if($query->num_rows != 1)
+    {
+      $this->template->load('error', array('title' => 'User Not found', "message" => "The user your cookie says you are doens't exist") );
+      return;
+    }
+    
+    $user = $query->row(0);
+    $newName = trim( $this->input->post( "newDisplayName" ) );
+    
+    if( strlen($newName) < 4 )
+    {
+      $this->template->load('error', array('title' => 'New Display Name too short', "message" => "New display names must be at least 4 characters long") );
+      return;
+    }
+    
+    $data = array( 'DisplayName' => $newName );
+
+    $this->db->where('ID', $user->ID);
+    $this->db->update('Users', $data);
+    
+    $this->profile( -1, true, "Display Name changed successfully to " . $newName );
   }
   
   public function lookup()

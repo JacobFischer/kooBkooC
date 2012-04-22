@@ -28,7 +28,6 @@ class Recipe extends CI_Controller
     
     // Load JS files in the template
     $this->template->load_js('recipe_voter.js');
-    $this->template->load_js('ingredients_index.js');
     
     $this->template->set_location("Recipes");
     $this->template->set_title("Top");

@@ -49,10 +49,7 @@ class Tags extends CI_Controller {
     }
     
     $this->template->set_title( $tagQuery->row(0)->Name );
-    
-    // Load JS files in the template
-    $this->template->load_js('recipe_voter.js');
-    $this->template->load_js('ingredients_index.js');
+
    //Query to find top rated recipes and return them in descending order
     $userID = -1;
     if($this->session->userdata('logged_in'))
@@ -105,6 +102,8 @@ class Tags extends CI_Controller {
       }
     }
     
+    // Load JS files in the template
+    $this->template->load_js('recipe_voter.js');
     $this->template->load('tags/recipes' , array("recipes" => $recipes, "tag" => $tagQuery->row(0) ));
   }
 

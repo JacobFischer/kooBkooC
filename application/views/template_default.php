@@ -10,15 +10,15 @@
         <!-- BEGIN: Style Sheet imports -->
         <link href="<?=base_url()?>/styles/reset.css" rel='stylesheet' type='text/css'>
         <link href="<?=base_url()?>/styles/style.css" rel='stylesheet' type='text/css'>
-<?foreach($styles as $style):?>  
+<?foreach($styles as $style):?>
         <link rel="stylesheet" type="text/css" href="<?=base_url()?>/styles/<?=$style?>"></script>
 <?endforeach;?>
         <!-- END: Style Sheet imports -->
         
         <!-- BEGIN: Javascript script imports -->
         <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
-        <script src="http://cdn.jquerytools.org/1.2.7/full/jquery.tools.min.js"></script>
-<?foreach($scripts as $script):?>  
+        <script type="text/javascript" src="http://cdn.jquerytools.org/1.2.7/full/jquery.tools.min.js"></script>
+<?foreach($scripts as $script):?>
         <script type="text/javascript" src="<?=base_url()?>/scripts/<?=$script?>"></script>
 <?endforeach;?>
         <!-- END: Javascript script imports -->
@@ -51,13 +51,13 @@
                             <a href="<?=site_url(array('tags'))?>">Tags</a>
                         </li>
                         <li<?=$location == "About Us" ? ' class="current-location"' : ""?>>
-                            <a href="<?=site_url(array('aboutus'))?>">About Us</a>
+                            <a href="<?=site_url(array('page', 'about_us'))?>">About Us</a>
                         </li>
-                        <li<?=$location == "FAQ" ? ' class="current-location"' : ""?>>
-                            <a href="<?=site_url(array('faqs'))?>">FAQ</a>
+                        <li<?=$location == "FAQs" ? ' class="current-location"' : ""?>>
+                            <a href="<?=site_url(array('page', 'faqs'))?>">FAQ</a>
                         </li>
                         <li<?=$location == "Contact Us" ? ' class="current-location"' : ""?>>
-                            <a href="<?=site_url(array('contactus'))?>">Contact Us</a>
+                            <a href="<?=site_url(array('page', 'contact_us'))?>">Contact Us</a>
                         </li>
                     </ul>
                 </nav>

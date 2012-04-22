@@ -46,6 +46,8 @@ nav#website-links ul li:first-child a { margin: 0 0.75em 0 0; }
 
 div#template-main { background: url(soft-white-background.jpg); padding: 0.5em 1em; border: 0.125em solid #006561; }
 
+div.alert-box { background: #FF3500; color: #FEFAFD; font-weight: bold; width: 100%; padding: 0.25em 0; margin-bottom: 1em; }
+
 /* Recipe
 *********************************************************/
 div#recipe-top { min-height: 4em; }
@@ -110,3 +112,9 @@ div#ingredients-add-wrapper, div#tags-add-wrapper { float: left; }
 /* Users
 *********************************************************/
 span.comment-on { padding-bottom: -1em; }
+div#profile-submission { width: 100%; border: 0.08333em solid #006561; display: block; background: #009B95 url(green-marble.png); color: #A1F0EE; padding: 0.25em 0; font-size: 1.5em; }
+div#profile-submission a { font-weight: bold; color: #FEFAFD; }
+div#profile-submission a:hover, div#profile-submission a:active, div#profile-submission a:focus { text-decoration: underline; }
+button#update-profile { margin: 0.5em 0; }
+section#profile-update { display: none; margin: 1em 0; }
+section#profile-update form { margin: 1em 0; }

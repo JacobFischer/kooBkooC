@@ -3,7 +3,7 @@ function responseParser( obj ) {
     var newGuess = "<ul>";
     var count = 0;
     for(i in obj.users) {
-      newGuess += ('<li><a href="'+base_url+'index.php/user/id/'+obj.users[i].ID+'">' + obj.users[i].DisplayName + '</a></li>');
+      newGuess += ('<li><a href="'+base_url+'index.php/user/profile/'+obj.users[i].ID+'">' + obj.users[i].DisplayName + '</a></li>');
       count++;
     }
     

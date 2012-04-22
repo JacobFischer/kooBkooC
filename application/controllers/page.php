@@ -2,22 +2,40 @@
 
 class Page extends CI_Controller {
 
-    public function index()
-    {
-        $this->home();
-    }
-    
-    public function home()
-    {
-        $this->template->load_js("frontPageSearch.js");
-        $this->template->set_location("Home");
-        $this->template->load( 'page_home' );
-    }
-    
-    public function help()
-    {
-        $this->template->load( 'page_help' );
-    }
+  public function index()
+  {
+    $this->home();
+  }
+  
+  public function home()
+  {
+    $this->template->load_js("frontPageSearch.js");
+    $this->template->set_location("Home");
+    $this->template->load( 'page/home' );
+  }
+  
+  public function help()
+  {
+    $this->template->load( 'page/help' );
+  }
+  
+  public function about_us()
+  {
+    $this->template->set_location( "About Us" );
+    $this->template->load( 'page/about_us' );
+  }
+  
+  public function faqs()
+  {
+    $this->template->set_location( "FAQs" );
+    $this->template->load( 'page/faqs' );
+  }
+  
+  public function contact_us()
+  {
+    $this->template->set_location( "Contact Us" );
+    $this->template->load( 'page/contact_us' );
+  }
 }
 
 /* End of file page.php */

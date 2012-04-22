@@ -26,7 +26,7 @@ class Ingredients extends CI_Controller //display ingredients by id
     
     $max_font_size = $total * 10;
     //$max_font_size = 700;    
-  if($query->num_rows() == 0)
+    if($query->num_rows() == 0)
       {
           $this->template->load('error', array('title' => 'No tags found' , "message" => "did not work"));//load error view
       }
@@ -102,6 +102,10 @@ class Ingredients extends CI_Controller //display ingredients by id
       }
     }
     /////
+    
+    // Load JS files in the template
+    $this->template->load_js('recipe_voter.js');
+    
     $this->template->set_title( $ingredient->Name );
     $this->template->load( 'ingredients/id', array("ingredient" => $ingredient, "recipes" => $recipes )); //load view of the ingredient and pas in params           
   }
