@@ -137,7 +137,7 @@ class Ingredients extends CI_Controller //display ingredients by id
     }
     $this->template->load_js("ingredients_add.js");
     $this->template->load_js("submit_guess.js");
-    $this->template->load('add_ingredient' , array("recipe" => 0, "tag" => 0 ));
+    $this->template->load('ingredients/add' , array("recipe" => 0, "tag" => 0 ));
   }
   
   public function submit()

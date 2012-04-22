@@ -1,4 +1,4 @@
-<section class="recipe-short">
+<section class="recipe-short<?=isset($reverse)?" reverse-result":""?>">
   <div class="recipe-voter" id="recipe-voter-<?=$recipe->ID?>">
     <button class="recipe-up-vote <?= $recipe->UsersVote == 1 ? "voted-up" : ""?>">&#9650;<span style="display: none;"><?=$recipe->ID?></span></button>
     <span class="recipe-total <?= $recipe->UsersVote == 1 ? "voted-up" : ($recipe->UsersVote == -1 ? "voted-down" : "") ?>"><?=$recipe->Direction?></span>

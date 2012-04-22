@@ -319,13 +319,15 @@ class Search extends CI_Controller {
     {
         // create data object mapped to json
         $data = array("json" => array("recipe" => array() ) );
+        $recipes = array();
         
         if (isset($_GET["ingredients"])) {
             $ingredients = $_GET["ingredients"];
             $ingredient_string = "";
         }
         else {
-            $this->load->view('search_json', $data);
+            //$this->load->view('search_json', $data);
+            $this->load->view( 'search/reverse', array( 'recipes' => $recipes ) );
             return;
         }
         
@@ -355,12 +357,50 @@ class Search extends CI_Controller {
             
             // Iterate through the query and build the result
             foreach($query->result() as $recipe) {
-                $data['json']['recipe'][] = $recipe;
+                //$data['json']['recipe'][] = $recipe;
+                $recipes[] = $recipe;
             }
         }
         
+        // Find the current user
+        $userID = -1;
+        if($this->session->userdata('logged_in'))
+        {
+          $this->db->select('*');
+          $this->db->from('Users');
+          $this->db->where('Email', $this->session->userdata('email'));
+          $query = $this->db->get();
+          
+          if($query->num_rows() == 1)
+          {
+            $userID = $query->row(0)->ID;
+          }
+          
+          $userID = $query->row(0)->ID;
+        }
+        
+        foreach($recipes as $recipe)
+        {
+          $recipe->UsersVote = "0";
+          $recipe->Direction = $recipe->VoteSum;
+          if( $userID != -1 )
+          {
+            $this->db->select('*');
+            $this->db->from('Votes');
+            $this->db->where('UsersID', $userID );
+            $this->db->where('RecipesID', $recipe->ID );
+            $query = $this->db->get();
+            
+            if($query->num_rows() == 1)
+            {
+              $recipe->UsersVote = $query->row(0)->Direction;
+            }
+          }
+        }
+        
         // return the result array
-        $this->load->view('search_json', $data);
+        //$this->load->view('search_json', $data);
+        $this->load->view( 'search/reverse', array( 'recipes' => $recipes ) );
     }
 
 //END REVERSE SEARCH
