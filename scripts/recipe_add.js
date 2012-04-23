@@ -26,6 +26,7 @@ function responseIngredientParser( obj ) {
   $("#suggested-ingredient").fadeOut('fast', function() {
     $("#suggested-ingredient").html("<ul id=" + "ingredient-list" + ">");
     var count = 0;
+    $("ul#ingredient-list").html("");
     for(i in obj.ingredients) {
       $("ul#ingredient-list").append('<li class="s-ingredient" value="'+obj.ingredients[i].ID+'">' + obj.ingredients[i].Name + 
       '<span>' + " " + unitLookup[obj.ingredients[i].ID]+ "(s) " + '</span></li>');
@@ -52,6 +53,9 @@ function responseIngredientParser( obj ) {
             '"/><span class="ingredient-name">' + $ingName + '</span><span class="ingredient-id" style="display: none;">' + 
             $ingId + '</span>' + " - " + '<span">' + $("#ingredient-amount").val() + '</span><span>'+ " " + unitLookup[$ingId] + "(s) "+ 
             '</span><span class="remove-ingredient-button" name="' + $ingName + '" >&#9747;</span></li>');
+          $("ul#ingredient-list").html("");
+          $("#ingredient-input").val("");
+          $("#ingredient-amount").val("1");
           $('ul#added-ingredients li.ingredient span.remove-ingredient-button').on("click", function(){
             $item = $(this).attr("name");
             $('ul#added-ingredients').each(function(){
@@ -74,7 +78,7 @@ function responseIngredientParser( obj ) {
     }
     
     if(count == 0) {
-      newGuess += ('<li><em>None</em></li>');
+      $("ul#ingredient-list").append('<li><em>None</em></li>');
     }  
     
     $("#suggested-ingredient").append("</ul>");
@@ -107,6 +111,8 @@ function responseTagParser( obj ) {
           $("ul#added-tags").append('<li class="tag"><input type="hidden" name="tags[]" value="' + 
             $tagId + '"/><span class="tag-name">' + $tagName + '</span><span class="tag-id" style="display: none;">' + 
             $tagId + '</span><span class="remove-tag-button" name="' + $tagName + '" >&#9747;</span></li>'); 
+          $("ul#tag-list").html("");
+          $("#tags-input").val("");
           $('ul#added-tags li.tag span.remove-tag-button').on("click", function(){
             $item = $(this).attr("name");
             $('ul#added-tags').each(function(){
@@ -129,7 +135,7 @@ function responseTagParser( obj ) {
     }
     
     if(count == 0) {
-      newGuess += ('<li><em>None</em></li>');
+      $("ul#tag-list").append('<li><em>None</em></li>');
     }
     
     $("#suggested-tags").append("</ul>");
@@ -175,14 +181,29 @@ $(document).ready(function(){
 
   //Functions for when the user is done typing in the input box.
   function doneRecipeTyping () {
-    ajaxGuess( "recipes", $("#recipe-name").val(), responseRecipeParser );
+    if($("#recipe-name").val() != ""){  
+      ajaxGuess( "recipes", $("#recipe-name").val(), responseRecipeParser );
+    }
+    else{
+      $("#guessed-recipes").html('');
+    }
   }
   
   function doneIngredientTyping () {
-    ajaxGuess( "ingredients", $("#ingredient-input").val(), responseIngredientParser );
+    if($("#ingredient-input").val() != ""){  
+      ajaxGuess( "ingredients", $("#ingredient-input").val(), responseIngredientParser );
+    }
+    else{
+      $("ul#ingredient-list").html('');
+    }
   }
   
   function doneTagTyping () {
-    ajaxGuess( "tags", $("#tags-input").val(), responseTagParser );
+    if(($("#tags-input").val()) != ""){  
+      ajaxGuess( "tags", $("#tags-input").val(), responseTagParser );
+    }
+    else{
+      $("ul#tag-list").html('');
+    }
   }
 });

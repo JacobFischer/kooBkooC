@@ -33,7 +33,7 @@ $(document).ready(function() {
 
   //user is "finished typing," do something
   function doneTyping () {
-    //do something
+    //do something  
     ajaxGuess( "ingredients", $("#ingredients-name").val(), responseParser )
   }
 });

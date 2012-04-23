@@ -25,7 +25,7 @@
     <label for="ingredient-input">Search for Ingredients</label>
     <input type="text" id="ingredient-input" autocomplete="off"></input>
     <label for="ingredient-amount" id="ingredient-amount-label">Amount</label>
-    <input type="text" id="ingredient-amount" maxlength="6" value="0"/>
+    <input type="text" id="ingredient-amount" maxlength="6" value="1"/>
     <div id="suggested-ingredient"></div>
     
     <span id="measure-span"></span> 
