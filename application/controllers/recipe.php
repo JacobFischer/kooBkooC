@@ -290,7 +290,7 @@ class Recipe extends CI_Controller
       return;
     }
     
-    redirect('recipes/id/'.$recipeID, 'location', 301);
+    redirect('recipe/id/'.$recipeID, 'location', 301);
   }
   
   public function id($id)
