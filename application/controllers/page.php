@@ -9,9 +9,10 @@ class Page extends CI_Controller {
   
   public function home()
   {
+    $this->template->load_js("submit_guess.js");
     $this->template->load_js("frontPageSearch.js");
     $this->template->set_location("Home");
-    $this->template->load( 'page/home' );
+    $this->template->load( 'page/home', array( 'ingredients' => $this->db->query("SELECT * FROM Ingredients")->result() ) );
   }
   
   public function help()
