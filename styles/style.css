@@ -94,11 +94,12 @@ div#recipe-paging nav span.disabled-page { color: #A1F0EE; padding: 0 0.5em; }
 div#recipe-paging nav a { color: #FEFAFD; padding: 0 0.5em; }
 
 section.recipe-short { width: 100%; float: left; margin: 0.5em 0;}
-section.recipe-short a { width: 90%; float: left; }
+section.recipe-short a { float: left; }
 section.recipe-short a img { height: 3.75em; width: auto; float: left; border: 0.125em solid #006561; }
 section.recipe-short a div { float: left; padding-left: 0.75em; }
 section.recipe-short a div h2 { float: left; margin-bottom: 0.25em; }
-section.recipe-short a div span { float: left; clear: left;}
+section.recipe-short a div span { float: left; clear: left; max-width: 40em; }
+section.reverse-result a div span{ float: left; clear: left; max-width: 17em; }
 
 /* Add */
 input#ingredient-input { display: inline; }
