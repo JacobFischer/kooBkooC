@@ -1,12 +1,12 @@
 $(document).ready(function(){
   
-  $(".recipe-up-vote").click(function() {
+  /*$(".recipe-up-vote").click(function() {
     recipe_ajax_vote( "up", $("#recipe-id").html() );
   });
   
   $(".recipe-down-vote").click(function() {
     recipe_ajax_vote( "down", $("#recipe-id").html() ); 
-  });
+  });*/
   
   $("#add-comment").click(function(){
       $.ajax({

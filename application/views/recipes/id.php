@@ -1,9 +1,9 @@
 <div id="recipe-id" style="display: none;"><?=$recipe->ID?></div>
 <div id="recipe-top">
   <div class="recipe-voter" id="recipe-voter-<?=$recipe->ID?>">
-    <button class="recipe-up-vote <?= $users_vote["Direction"] == 1 ? "voted-up" : ""?>">&#9650;</button>
+    <button class="recipe-up-vote <?= $users_vote["Direction"] == 1 ? "voted-up" : ""?>">&#9650;<span style="display: none;"><?=$recipe->ID?></span></button>
     <span class="recipe-total <?= $users_vote["Direction"] == 1 ? "voted-up" : ($users_vote["Direction"] == -1 ? "voted-down" : "") ?>"><?=$vote_count->Direction?></span>
-    <button class="recipe-down-vote <?= $users_vote["Direction"] == -1 ? "voted-down" : ""?>">&#9660;</button>
+    <button class="recipe-down-vote <?= $users_vote["Direction"] == -1 ? "voted-down" : ""?>">&#9660;<span style="display: none;"><?=$recipe->ID?></span></button>
   </div>
   <h1><?=$recipe->Name?></h1>
   <div id="recipe-submitter">Submitted by: <a href="<?=site_url(array('user', 'profile', $submitter->ID))?>"><?=$submitter->DisplayName?></a></div>
