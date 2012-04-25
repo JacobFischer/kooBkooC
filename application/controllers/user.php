@@ -179,8 +179,7 @@ class User extends CI_Controller {
 
     $this->db->insert('Users', $data);
 
-    $this->template->load('register/successful', array( 'username' => $displayName));
-    
+    $this->template->load('user/register/successful', array( 'username' => $displayName));
   }
 
   public function user_login()
