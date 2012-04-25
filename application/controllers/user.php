@@ -213,7 +213,7 @@ class User extends CI_Controller {
     // This is basically the page->home() controller, stupid Firefox
     $this->template->load_js("frontPageSearch.js");
     $this->template->set_location("Home");
-    $this->template->load( 'page_home' );
+    $this->template->load( 'page/home' );
   }
 
   public function login()
