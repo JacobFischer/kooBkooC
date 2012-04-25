@@ -1,6 +1,6 @@
-<!-- Created by Steven Williams and Jacob Fischer !-->
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+//Created by Steven Williams and Jacob Fischer
 class Template {
     var $template_data = array();
     var $scripts = array();

@@ -1,4 +1,4 @@
-<!-- This page was created by Steven Williams  !-->
+<!-- This page was created by Steven Williams -->
 <h1>Home Page</h1>
 <div id="reverse-wrapper">
   <section id="reverse-search">
