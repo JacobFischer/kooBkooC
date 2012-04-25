@@ -7,8 +7,9 @@ class Comment extends CI_Controller
     $this->template->load('error', array('title' => 'Page Not Done!', "message" => "We need to do this") );
   }
   
-  public function add($recipeID = -1, $contents = "")
+  public function add($recipeID = -1)
   {
+    $contents = $this->input->post("message");
     $r = array( "json" => array() );
     $r["json"]["success"] = false;
     
