@@ -1,3 +1,6 @@
+<!-- This code was written by Steven Williams !-->
+
+<!-- Creates an array to be used to match an ingredient ID to its Unit of Measurement !-->
 <script type="text/javascript">
   var unitLookup = new Array();
 <?php foreach($ingredients as $ingredient):?>

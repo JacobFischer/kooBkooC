@@ -1,4 +1,7 @@
 //This script was created by Steven Williams
+
+//When a user begins to type a recipe this will suggest similar recipes to them on the side of the screen.
+//This will allow the user to check is a very similar recipe already exists before creating their own recipe
 function responseRecipeParser( obj ) {
   $("#guessed-recipes").fadeOut('fast', function() {
     var newGuess = "<ul>";
@@ -76,7 +79,6 @@ function responseIngredientParser( obj ) {
       });
       count++;
     }
-    
     if(count == 0) {
       $("ul#ingredient-list").append('<li><em>None</em></li>');
     }  

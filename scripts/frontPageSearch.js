@@ -1,24 +1,5 @@
-/*$(document).ready(function(){
-  $("#searchButton").click(function(){
-    var url_string = base_url + "index.php/search/reverse?";
-    $('ul#searchList').each(function(){
-      $(this).find('li.ingredient-using span.ingredient-id').each(function(){
-        url_string = url_string + "ingredients[]=" + $(this).text() + "&";
-      });
-    });
-    $.ajax({
-      url: url_string,
-      context: document.body,
-      success: function(data){
-        $("section#guessed-reverse").fadeOut( 'fast', function() {
-          $(this).html( data );
-          $(this).fadeIn( 'fast' );
-        });
-      }
-    });
-  })
-});*/
-
+//This page was written by Steven Williams
+//Refactored by Jacob Fischer
 function responseIngredientParser( obj ) {
   $("#suggested-ingredient").fadeOut('fast', function() {
     
