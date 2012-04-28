@@ -423,7 +423,9 @@ class Search extends CI_Controller {
 //BEGIN TAG SEARCH
     
     ///////////////////////////////////////////////////////////////////////////////////////
-    //Tag search for tags containing user entered text.
+    //Return JSON map with all column info for Tags whose name contains the user-entered text.
+    //Function by: David Costello
+    //Test integration by: 
     ///////////////////////////////////////////////////////////////////////////////////////
     public function tags($searchVal = "", $page = 1, $runtest=FALSE)
     {
@@ -431,27 +433,27 @@ class Search extends CI_Controller {
 	$numRows2=0;
 	$this->load->library('unit_test');
       if($page<1){$page=1;} //Validate Page Number
-      $returnVal=array( "json" => array( "tags" => array() ) );
+      $returnVal=array( "json" => array( "tags" => array() ) ); //instantiating the JSON map
       $delimiter=$this->SEARCH_TAG_PAGE_OFFSET;
       $offset=($page - 1)*$this->SEARCH_TAG_PAGE_OFFSET;
       $searchVal=$this->tag_escape($searchVal);
       /////////////////////////////////////////////////////////  
-      if( strlen($searchVal) )
-      {
-        $this->db->select("ID, Name, Description");
-        $this->db->like("Name", $searchVal, "after");
-        $this->db->order_by("Name");
+      if( strlen($searchVal) ) //if string length is not 0
+      {                                               //STRUCTURING THE INITIAL QUERY
+        $this->db->select("ID, Name, Description");   
+        $this->db->like("Name", $searchVal, "after"); 
+        $this->db->order_by("Name");                  
         $this->db->limit($delimiter, $offset);
-        $initialQuery=$this->db->get("Tags");
+        $initialQuery=$this->db->get("Tags");         //EXECUTE THE QUERY
 		if($runtest==TRUE)
 			$numRows+=$initialQuery->num_rows();
-        $this->db->flush_cache();
-        $this->db->select("ID, Name, Description");
+        $this->db->flush_cache();                     //flush cache
+        $this->db->select("ID, Name, Description");   //STRUCTURING SECONDARY QUERY
         $this->db->like("Name", $searchVal, "both");
         $this->db->not_like("Name", $searchVal, "after");
         $this->db->order_by("Name");
         $this->db->limit($delimiter, $offset);
-        $secondaryQuery = $this->db->get("Tags");
+        $secondaryQuery = $this->db->get("Tags");     //EXECUTE SECONDARY QUERY
 		//tests to see if either query generates results
 		if($runtest==TRUE)
 		{
@@ -475,7 +477,8 @@ class Search extends CI_Controller {
 				$this->unit->run((stripos($rowName, $searchVal))===FALSE, FALSE, "Query 1: Partial Ingredients Match% (Result ${i})",
 				"Verifies that result (${rowName}) partially matches target (${searchVal})");
           }
-		  $returnVal["json"]["tags"][] = $result;
+		  $returnVal["json"]["tags"][] = $result;  //assigning value to the JSON map
+
 		  $i++;
         }
         foreach($secondaryQuery->result() as $result)
@@ -487,12 +490,13 @@ class Search extends CI_Controller {
 			$this->unit->run(stripos($rowName, $searchVal), TRUE, "Query 2: Partial Tag %Match% (Result ${i})",
 			"Verifies that result (${rowName}) partially matches target (${searchVal})");
 		  }
-          $returnVal["json"]["tags"][] = $result;
+          $returnVal["json"]["tags"][] = $result;  //assigning value to the JSON map
+
 		  $i++;
         }
       }
       /////////////////////////////////////////////////////////
-      else
+      else  //is string length is 0, return all tags
       {
         $this->db->select("ID, Name, Description");
         $this->db->order_by("Name");
@@ -500,7 +504,7 @@ class Search extends CI_Controller {
         $query = $this->db->get("Tags");
         foreach($query->result() as $result)
         {
-          $returnVal["json"]["tags"][] = $result;
+          $returnVal["json"]["tags"][] = $result;  //assigning value to the JSON map
         }
       }
       ///////////////////////////////////////////////////////// 
