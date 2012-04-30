@@ -18,6 +18,8 @@ class AutoCorrect extends CI_Controller {
     // Return the target string stripped of non-alphanumeric characters and
     // converted to lower case. For future-proofing and security reasons, do
     // not consider the result to be SQL-escaped.
+    //
+    // Cody Williams
     // ------------------------------------------------------------------------
     
     protected function tag_escape($target)
@@ -34,6 +36,8 @@ class AutoCorrect extends CI_Controller {
     // obtained by searching against this value is empty.
     //
     // http://.../autocorrect/ingredients/__target__
+    //
+    // Cody Williams
     // ------------------------------------------------------------------------
     
     public function ingredients($target = "")
