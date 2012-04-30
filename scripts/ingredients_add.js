@@ -1,3 +1,5 @@
+//Programmers: Tim Pund & Jacob Fischer(I think)
+//Desc: Javascript function used to grab the added ingredient name on the form and return results so the controller can use them
 function responseParser( obj ) {
   $("#guessed-ingredients").fadeOut('fast', function() {
     var newGuess = "<ul>";

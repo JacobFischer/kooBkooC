@@ -1,3 +1,4 @@
+<!--This view created by Tim Pund-->
 <h1>Add an Ingredient</h1>
 <div id="ingredients-add-wrapper">
   <form action="<?=site_url( array('ingredients', 'submit' ) ) ?>" method="post" accept-charset="utf-8" enctype="multipart/form-data" id="ingredients-add">

@@ -1,3 +1,4 @@
+<!--This view created by Tim Pund-->
 <section id="ingredient-body">
   <img src="<?=/*base_url() . 'uploads/ingredients/'*/ 'http://home.jacobfischer.me/cs397_uploads/ingredients/' . $ingredient->ID . '.jpg'?>" id="ingredient-img" />
   <h1><?=$ingredient->Name?></h1>

@@ -1,3 +1,5 @@
+//Programmers: Tim Pund & Jacob Fischer(I think, refactored)
+//Desc: Javascript function used to list the guessed ingredients from the query of results on what was currently typed
 /*$(document).ready(function(){
   $("#guesser").click(function() {
     $.ajax

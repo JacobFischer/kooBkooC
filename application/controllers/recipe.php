@@ -293,6 +293,8 @@ class Recipe extends CI_Controller
     redirect('recipe/id/'.$recipeID, 'location', 301);
   }
   
+  //Programmers: Tim Pund (Framework)
+  //Desc: Controller for finding a recipe in it's full beauty in a recipe page with all comments, desc, directions, ratings, etc. given an ID
   public function id($id)
   {
     // Load JS files in the template

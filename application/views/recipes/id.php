@@ -1,3 +1,4 @@
+<!--This view created by Tim Pund and other Front End Developers-->
 <div id="recipe-id" style="display: none;"><?=$recipe->ID?></div>
 <div id="recipe-top">
   <div class="recipe-voter" id="recipe-voter-<?=$recipe->ID?>">

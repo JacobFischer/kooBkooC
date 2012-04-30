@@ -6,7 +6,7 @@
 class Ingredients extends CI_Controller //display ingredients by id
 {
 
-  //Programmers: Michael Wilson and Jacob Fischer
+  //Programmers: Michael Wilson and Jacob Fischer and Tim Pund(Initial Framework)
   
   public function index()
   {
@@ -125,6 +125,8 @@ class Ingredients extends CI_Controller //display ingredients by id
     }
   } 
   
+  //Programmers: Tim Pund
+  //Desc: Controller that loads the Form page for adding an ingredient to the database
   public function add()
   {
     $this->template->set_location("Ingredients");
@@ -140,6 +142,8 @@ class Ingredients extends CI_Controller //display ingredients by id
     $this->template->load('ingredients/add' , array("recipe" => 0, "tag" => 0 ));
   }
   
+  //Programmers: Tim Pund
+  //Desc: Controller that loads the submit for the Add Ingredient and returns result of insert from the Database
   public function submit()
   {
     $name = $this->input->post("ingredient");

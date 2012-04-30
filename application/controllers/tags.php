@@ -107,6 +107,8 @@ class Tags extends CI_Controller {
     $this->template->load('tags/recipes' , array("recipes" => $recipes, "tag" => $tagQuery->row(0) ));
   }
 
+  //Programmers: Tim Pund
+  //Desc:  Controller that loads a form page for adding a Tag to the database
   public function add()
   {  
     $this->template->set_location("Tags");
@@ -122,6 +124,8 @@ class Tags extends CI_Controller {
     $this->template->load('tags/add' , array("recipe" => 0, "tag" => 0 ));
   }
   
+  //Programmers: Tim Pund
+  //Desc: Controller that loads a submit page that for the Add Tag and returns result of insert from the Database
   public function submit()
   {
     $name = $this->input->post("tag_name");
