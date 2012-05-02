@@ -355,6 +355,7 @@ class Search extends CI_Controller {
         $data = array("json" => array("recipe" => array() ) );
         $recipes = array();
         
+        //get the ingredients entered by the user from the GET array
         if (isset($_GET["ingredients"])) {
             $ingredients = $_GET["ingredients"];
             $ingredient_string = "";
@@ -374,8 +375,7 @@ class Search extends CI_Controller {
         $ingredient_string = "(" . substr($ingredient_string, 0, -2) . ")";
         
         // Execute reverse search queries
-        //
-        // Cody Williams
+        // Cody Williams and Lou Harmon
         for($i = sizeof($ingredients); $i > 0; $i--) {
             $query = $this->db->query("
               SELECT re.ID, re.SubmitterUsersID, re.Name, re.Directions,
@@ -415,6 +415,7 @@ class Search extends CI_Controller {
           $userID = $query->row(0)->ID;
         }
         
+        //find the vote sums of each recipe recieved from query
         foreach($recipes as $recipe)
         {
           $recipe->UsersVote = "0";
