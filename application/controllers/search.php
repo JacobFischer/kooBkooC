@@ -254,8 +254,14 @@ class Search extends CI_Controller {
 // END INGREDIENTS SEARCH  
 //--------------------------------------------------------------------------------------------------------
 // BEGIN RECIPE SEARCH
+	/*
 	//Searches for recipe names based on inputed text
-	//Search by Brian Yocum
+	//$text refers to the input to the search
+	//$runtest determines wheter to run unit testing or not
+	//If runtest is set to true, then unit tests will run and 
+	//and test results will be displayed, no JSON will be returned
+	//Brian Yocum
+	*/
     public function recipes($text = "default", $page=1, $runtest=FALSE)
     {
 	$this->load->library('unit_test');
@@ -268,7 +274,7 @@ class Search extends CI_Controller {
 
 	// create data object mapped to json
 	$data = array("json" => array("recipe" => array() ) );
-       // Assign limit, offset, and target
+       // Assign limit, offset, and text
         $limit = $this->SEARCH_TAG_PAGE_OFFSET;
         $offset = ($page - 1) * $this->SEARCH_TAG_PAGE_OFFSET;
         $text = $this->tag_escape($text);
@@ -328,7 +334,7 @@ class Search extends CI_Controller {
 			"Verifies that all results have been tested and stored as JSON");
 			echo $this->unit->report();
 		}
-		// return the recipes to the "views/search_json.php" view so it can build valid JSON from the data
+		// return the recipes to the "views/search_json.php" viblackie1ew so it can build valid JSON from the data
 		else
 			$this->load->view('search_json', array_slice($data, 0, $limit,
 			TRUE));

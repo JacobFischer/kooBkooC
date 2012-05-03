@@ -1,4 +1,4 @@
-<!--TEST DRIVER, runs assortment of queries to test queries created by Brian Yocum
+<!--TEST DRIVER, runs assortment of queries to test queries. -Brian Yocum
 //http://home.jacobfischer.me/USERNAME/cs397/index.php/tester/run-->
 
 
