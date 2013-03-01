@@ -6,8 +6,8 @@ Obtain your own keys from:
 http://www.recaptcha.net
 */
 $config['recaptcha'] = array(
-  'public'=>'6LexDtASAAAAAFT4hmfM-RoSCZhl03FsraDH4XEq',
-  'private'=>'6LexDtASAAAAACUMX5RLUR2Cta6oFbi_gtIQUx1M',
+  'public'=>'YOUR_KEY',
+  'private'=>'YOUR_KEY',
   'RECAPTCHA_API_SERVER' =>'http://www.google.com/recaptcha/api',
   'RECAPTCHA_API_SECURE_SERVER'=>'https://www.google.com/recaptcha/api',
   'RECAPTCHA_VERIFY_SERVER' =>'www.google.com',

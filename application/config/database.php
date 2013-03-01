@@ -49,9 +49,9 @@ $active_group = 'default';
 $active_record = TRUE;
 
 $db['default']['hostname'] = 'localhost';
-$db['default']['username'] = 'cs397ci';
-$db['default']['password'] = 'ms&t';
-$db['default']['database'] = 'cs397';
+$db['default']['username'] = 'USERNAME';
+$db['default']['password'] = 'PASSWORD';
+$db['default']['database'] = 'DATABASE';
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;
